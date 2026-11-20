@@ -1,0 +1,73 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Music World</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#100d08;color:#fff;font-family:Arial,sans-serif}
+header{padding:20px 6%;display:flex;justify-content:space-between;align-items:center;background:#090806;border-bottom:1px solid #9b762b}
+.logo{font-size:25px;font-weight:bold;color:#e8bd57}
+nav a{color:#f5e5bd;text-decoration:none;margin-left:15px;font-size:14px}
+.hero{padding:75px 7%;background:radial-gradient(ellipse at top right,#71521b,#211809 45%,#0a0906 85%);border-bottom:1px solid #9b762b}
+.hero h1{font-size:clamp(35px,7vw,65px);margin:0 0 15px}
+.hero h1 span{color:#f1c75b}
+.hero p{color:#e1d4b6;line-height:1.7;max-width:480px}
+button{background:linear-gradient(135deg,#f5d77e,#b88628);color:#1b1305;border:1px solid #ffe7a0;padding:13px 23px;border-radius:25px;font-weight:bold;cursor:pointer}
+section{padding:35px 6%}
+h2{color:#edc65f;margin-bottom:20px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:16px}
+.card{background:linear-gradient(145deg,#241c0d,#100d08);padding:14px;border-radius:15px;border:1px solid #8d6a2b;box-shadow:0 0 15px #c18c3020}
+.art{height:130px;border-radius:10px;background:linear-gradient(135deg,#493313,#d6a83e,#73501c);display:grid;place-items:center;font-size:38px}
+.card h3{color:#f2d58d;margin-bottom:5px}
+.card p{color:#c6b995;font-size:13px;line-height:1.5}
+.player{position:sticky;bottom:0;background:#171208;padding:16px 6%;display:flex;justify-content:space-between;align-items:center;gap:12px;border-top:1px solid #a27a2c}
+.player small{color:#c9b98f}
+footer{text-align:center;padding:25px;color:#c9b98f}
+@media(max-width:500px){nav a{margin-left:8px;font-size:12px}.player{font-size:13px}}
+</style>
+</head>
+<body>
+<header>
+<div class="logo">MUSIC WORLD.</div>
+<nav>
+<a href="#home">Home</a>
+<a href="#discover">Discover</a>
+<a href="#library">Library</a>
+</nav>
+</header>
+
+<div class="hero" id="home">
+<h1>YOUR MUSIC.<br><span>YOUR WORLD.</span></h1>
+<p>Discover music, explore new sounds and enjoy your favourite artists in one luxury music experience.</p>
+<button onclick="document.getElementById('discover').scrollIntoView({behavior:'smooth'})">Explore Music</button>
+</div>
+
+<section id="discover">
+<h2>Discover Music 🎧</h2>
+<div class="cards">
+<div class="card"><div class="art">🎵</div><h3>Trending Hits</h3><p>Popular music and new sounds</p></div>
+<div class="card"><div class="art">🔥</div><h3>Top Charts</h3><p>Music everyone is enjoying</p></div>
+<div class="card"><div class="art">🌍</div><h3>Afrobeats</h3><p>Discover African sounds</p></div>
+<div class="card"><div class="art">🎸</div><h3>Pop & Rock</h3><p>Explore different genres</p></div>
+</div>
+</section>
+
+<section id="library">
+<h2>Your Music Library</h2>
+<div class="card">
+<h3>Your collection starts here</h3>
+<p>Your uploaded songs and playlists will appear here once we connect the database.</p>
+<button onclick="alert('Music uploads will be enabled when we connect your database.')">Upload Music</button>
+</div>
+</section>
+
+<div class="player">
+<div><strong>Music Player</strong><br><small>Choose a song to start listening</small></div>
+<div>⏮️　▶️　⏭️</div>
+</div>
+<footer>Music World. | Your sound, your experience.</footer>
+</body>
+</html>
