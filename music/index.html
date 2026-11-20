@@ -3,71 +3,273 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Music World</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SHAGA MUSIC</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#100d08;color:#fff;font-family:Arial,sans-serif}
-header{padding:20px 6%;display:flex;justify-content:space-between;align-items:center;background:#090806;border-bottom:1px solid #9b762b}
-.logo{font-size:25px;font-weight:bold;color:#e8bd57}
-nav a{color:#f5e5bd;text-decoration:none;margin-left:15px;font-size:14px}
-.hero{padding:75px 7%;background:radial-gradient(ellipse at top right,#71521b,#211809 45%,#0a0906 85%);border-bottom:1px solid #9b762b}
-.hero h1{font-size:clamp(35px,7vw,65px);margin:0 0 15px}
-.hero h1 span{color:#f1c75b}
-.hero p{color:#e1d4b6;line-height:1.7;max-width:480px}
-button{background:linear-gradient(135deg,#f5d77e,#b88628);color:#1b1305;border:1px solid #ffe7a0;padding:13px 23px;border-radius:25px;font-weight:bold;cursor:pointer}
-section{padding:35px 6%}
-h2{color:#edc65f;margin-bottom:20px}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:16px}
-.card{background:linear-gradient(145deg,#241c0d,#100d08);padding:14px;border-radius:15px;border:1px solid #8d6a2b;box-shadow:0 0 15px #c18c3020}
-.art{height:130px;border-radius:10px;background:linear-gradient(135deg,#493313,#d6a83e,#73501c);display:grid;place-items:center;font-size:38px}
-.card h3{color:#f2d58d;margin-bottom:5px}
-.card p{color:#c6b995;font-size:13px;line-height:1.5}
-.player{position:sticky;bottom:0;background:#171208;padding:16px 6%;display:flex;justify-content:space-between;align-items:center;gap:12px;border-top:1px solid #a27a2c}
-.player small{color:#c9b98f}
+body{margin:0;background:#100d08;color:white;font-family:Arial;padding-bottom:110px}
+header{background:#090806;padding:18px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #b88c36;position:sticky;top:0;z-index:5}
+.logo{font-size:22px;font-weight:bold;color:#edc65f}
+nav a{color:white;text-decoration:none;margin-left:10px;font-size:12px}
+.hero{padding:65px 22px;background:radial-gradient(ellipse at top right,#71521b,#211809 55%,#0a0906)}
+.hero h1{font-size:43px;margin:0}
+.gold{color:#f1c75b}
+.hero p{color:#ddd0ad;line-height:1.7}
+section{padding:22px 17px}
+h2{color:#edc65f}
+.card{background:linear-gradient(145deg,#241c0d,#100d08);border:1px solid #8d6a2b;border-radius:15px;padding:17px;margin-bottom:15px}
+input{width:100%;padding:13px;margin:7px 0;background:#211b10;color:white;border:1px solid #9b762b;border-radius:8px}
+button{background:linear-gradient(135deg,#f5d77e,#b88628);color:#1b1305;border:0;padding:12px 15px;border-radius:25px;font-weight:bold;cursor:pointer;margin:5px 2px}
+.secondary{background:#302615;color:#f5d77e;border:1px solid #a27a2c}
+.danger{background:#812d25;color:white}
+#status{color:#f1c75b;font-size:13px;line-height:1.5}
+.song{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:13px 3px;border-bottom:1px solid #55421e}
+.song-info{flex:1;min-width:0}
+.song-info strong{display:block;overflow-wrap:anywhere}
+.song-info small{color:#bcae8b}
+.song-actions{display:flex;flex-wrap:wrap;justify-content:flex-end}
+.player{position:fixed;bottom:0;left:0;width:100%;background:#171208;border-top:1px solid #a27a2c;padding:12px 17px;z-index:10}
+.player-top{display:flex;justify-content:space-between}
+audio{width:100%;height:35px;margin-top:7px}
 footer{text-align:center;padding:25px;color:#c9b98f}
-@media(max-width:500px){nav a{margin-left:8px;font-size:12px}.player{font-size:13px}}
 </style>
 </head>
 <body>
+
 <header>
-<div class="logo">MUSIC WORLD.</div>
+<div class="logo">SHAGA MUSIC.</div>
 <nav>
 <a href="#home">Home</a>
-<a href="#discover">Discover</a>
 <a href="#library">Library</a>
+<a href="#account">Account</a>
 </nav>
 </header>
 
 <div class="hero" id="home">
-<h1>YOUR MUSIC.<br><span>YOUR WORLD.</span></h1>
-<p>Discover music, explore new sounds and enjoy your favourite artists in one luxury music experience.</p>
-<button onclick="document.getElementById('discover').scrollIntoView({behavior:'smooth'})">Explore Music</button>
+<h1>YOUR MUSIC.<br><span class="gold">YOUR WORLD.</span></h1>
+<p>Discover music. Enjoy your favourite sounds. Welcome to SHAGA MUSIC.</p>
+<button onclick="document.getElementById('library').scrollIntoView({behavior:'smooth'})">Explore Music</button>
 </div>
 
-<section id="discover">
-<h2>Discover Music 🎧</h2>
-<div class="cards">
-<div class="card"><div class="art">🎵</div><h3>Trending Hits</h3><p>Popular music and new sounds</p></div>
-<div class="card"><div class="art">🔥</div><h3>Top Charts</h3><p>Music everyone is enjoying</p></div>
-<div class="card"><div class="art">🌍</div><h3>Afrobeats</h3><p>Discover African sounds</p></div>
-<div class="card"><div class="art">🎸</div><h3>Pop & Rock</h3><p>Explore different genres</p></div>
+<section id="account">
+<h2>Your Account 👤</h2>
+<div class="card">
+<p>Create an account or sign in to upload music.</p>
+<input id="email" type="email" placeholder="Email address">
+<input id="password" type="password" placeholder="Password (minimum 6 characters)">
+<button onclick="register()">Create Account</button>
+<button class="secondary" onclick="login()">Login</button>
+<button class="danger" onclick="logout()">Logout</button>
+<p id="accountStatus">Checking account...</p>
+</div>
+</section>
+
+<section>
+<h2>Upload Music 🎵</h2>
+<div class="card">
+<input id="songTitle" placeholder="Song title">
+<input id="artist" placeholder="Artist name">
+<input id="musicFile" type="file" accept="audio/*">
+<button onclick="uploadMusic()">Upload Song</button>
+<p id="status">Sign in to upload your music.</p>
 </div>
 </section>
 
 <section id="library">
-<h2>Your Music Library</h2>
-<div class="card">
-<h3>Your collection starts here</h3>
-<p>Your uploaded songs and playlists will appear here once we connect the database.</p>
-<button onclick="alert('Music uploads will be enabled when we connect your database.')">Upload Music</button>
-</div>
+<h2>Your Music Library 🎧</h2>
+<input id="search" placeholder="Search songs..." oninput="renderSongs()">
+<div id="songs">Loading music...</div>
 </section>
 
 <div class="player">
-<div><strong>Music Player</strong><br><small>Choose a song to start listening</small></div>
-<div>⏮️　▶️　⏭️</div>
+<div class="player-top">
+<strong id="nowPlaying">SHAGA MUSIC PLAYER</strong>
+<span class="gold">♪</span>
 </div>
-<footer>Music World. | Your sound, your experience.</footer>
+<audio id="audio" controls></audio>
+</div>
+
+<footer>SHAGA MUSIC © 2026<br>Your sound. Your experience.</footer>
+
+<script>
+const SUPABASE_URL = "https://qppzalgmxewuddxblmlz.supabase.co";
+const SUPABASE_KEY = "sb_publishable_BKsfK3UfjqtvRptaghGGA_sdELamOp";
+
+const db = window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
+let currentUser=null;
+let allSongs=[];
+
+function message(text){
+document.getElementById("status").textContent=text;
+}
+function accountMessage(text){
+document.getElementById("accountStatus").textContent=text;
+}
+
+function escapeHTML(value){
+return String(value??"").replace(/[&<>"']/g,c=>({
+"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+}[c]));
+}
+
+async function register(){
+const email=document.getElementById("email").value.trim();
+const password=document.getElementById("password").value;
+if(!email||password.length<6){
+accountMessage("Enter an email and password of at least 6 characters.");
+return;
+}
+const {data,error}=await db.auth.signUp({email,password});
+if(error){accountMessage(error.message);return;}
+accountMessage(data.session?"Account created!":"Account created. Check your email for confirmation.");
+await checkUser();
+}
+
+async function login(){
+const email=document.getElementById("email").value.trim();
+const password=document.getElementById("password").value;
+const {data,error}=await db.auth.signInWithPassword({email,password});
+if(error){accountMessage(error.message);return;}
+currentUser=data.user;
+accountMessage("Welcome! You are signed in.");
+await loadSongs();
+}
+
+async function logout(){
+const {error}=await db.auth.signOut();
+if(error){accountMessage(error.message);return;}
+currentUser=null;
+accountMessage("You have logged out.");
+await checkUser();
+}
+
+async function checkUser(){
+const {data,error}=await db.auth.getSession();
+if(error){accountMessage(error.message);return;}
+currentUser=data.session?.user||null;
+accountMessage(currentUser?"Signed in: "+currentUser.email:"Not signed in.");
+await loadSongs();
+}
+
+async function uploadMusic(){
+if(!currentUser){message("Please sign in first.");return;}
+const title=document.getElementById("songTitle").value.trim();
+const artist=document.getElementById("artist").value.trim();
+const file=document.getElementById("musicFile").files[0];
+
+if(!title||!file){message("Enter a title and select a song.");return;}
+if(!file.type.startsWith("audio/")){message("Select an audio file.");return;}
+if(file.size>30*1024*1024){message("File must be smaller than 30 MB.");return;}
+
+const path=currentUser.id+"/"+Date.now()+"_"+file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+message("Uploading...");
+
+const {error:uploadError}=await db.storage.from("music").upload(path,file,{contentType:file.type});
+if(uploadError){message("Upload failed: "+uploadError.message);return;}
+
+const {data:urlData}=db.storage.from("music").getPublicUrl(path);
+
+const {error:insertError}=await db.from("songs").insert({
+title,
+artist:artist||"Unknown artist",
+file_url:urlData.publicUrl,
+storage_path:path,
+owner_id:currentUser.id
+});
+
+if(insertError){
+await db.storage.from("music").remove([path]);
+message("Database error: "+insertError.message);
+return;
+}
+
+document.getElementById("songTitle").value="";
+document.getElementById("artist").value="";
+document.getElementById("musicFile").value="";
+message("Song uploaded successfully!");
+await loadSongs();
+}
+
+async function loadSongs(){
+const container=document.getElementById("songs");
+container.textContent="Loading songs...";
+const {data,error}=await db.from("songs").select("*").order("created_at",{ascending:false});
+if(error){
+container.textContent="Could not load songs: "+error.message;
+return;
+}
+allSongs=data||[];
+renderSongs();
+}
+
+function renderSongs(){
+const container=document.getElementById("songs");
+const query=document.getElementById("search").value.toLowerCase();
+const filtered=allSongs.filter(song=>(song.title+" "+song.artist).toLowerCase().includes(query));
+container.innerHTML="";
+if(!filtered.length){container.textContent="No songs found. Upload your first song!";return;}
+
+filtered.forEach(song=>{
+const item=document.createElement("div");
+item.className="song";
+const info=document.createElement("div");
+info.className="song-info";
+const name=document.createElement("strong");
+name.textContent=song.title;
+const artist=document.createElement("small");
+artist.textContent=song.artist||"Unknown artist";
+info.append(name,artist);
+
+const actions=document.createElement("div");
+actions.className="song-actions";
+const play=document.createElement("button");
+play.textContent="▶ Play";
+play.onclick=()=>playSong(song);
+actions.append(play);
+
+if(currentUser&&currentUser.id===song.owner_id){
+const del=document.createElement("button");
+del.textContent="Delete";
+del.className="danger";
+del.onclick=()=>deleteSong(song);
+actions.append(del);
+}
+item.append(info,actions);
+container.append(item);
+});
+}
+
+function playSong(song){
+const audio=document.getElementById("audio");
+audio.src=song.file_url;
+document.getElementById("nowPlaying").textContent=song.title+" — "+(song.artist||"Unknown artist");
+audio.play().catch(()=>message("Tap play in the music player."));
+}
+
+async function deleteSong(song){
+if(!currentUser||currentUser.id!==song.owner_id){message("You cannot delete this song.");return;}
+if(!confirm("Delete "+song.title+"?"))return;
+
+const {error}=await db.from("songs").delete().eq("id",song.id);
+if(error){message("Delete failed: "+error.message);return;}
+
+const {error:storageError}=await db.storage.from("music").remove([song.storage_path]);
+if(storageError){message("Song removed from library, but storage deletion failed: "+storageError.message);}
+else{message("Song deleted successfully.");}
+await loadSongs();
+}
+
+db.auth.onAuthStateChange((event,session)=>{
+currentUser=session?.user||null;
+if(event==="SIGNED_IN"||event==="SIGNED_OUT"){
+setTimeout(checkUser,0);
+}
+});
+
+checkUser();
+</script>
 </body>
 </html>
+
