@@ -1,0 +1,152 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Entertainment World</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#090610;color:white;font-family:Arial,sans-serif;overflow:hidden}
+header{height:75px;padding:15px 5%;background:#100b19;border-bottom:1px solid #7040a8;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.logo{font-size:20px;font-weight:bold;color:#c69aff}
+.menu{display:flex;gap:8px}
+.menu button{background:transparent;color:#e2c9ff;border:1px solid #7545a5;padding:9px 12px;border-radius:20px}
+.menu button.active{background:#a45be0;color:white}
+.slider{height:calc(100dvh - 145px);overflow:hidden;touch-action:pan-y}
+.track{height:100%;display:flex;transition:transform .55s ease}
+.page{flex:0 0 100%;height:100%;overflow-y:auto;padding:30px 6%;background:radial-gradient(ellipse at top right,#452365,#100b19 65%)}
+.page h1{font-size:clamp(34px,7vw,60px);margin:15px 0;color:#d4afff}
+.page h2{color:#d4afff}
+.page p{color:#d0c2df;line-height:1.6}
+.hero-art{height:190px;border-radius:18px;background:linear-gradient(120deg,#241238,#a34ed5,#46215f);display:grid;place-items:center;font-size:75px;margin:22px 0}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin-top:20px}
+.card{background:#21152e;border:1px solid #7040a8;border-radius:15px;padding:13px}
+.art{height:115px;border-radius:10px;background:linear-gradient(135deg,#28133f,#9654c6);display:grid;place-items:center;font-size:38px}
+.card h3{color:#e1c2ff;margin-bottom:5px}
+.card p{font-size:13px}
+.controls{height:70px;background:#100b19;border-top:1px solid #7040a8;display:flex;align-items:center;justify-content:center;gap:20px}
+.controls button{background:linear-gradient(135deg,#d4b1ff,#8244c7);border:0;padding:12px 23px;border-radius:25px;font-weight:bold;color:#160b24}
+#counter{color:#d4b1ff;font-size:13px}
+footer{color:#a991bb;text-align:center;padding:10px;font-size:12px}
+@media(max-width:500px){
+ header{height:65px}
+ .logo{font-size:15px}
+ .menu button{padding:8px;font-size:11px}
+ .slider{height:calc(100dvh - 135px)}
+}
+</style>
+</head>
+<body>
+
+<header>
+<div class="logo">ENTERTAINMENT WORLD</div>
+<div class="menu">
+<button class="active" onclick="go(0)">Home</button>
+<button onclick="go(1)">Movies</button>
+<button onclick="go(2)">Stars</button>
+</div>
+</header>
+
+<div class="slider" id="slider">
+<div class="track" id="track">
+
+<section class="page">
+<h1>WELCOME TO<br>YOUR WORLD.</h1>
+<p>Discover the biggest names, movies, shows and stories in entertainment.</p>
+<div class="hero-art">🌟</div>
+<h2>Explore Everything</h2>
+<div class="cards">
+<div class="card"><div class="art">🎬</div><h3>Movies</h3><p>Explore cinema.</p></div>
+<div class="card"><div class="art">📺</div><h3>TV Shows</h3><p>Discover series.</p></div>
+<div class="card"><div class="art">🎤</div><h3>Music Stars</h3><p>Meet artists.</p></div>
+</div>
+</section>
+
+<section class="page">
+<h1>MOVIE WORLD 🎬</h1>
+<p>Explore the world of cinema.</p>
+<div class="hero-art">🍿</div>
+<h2>Movie Categories</h2>
+<div class="cards">
+<div class="card"><div class="art">💥</div><h3>Action</h3><p>Adventure and excitement.</p></div>
+<div class="card"><div class="art">😂</div><h3>Comedy</h3><p>Laugh and enjoy.</p></div>
+<div class="card"><div class="art">🚀</div><h3>Sci-Fi</h3><p>Explore new worlds.</p></div>
+<div class="card"><div class="art">🎭</div><h3>Drama</h3><p>Stories and performances.</p></div>
+<div class="card"><div class="art">❤️</div><h3>Animation</h3><p>Animated adventures.</p></div>
+<div class="card"><div class="art">🏆</div><h3>Classics</h3><p>Timeless cinema.</p></div>
+</div>
+</section>
+
+<section class="page">
+<h1>CELEBRITY WORLD ⭐</h1>
+<p>Discover famous personalities from around the world.</p>
+<div class="hero-art">🌍</div>
+<div class="cards">
+<div class="card"><div class="art">🎭</div><h3>Actors</h3><p>Explore film and TV actors.</p></div>
+<div class="card"><div class="art">🎵</div><h3>Singers</h3><p>Meet global music stars.</p></div>
+<div class="card"><div class="art">⚽</div><h3>Sports Stars</h3><p>Discover famous athletes.</p></div>
+<div class="card"><div class="art">📸</div><h3>Influencers</h3><p>Explore digital creators.</p></div>
+</div>
+</section>
+
+<section class="page">
+<h1>TV SHOWS 📺</h1>
+<p>Your space for television entertainment.</p>
+<div class="hero-art">🎞️</div>
+<div class="cards">
+<div class="card"><div class="art">🌎</div><h3>Documentaries</h3><p>Real stories and discoveries.</p></div>
+<div class="card"><div class="art">🎤</div><h3>Reality Shows</h3><p>Entertainment and competition.</p></div>
+<div class="card"><div class="art">🎭</div><h3>Series</h3><p>Explore television stories.</p></div>
+<div class="card"><div class="art">🏅</div><h3>Awards</h3><p>Celebrate entertainment.</p></div>
+</div>
+</section>
+
+<section class="page">
+<h1>ENTERTAINMENT NEWS 📰</h1>
+<p>Explore stories, announcements and updates from entertainment around the world.</p>
+<div class="hero-art">🌟</div>
+<div class="cards">
+<div class="card"><div class="art">🎬</div><h3>Movie News</h3><p>Film announcements and updates.</p></div>
+<div class="card"><div class="art">🎵</div><h3>Music News</h3><p>Artist and music updates.</p></div>
+<div class="card"><div class="art">🏆</div><h3>Awards News</h3><p>Entertainment award events.</p></div>
+</div>
+</section>
+
+</div>
+</div>
+
+<div class="controls">
+<button onclick="move(-1)">← Previous</button>
+<span id="counter">1 / 5</span>
+<button onclick="move(1)">Next →</button>
+</div>
+<footer>ENTERTAINMENT WORLD • Explore beyond imagination</footer>
+
+<script>
+let current=0;
+const total=5;
+const track=document.getElementById("track");
+const counter=document.getElementById("counter");
+
+function go(index){
+ current=Math.max(0,Math.min(total-1,index));
+ track.style.transform=`translateX(-${current*100}%)`;
+ counter.textContent=(current+1)+" / "+total;
+ document.querySelectorAll(".menu button").forEach(b=>b.classList.remove("active"));
+ if(current===0)document.querySelectorAll(".menu button")[0].classList.add("active");
+ if(current===1)document.querySelectorAll(".menu button")[1].classList.add("active");
+ if(current===2)document.querySelectorAll(".menu button")[2].classList.add("active");
+}
+function move(direction){go(current+direction)}
+
+let startX=0;
+const slider=document.getElementById("slider");
+slider.addEventListener("touchstart",e=>{startX=e.touches[0].clientX},{passive:true});
+slider.addEventListener("touchend",e=>{
+ const difference=e.changedTouches[0].clientX-startX;
+ if(Math.abs(difference)>60)move(difference<0?1:-1);
+},{passive:true});
+</script>
+</body>
+</html>
