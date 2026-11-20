@@ -1,152 +1,350 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Entertainment World</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>S.G. Worlds | Entertainment</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#090610;color:white;font-family:Arial,sans-serif;overflow:hidden}
-header{height:75px;padding:15px 5%;background:#100b19;border-bottom:1px solid #7040a8;display:flex;align-items:center;justify-content:space-between;gap:10px}
-.logo{font-size:20px;font-weight:bold;color:#c69aff}
-.menu{display:flex;gap:8px}
-.menu button{background:transparent;color:#e2c9ff;border:1px solid #7545a5;padding:9px 12px;border-radius:20px}
-.menu button.active{background:#a45be0;color:white}
-.slider{height:calc(100dvh - 145px);overflow:hidden;touch-action:pan-y}
-.track{height:100%;display:flex;transition:transform .55s ease}
-.page{flex:0 0 100%;height:100%;overflow-y:auto;padding:30px 6%;background:radial-gradient(ellipse at top right,#452365,#100b19 65%)}
-.page h1{font-size:clamp(34px,7vw,60px);margin:15px 0;color:#d4afff}
-.page h2{color:#d4afff}
-.page p{color:#d0c2df;line-height:1.6}
-.hero-art{height:190px;border-radius:18px;background:linear-gradient(120deg,#241238,#a34ed5,#46215f);display:grid;place-items:center;font-size:75px;margin:22px 0}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin-top:20px}
-.card{background:#21152e;border:1px solid #7040a8;border-radius:15px;padding:13px}
-.art{height:115px;border-radius:10px;background:linear-gradient(135deg,#28133f,#9654c6);display:grid;place-items:center;font-size:38px}
-.card h3{color:#e1c2ff;margin-bottom:5px}
-.card p{font-size:13px}
-.controls{height:70px;background:#100b19;border-top:1px solid #7040a8;display:flex;align-items:center;justify-content:center;gap:20px}
-.controls button{background:linear-gradient(135deg,#d4b1ff,#8244c7);border:0;padding:12px 23px;border-radius:25px;font-weight:bold;color:#160b24}
-#counter{color:#d4b1ff;font-size:13px}
-footer{color:#a991bb;text-align:center;padding:10px;font-size:12px}
-@media(max-width:500px){
- header{height:65px}
- .logo{font-size:15px}
- .menu button{padding:8px;font-size:11px}
- .slider{height:calc(100dvh - 135px)}
+body{margin:0;background:#080810;color:white;font-family:Arial;overflow:hidden}
+header{height:70px;background:#100e1b;display:flex;align-items:center;justify-content:space-between;padding:0 4%;border-bottom:1px solid #49305e;gap:10px}
+.logo{font-size:19px;font-weight:bold;color:#d2a5ff}
+.menu{display:flex;gap:5px}
+button{cursor:pointer}
+.menu button{background:transparent;color:#ddd;border:0;padding:10px;border-radius:20px}
+.menu button.active,.menu button:hover{background:#9b54d5;color:white}
+.search{width:180px;padding:10px;background:#20192b;border:1px solid #49335d;color:white;border-radius:20px;outline:none}
+.slider{height:calc(100dvh - 135px);overflow:hidden}
+.track{display:flex;height:100%;transition:transform .5s}
+.page{flex:0 0 100%;height:100%;overflow-y:auto;padding:22px 5%;background:radial-gradient(ellipse at top right,#302044,#080810 65%)}
+.hero{min-height:330px;border-radius:20px;padding:30px;display:flex;align-items:end;background-size:cover;background-position:center;position:relative;margin-bottom:25px;overflow:hidden;background-color:#261536}
+.hero:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#080810 5%,#080810bb 55%,transparent),linear-gradient(0deg,#080810aa,transparent)}
+.hero-content{position:relative;max-width:550px}
+.hero h1{font-size:clamp(34px,7vw,60px);margin:10px 0}
+.hero p{color:#ddd;line-height:1.6}
+.tag{color:#d5a5ff;font-weight:bold;letter-spacing:3px}
+.primary{background:#a45cdd;color:white;border:0;padding:12px 20px;border-radius:25px;font-weight:bold}
+h2{color:#d9b7ff;margin-top:25px}
+.row-title{display:flex;justify-content:space-between;align-items:center}
+.row-title button{background:transparent;color:#d5a5ff;border:0}
+.rail{display:flex;gap:14px;overflow-x:auto;padding:8px 2px 18px;scroll-snap-type:x mandatory}
+.rail::-webkit-scrollbar{height:5px}
+.rail::-webkit-scrollbar-thumb{background:#76449b;border-radius:10px}
+.card{flex:0 0 150px;background:#191523;border:1px solid #342443;border-radius:13px;overflow:hidden;scroll-snap-align:start;cursor:pointer;transition:.2s}
+.card:hover{transform:translateY(-4px);border-color:#bd7cff}
+.poster{height:205px;background:#30203d center/cover no-repeat;position:relative}
+.card-info{padding:10px}
+.card h3{font-size:14px;margin:3px 0 7px}
+.card p{font-size:12px;color:#aaa;margin:0 0 7px}
+.rating{color:#ffc65c;font-size:12px}
+.category{flex:0 0 170px;height:110px;border-radius:14px;display:flex;align-items:end;padding:15px;background:#30203d center/cover;position:relative;overflow:hidden}
+.category:before{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#080810,transparent)}
+.category span{position:relative;font-weight:bold;font-size:18px}
+.controls{height:60px;background:#100e1b;border-top:1px solid #39254e;display:flex;align-items:center;justify-content:center;gap:20px}
+.controls button{background:#a45cdd;border:0;color:white;padding:10px 18px;border-radius:25px}
+#counter{color:#d3a5ff;font-size:13px}
+footer{height:25px;text-align:center;font-size:11px;color:#9987a9;padding:5px;background:#100e1b}
+.modal{display:none;position:fixed;inset:0;z-index:20;background:#000e;align-items:center;justify-content:center;padding:20px}
+.modal-box{background:#191323;border:1px solid #79509c;border-radius:18px;padding:20px;width:min(450px,100%);max-height:85vh;overflow:auto}
+.modal-box img{width:100%;height:230px;object-fit:cover;border-radius:12px}
+.close{float:right;background:none;border:0;color:white;font-size:25px}
+.status{font-size:11px;color:#bba4d0;margin-top:8px}
+@media(max-width:650px){
+ header{padding:0 9px;height:65px}
+ .logo{font-size:12px}
+ .menu button{font-size:10px;padding:8px 5px}
+ .search{display:none}
+ .page{padding:16px 13px}
+ .hero{min-height:290px;padding:20px}
+ .card{flex-basis:135px}
+ .poster{height:180px}
 }
 </style>
 </head>
 <body>
 
 <header>
-<div class="logo">ENTERTAINMENT WORLD</div>
-<div class="menu">
-<button class="active" onclick="go(0)">Home</button>
-<button onclick="go(1)">Movies</button>
-<button onclick="go(2)">Stars</button>
-</div>
+ <div class="logo">S.G. WORLDS ✦</div>
+ <input class="search" id="search" placeholder="Search movies..." oninput="searchMovies()">
+ <nav class="menu">
+  <button class="active" onclick="go(0)">Home</button>
+  <button onclick="go(1)">Movies</button>
+  <button onclick="go(2)">Stars</button>
+  <button onclick="go(3)">TV</button>
+  <button onclick="go(4)">News</button>
+ </nav>
 </header>
 
 <div class="slider" id="slider">
 <div class="track" id="track">
 
 <section class="page">
-<h1>WELCOME TO<br>YOUR WORLD.</h1>
-<p>Discover the biggest names, movies, shows and stories in entertainment.</p>
-<div class="hero-art">🌟</div>
-<h2>Explore Everything</h2>
-<div class="cards">
-<div class="card"><div class="art">🎬</div><h3>Movies</h3><p>Explore cinema.</p></div>
-<div class="card"><div class="art">📺</div><h3>TV Shows</h3><p>Discover series.</p></div>
-<div class="card"><div class="art">🎤</div><h3>Music Stars</h3><p>Meet artists.</p></div>
-</div>
+ <div class="hero" data-wiki="Cinema">
+  <div class="hero-content">
+   <div class="tag">WELCOME TO S.G. WORLDS</div>
+   <h1>ENTERTAINMENT WITHOUT LIMITS.</h1>
+   <p>Discover movies, television, celebrities and stories from around the world.</p>
+   <button class="primary" onclick="go(1)">EXPLORE MOVIES →</button>
+  </div>
+ </div>
+ <div class="row-title"><h2>Featured Movies</h2><button onclick="go(1)">See all →</button></div>
+ <div class="rail" id="homeMovies"></div>
+ <h2>Explore Categories</h2>
+ <div class="rail" id="categories"></div>
 </section>
 
 <section class="page">
-<h1>MOVIE WORLD 🎬</h1>
-<p>Explore the world of cinema.</p>
-<div class="hero-art">🍿</div>
-<h2>Movie Categories</h2>
-<div class="cards">
-<div class="card"><div class="art">💥</div><h3>Action</h3><p>Adventure and excitement.</p></div>
-<div class="card"><div class="art">😂</div><h3>Comedy</h3><p>Laugh and enjoy.</p></div>
-<div class="card"><div class="art">🚀</div><h3>Sci-Fi</h3><p>Explore new worlds.</p></div>
-<div class="card"><div class="art">🎭</div><h3>Drama</h3><p>Stories and performances.</p></div>
-<div class="card"><div class="art">❤️</div><h3>Animation</h3><p>Animated adventures.</p></div>
-<div class="card"><div class="art">🏆</div><h3>Classics</h3><p>Timeless cinema.</p></div>
-</div>
+ <div class="hero" data-wiki="Film">
+  <div class="hero-content">
+   <div class="tag">THE MOVIE COLLECTION</div>
+   <h1>YOUR NEXT GREAT MOVIE STARTS HERE.</h1>
+   <p>Explore famous films, discoveries and unforgettable cinema.</p>
+  </div>
+ </div>
+ <h2>Popular Movies</h2><div class="rail" id="movieList"></div>
+ <h2>Action & Adventure</h2><div class="rail" id="actionList"></div>
+ <h2>Animation & Drama</h2><div class="rail" id="otherMovies"></div>
 </section>
 
 <section class="page">
-<h1>CELEBRITY WORLD ⭐</h1>
-<p>Discover famous personalities from around the world.</p>
-<div class="hero-art">🌍</div>
-<div class="cards">
-<div class="card"><div class="art">🎭</div><h3>Actors</h3><p>Explore film and TV actors.</p></div>
-<div class="card"><div class="art">🎵</div><h3>Singers</h3><p>Meet global music stars.</p></div>
-<div class="card"><div class="art">⚽</div><h3>Sports Stars</h3><p>Discover famous athletes.</p></div>
-<div class="card"><div class="art">📸</div><h3>Influencers</h3><p>Explore digital creators.</p></div>
-</div>
+ <div class="hero" data-wiki="Celebrity">
+  <div class="hero-content">
+   <div class="tag">GLOBAL PERSONALITIES</div>
+   <h1>MEET THE STARS.</h1>
+   <p>Discover actors, musicians, athletes and influential personalities.</p>
+  </div>
+ </div>
+ <h2>Famous Personalities</h2><div class="rail" id="starsList"></div>
 </section>
 
 <section class="page">
-<h1>TV SHOWS 📺</h1>
-<p>Your space for television entertainment.</p>
-<div class="hero-art">🎞️</div>
-<div class="cards">
-<div class="card"><div class="art">🌎</div><h3>Documentaries</h3><p>Real stories and discoveries.</p></div>
-<div class="card"><div class="art">🎤</div><h3>Reality Shows</h3><p>Entertainment and competition.</p></div>
-<div class="card"><div class="art">🎭</div><h3>Series</h3><p>Explore television stories.</p></div>
-<div class="card"><div class="art">🏅</div><h3>Awards</h3><p>Celebrate entertainment.</p></div>
-</div>
+ <div class="hero" data-wiki="Television">
+  <div class="hero-content">
+   <div class="tag">SERIES • DOCUMENTARIES • SHOWS</div>
+   <h1>THE WORLD OF TELEVISION.</h1>
+   <p>Discover stories, series and shows worth exploring.</p>
+  </div>
+ </div>
+ <h2>Explore TV</h2><div class="rail" id="tvList"></div>
 </section>
 
 <section class="page">
-<h1>ENTERTAINMENT NEWS 📰</h1>
-<p>Explore stories, announcements and updates from entertainment around the world.</p>
-<div class="hero-art">🌟</div>
-<div class="cards">
-<div class="card"><div class="art">🎬</div><h3>Movie News</h3><p>Film announcements and updates.</p></div>
-<div class="card"><div class="art">🎵</div><h3>Music News</h3><p>Artist and music updates.</p></div>
-<div class="card"><div class="art">🏆</div><h3>Awards News</h3><p>Entertainment award events.</p></div>
-</div>
+ <div class="hero" data-wiki="Entertainment">
+  <div class="hero-content">
+   <div class="tag">S.G. WORLDS NEWS</div>
+   <h1>THE LATEST IN ENTERTAINMENT.</h1>
+   <p>Explore movie announcements, celebrity stories and entertainment updates.</p>
+  </div>
+ </div>
+ <h2>Entertainment Updates</h2><div class="rail" id="newsList"></div>
 </section>
 
 </div>
 </div>
 
 <div class="controls">
-<button onclick="move(-1)">← Previous</button>
-<span id="counter">1 / 5</span>
-<button onclick="move(1)">Next →</button>
+ <button onclick="move(-1)">← Previous</button>
+ <span id="counter">1 / 5</span>
+ <button onclick="move(1)">Next →</button>
 </div>
-<footer>ENTERTAINMENT WORLD • Explore beyond imagination</footer>
+<footer>S.G. WORLDS • ENTERTAINMENT • DISCOVER MORE</footer>
+
+<div class="modal" id="modal" onclick="if(event.target===this)closeModal()">
+ <div class="modal-box">
+  <button class="close" onclick="closeModal()">×</button>
+  <div id="modalContent"></div>
+ </div>
+</div>
 
 <script>
 let current=0;
 const total=5;
-const track=document.getElementById("track");
-const counter=document.getElementById("counter");
+const imageCache={};
+
+const movies=[
+ ["Inception","Sci-Fi • 2010","8.8","Inception","A mind-bending science-fiction thriller."],
+ ["Interstellar","Sci-Fi • 2014","8.7","Interstellar (film)","An epic journey through space and time."],
+ ["The Dark Knight","Action • 2008","9.0","The Dark Knight","A legendary superhero crime drama."],
+ ["Gladiator","Action • 2000","8.5","Gladiator (2000 film)","An epic historical adventure."],
+ ["The Lion King","Animation • 1994","8.5","The Lion King","An unforgettable animated adventure."],
+ ["Joker","Drama • 2019","8.3","Joker (2019 film)","A psychological character drama."],
+ ["Avatar","Adventure • 2009","7.9","Avatar (2009 film)","A journey into a spectacular world."],
+ ["Titanic","Drama • 1997","7.9","Titanic (1997 film)","A famous romantic disaster film."],
+ ["The Matrix","Sci-Fi • 1999","8.7","The Matrix","A science-fiction action classic."],
+ ["Jurassic Park","Adventure • 1993","8.2","Jurassic Park (film)","A classic dinosaur adventure."]
+];
+
+const stars=[
+ ["Cristiano Ronaldo","Football Star","Cristiano Ronaldo"],
+ ["Lionel Messi","Football Star","Lionel Messi"],
+ ["Michael Jackson","Music Legend","Michael Jackson"],
+ ["Taylor Swift","Singer","Taylor Swift"],
+ ["Dwayne Johnson","Actor","Dwayne Johnson"],
+ ["Leonardo DiCaprio","Actor","Leonardo DiCaprio"],
+ ["Kylian Mbappe","Football Star","Kylian Mbappé"],
+ ["Zendaya","Actress","Zendaya"],
+ ["Ariana Grande","Singer","Ariana Grande"],
+ ["Will Smith","Actor","Will Smith"]
+];
+
+const shows=[
+ ["Planet Earth","Documentary","Planet Earth"],
+ ["Stranger Things","Drama Series","Stranger Things"],
+ ["The Crown","Historical Series","The Crown (TV series)"],
+ ["Our Planet","Documentary","Our Planet"],
+ ["Wednesday","Mystery Series","Wednesday (TV series)"],
+ ["The Last of Us","Drama Series","The Last of Us (TV series)"]
+];
+
+const news=[
+ ["Movie Industry","Film and cinema stories.","Cinema"],
+ ["Music World","Music and artist stories.","Music"],
+ ["Celebrity Updates","Famous personality stories.","Celebrity"],
+ ["Entertainment Awards","Entertainment award events.","Academy Awards"]
+];
+
+const categories=[
+ ["Action","Action film"],
+ ["Comedy","Comedy"],
+ ["Sci-Fi","Science fiction"],
+ ["Adventure","Adventure film"],
+ ["Drama","Drama film"],
+ ["Animation","Animation"]
+];
+
+function esc(s){
+ return String(s).replace(/[&<>"']/g,c=>({
+  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+ }[c]));
+}
+
+function makeCard(name,type,description,wiki,rating=""){
+ const id="card-"+Math.random().toString(36).slice(2);
+ const fallback="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=500";
+ return `<div class="card" data-wiki="${esc(wiki)}"
+ onclick="details('${esc(name)}','${esc(type)}','${esc(description)}','${esc(wiki)}')">
+ <div class="poster" id="${id}" style="background-image:url('${fallback}')"></div>
+ <div class="card-info"><h3>${esc(name)}</h3>
+ <p>${esc(type)}</p>${rating?`<span class="rating">★ ${esc(rating)}</span>`:""}
+ </div></div>`;
+}
+
+function movieCard(m){
+ return makeCard(m[0],m[1],m[4],m[3],m[2]);
+}
+function starCard(s){
+ return makeCard(s[0],s[1],"Discover more about "+s[0]+".",s[2]);
+}
+function showCard(s){
+ return makeCard(s[0],s[1],"Explore this television title.",s[2]);
+}
+function newsCard(n){
+ return makeCard(n[0], "Entertainment News",n[1],n[2]);
+}
+
+document.getElementById("homeMovies").innerHTML=movies.slice(0,6).map(movieCard).join("");
+document.getElementById("movieList").innerHTML=movies.map(movieCard).join("");
+document.getElementById("actionList").innerHTML=movies.filter(m=>/Action|Adventure/.test(m[1])).map(movieCard).join("");
+document.getElementById("otherMovies").innerHTML=movies.filter(m=>/Animation|Drama/.test(m[1])).map(movieCard).join("");
+document.getElementById("starsList").innerHTML=stars.map(starCard).join("");
+document.getElementById("tvList").innerHTML=shows.map(showCard).join("");
+document.getElementById("newsList").innerHTML=news.map(newsCard).join("");
+
+document.getElementById("categories").innerHTML=categories.map(c=>
+ `<div class="category" data-wiki="${esc(c[1])}"><span>${esc(c[0])}</span></div>`
+).join("");
+
+async function getRealImage(title){
+ if(imageCache[title]!==undefined)return imageCache[title];
+
+ try{
+  const url="https://en.wikipedia.org/api/rest_v1/page/summary/"+encodeURIComponent(title.replace(/ /g,"_"));
+  const response=await fetch(url);
+  if(!response.ok)throw new Error("Image unavailable");
+  const data=await response.json();
+  const picture=data.thumbnail?.source||data.originalimage?.source||null;
+  imageCache[title]=picture;
+  return picture;
+ }catch(e){
+  imageCache[title]=null;
+  return null;
+ }
+}
+
+async function loadRealImages(){
+ const elements=document.querySelectorAll("[data-wiki]");
+
+ for(const element of elements){
+  const title=element.dataset.wiki;
+  const picture=await getRealImage(title);
+
+  if(picture){
+   if(element.classList.contains("hero")){
+    element.style.backgroundImage=`url("${picture}")`;
+   }else if(element.classList.contains("category")){
+    element.style.backgroundImage=`url("${picture}")`;
+   }else if(element.classList.contains("card")){
+    const poster=element.querySelector(".poster");
+    if(poster)poster.style.backgroundImage=`url("${picture}")`;
+   }
+  }
+ }
+}
 
 function go(index){
  current=Math.max(0,Math.min(total-1,index));
- track.style.transform=`translateX(-${current*100}%)`;
- counter.textContent=(current+1)+" / "+total;
- document.querySelectorAll(".menu button").forEach(b=>b.classList.remove("active"));
- if(current===0)document.querySelectorAll(".menu button")[0].classList.add("active");
- if(current===1)document.querySelectorAll(".menu button")[1].classList.add("active");
- if(current===2)document.querySelectorAll(".menu button")[2].classList.add("active");
+ document.getElementById("track").style.transform=`translateX(-${current*100}%)`;
+ document.getElementById("counter").textContent=(current+1)+" / "+total;
+ document.querySelectorAll(".menu button").forEach((b,i)=>{
+  b.classList.toggle("active",i===current);
+ });
 }
-function move(direction){go(current+direction)}
+function move(d){go(current+d)}
+
+function details(name,type,description,wiki){
+ document.getElementById("modalContent").innerHTML=`
+ <div id="detailImage" style="height:230px;background:#30203d center/cover;border-radius:12px"></div>
+ <h2>${esc(name)}</h2>
+ <p style="color:#c69aff">${esc(type)}</p>
+ <p style="line-height:1.6;color:#ddd">${esc(description)}</p>
+ <p class="status">Image and information from Wikipedia, where available.</p>`;
+ document.getElementById("modal").style.display="flex";
+
+ getRealImage(wiki).then(picture=>{
+  if(picture){
+   document.getElementById("detailImage").style.backgroundImage=`url("${picture}")`;
+  }
+ });
+}
+
+function closeModal(){
+ document.getElementById("modal").style.display="none";
+}
+
+function searchMovies(){
+ const q=document.getElementById("search").value.toLowerCase();
+ const results=movies.filter(m=>
+  m[0].toLowerCase().includes(q)||m[1].toLowerCase().includes(q)
+ );
+ go(1);
+ document.getElementById("movieList").innerHTML=
+  results.length?results.map(movieCard).join(""):"<p>No matching movies found.</p>";
+ loadRealImages();
+}
 
 let startX=0;
 const slider=document.getElementById("slider");
-slider.addEventListener("touchstart",e=>{startX=e.touches[0].clientX},{passive:true});
-slider.addEventListener("touchend",e=>{
- const difference=e.changedTouches[0].clientX-startX;
- if(Math.abs(difference)>60)move(difference<0?1:-1);
+slider.addEventListener("touchstart",e=>{
+ startX=e.touches[0].clientX;
 },{passive:true});
+slider.addEventListener("touchend",e=>{
+ const diff=e.changedTouches[0].clientX-startX;
+ if(Math.abs(diff)>80)move(diff<0?1:-1);
+},{passive:true});
+
+loadRealImages();
 </script>
 </body>
 </html>
