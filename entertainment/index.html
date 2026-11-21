@@ -1,0 +1,465 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#100b20">
+<title>S.G. WORLDS | Entertainment Universe</title>
+<style>
+:root{--bg:#090713;--panel:#171229;--panel2:#211839;--purple:#a978f5;--light:#d9c3ff;--muted:#b9afca;--border:#382957}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:#fff;font-family:Arial,sans-serif}
+header{position:sticky;top:0;z-index:10;background:#130e24;border-bottom:1px solid var(--border);padding:14px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.logo{font-size:23px;font-weight:900;color:var(--light);letter-spacing:1px}
+.search{background:#090713;border:1px solid #57417d;color:white;border-radius:25px;padding:12px;width:min(100%,270px)}
+nav{display:flex;gap:8px;overflow-x:auto;margin-top:14px;padding-bottom:4px}
+nav button,.chip{background:#29203e;color:#eee;border:0;border-radius:22px;padding:11px 15px;white-space:nowrap;cursor:pointer}
+nav button.active,nav button:hover,.chip.active{background:var(--purple);color:#140d23}
+main{max-width:1500px;margin:auto}
+.page{display:none;padding:18px;min-height:75vh}
+.page.active{display:block;animation:fade .25s}
+@keyframes fade{from{opacity:.4}to{opacity:1}}
+.hero{padding:34px 22px;border-radius:20px;background:linear-gradient(120deg,#25123e,#17102e,#512b6c);margin-bottom:22px}
+.hero h1{font-size:clamp(27px,5vw,43px);margin:0 0 10px}
+.hero p{color:#ded4ed;line-height:1.7;max-width:750px}
+h2{color:var(--light);margin:28px 0 15px}
+h3{margin:0 0 8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:15px}
+.card{background:var(--panel);border:1px solid var(--border);border-radius:15px;overflow:hidden;cursor:pointer;transition:.2s;min-width:0}
+.card:hover{transform:translateY(-4px);border-color:var(--purple)}
+.poster{height:220px;background:linear-gradient(135deg,#251b3d,#493064);display:flex;align-items:center;justify-content:center;text-align:center;padding:12px;color:#d8c5f2;overflow:hidden}
+.poster img{width:100%;height:100%;object-fit:cover}
+.info{padding:12px}
+.info h3{font-size:15px}
+.info p{font-size:12px;color:var(--muted);line-height:1.5;margin:0}
+.tag{display:inline-block;background:#392657;color:#e0ccff;border-radius:20px;padding:5px 9px;font-size:10px;margin-top:9px}
+.card-actions{display:flex;justify-content:space-between;align-items:center;padding:0 12px 12px;gap:8px}
+.smallbtn{background:#35254e;color:white;border:1px solid #604582;border-radius:18px;padding:7px 10px;cursor:pointer}
+.smallbtn.saved{background:#67419a}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:15px 0}
+.empty{color:var(--muted);padding:20px;background:var(--panel);border-radius:12px}
+.ad-placeholder{display:none}
+.plan-grid,.feature-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px}
+.panel{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:18px}
+.panel p{color:var(--muted);line-height:1.6}
+.news-link{display:block;background:var(--panel);border:1px solid var(--border);padding:17px;border-radius:13px;color:white;text-decoration:none;margin-bottom:12px}
+.news-link:hover{border-color:var(--purple)}
+.news-link span{display:block;color:var(--muted);font-size:13px;margin-top:7px}
+.modal{display:none;position:fixed;inset:0;background:#000e;z-index:30;overflow:auto;padding:20px 12px}
+.modalbox{max-width:760px;margin:20px auto;background:#171229;border:1px solid #7554a4;border-radius:18px;padding:20px;position:relative}
+.close{position:absolute;right:13px;top:12px;background:#493263;color:white;border:0;border-radius:50%;padding:10px 13px;cursor:pointer}
+.detail-image{width:100%;max-height:370px;object-fit:cover;border-radius:12px;background:#302044}
+.detail-meta{color:var(--light);font-size:13px;line-height:1.7}
+.detail-text{line-height:1.75;color:#ded6e9}
+.detail-actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px}
+.detail-actions button,.detail-actions a{background:#8055c5;color:white;border:0;border-radius:22px;padding:11px 15px;text-decoration:none;cursor:pointer}
+.detail-actions a{background:#35264c}
+footer{background:#120d20;text-align:center;padding:28px;color:#a99ebd;margin-top:30px;line-height:1.8}
+footer a{color:#d3b6ff}
+.notice{background:#211839;border-left:3px solid var(--purple);padding:13px;border-radius:8px;color:#ded4ed;line-height:1.6}
+input,textarea{font:inherit}
+@media(max-width:520px){.page{padding:12px}.poster{height:190px}.logo{font-size:20px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{padding:25px 17px}}
+</style>
+</head>
+<body>
+
+<header>
+ <div class="top">
+  <div class="logo">S.G. WORLDS 🌍</div>
+  <input id="search" class="search" placeholder="Search everything..." oninput="searchAll()">
+ </div>
+ <nav id="navigation">
+  <button class="active" data-page="home" onclick="showPage('home',this)">Home</button>
+  <button data-page="movies" onclick="showPage('movies',this)">Movies 🎬</button>
+  <button data-page="stars" onclick="showPage('stars',this)">Celebrities ⭐</button>
+  <button data-page="tv" onclick="showPage('tv',this)">TV 📺</button>
+  <button data-page="music" onclick="showPage('music',this)">Music 🎵</button>
+  <button data-page="football" onclick="showPage('football',this)">Football ⚽</button>
+  <button data-page="news" onclick="showPage('news',this)">News 📰</button>
+  <button data-page="favourites" onclick="showPage('favourites',this)">Favourites ♥</button>
+  <button data-page="about" onclick="showPage('about',this)">About</button>
+ </nav>
+</header>
+
+<main>
+<section class="page active" id="home">
+ <div class="hero">
+  <h1>Welcome to S.G. WORLDS</h1>
+  <p>Explore the world of cinema, famous personalities, television, music and football. Discover stories, careers, achievements and entertainment from around the world.</p>
+  <div class="toolbar">
+   <button class="chip active" onclick="showPage('movies')">Explore Movies</button>
+   <button class="chip" onclick="showPage('stars')">Meet the Stars</button>
+   <button class="chip" onclick="showPage('music')">Discover Music</button>
+  </div>
+ </div>
+ <div class="notice">Welcome to your entertainment universe. Select a card to explore its detailed profile. Pictures are loaded from Wikipedia when available.</div>
+ <h2>🎬 Featured Movies</h2><div class="grid" id="homeMovies"></div>
+ <h2>⭐ Famous Personalities</h2><div class="grid" id="homeStars"></div>
+ <h2>📺 Popular Television</h2><div class="grid" id="homeTV"></div>
+ <h2>Explore S.G. WORLDS</h2>
+ <div class="feature-grid">
+  <div class="panel"><h3>🎥 Cinema</h3><p>Explore films, directors, actors, stories and production details.</p></div>
+  <div class="panel"><h3>🌟 People</h3><p>Discover famous actors, musicians, creators and athletes.</p></div>
+  <div class="panel"><h3>🎵 Music</h3><p>Discover artists, musical styles, albums and careers.</p></div>
+  <div class="panel"><h3>⚽ Football</h3><p>Explore famous players, clubs, positions and achievements.</p></div>
+ </div>
+</section>
+
+<section class="page" id="movies">
+ <div class="hero"><h1>🎬 Movies Universe</h1><p>Discover famous films, their stories, casts, directors and production information.</p></div>
+ <div class="toolbar" id="movieFilters">
+  <button class="chip active" onclick="filterCategory('movies','All',this)">All</button>
+  <button class="chip" onclick="filterCategory('movies','Action',this)">Action</button>
+  <button class="chip" onclick="filterCategory('movies','Science Fiction',this)">Sci-Fi</button>
+  <button class="chip" onclick="filterCategory('movies','Drama',this)">Drama</button>
+  <button class="chip" onclick="filterCategory('movies','Animation',this)">Animation</button>
+  <button class="chip" onclick="filterCategory('movies','Adventure',this)">Adventure</button>
+ </div>
+ <div class="grid" id="movieList"></div>
+</section>
+
+<section class="page" id="stars">
+ <div class="hero"><h1>⭐ Celebrity World</h1><p>Explore biographies, careers, achievements and interesting facts about famous people.</p></div>
+ <div class="grid" id="starList"></div>
+</section>
+
+<section class="page" id="tv">
+ <div class="hero"><h1>📺 Television World</h1><p>Explore television series, documentaries, casts and storylines.</p></div>
+ <div class="grid" id="tvList"></div>
+</section>
+
+<section class="page" id="music">
+ <div class="hero"><h1>🎵 Music Universe</h1><p>Discover influential singers, musicians and music creators from different genres.</p></div>
+ <div class="grid" id="musicList"></div>
+</section>
+
+<section class="page" id="football">
+ <div class="hero"><h1>⚽ Football Legends</h1><p>Explore famous footballers, their positions, clubs, national teams and careers.</p></div>
+ <div class="grid" id="footballList"></div>
+</section>
+
+<section class="page" id="news">
+ <div class="hero"><h1>📰 Entertainment News</h1><p>Visit established entertainment publications for current stories and updates.</p></div>
+ <div id="newsList"></div>
+ <p class="notice">These links open external news websites or topic searches. S.G. WORLDS does not claim to publish or verify live news itself.</p>
+</section>
+
+<section class="page" id="favourites">
+ <div class="hero"><h1>♥ Your Favourites</h1><p>Your saved movies, personalities, television shows and music artists.</p></div>
+ <div class="notice">Favourites are saved in this browser on this device. They will not automatically appear on another phone or browser.</div>
+ <div class="grid" id="favouriteList"></div>
+</section>
+
+<section class="page" id="about">
+ <div class="hero"><h1>About S.G. WORLDS</h1><p>Your entertainment universe.</p></div>
+ <div class="panel">
+  <h2>Our Story</h2>
+  <p>S.G. WORLDS is an entertainment discovery project bringing together information about films, celebrities, television, music and football.</p>
+  <h2>Our Goal</h2>
+  <p>To make it easier for visitors to discover entertainment information and explore the stories behind famous people and productions.</p>
+  <h2>Contact</h2>
+  <p>For questions or feedback, add your official contact email address here when you are ready to publish one.</p>
+  <h2>Privacy Information</h2>
+  <p>This version stores favourite selections in the visitor's browser using local storage. It does not create online accounts or send favourites to a server. Images and some information are requested from Wikipedia. External news and video links open third-party websites, which have their own privacy policies.</p>
+  <h2>Content and Accuracy</h2>
+  <p>Information is provided for general entertainment discovery. Details may change or require correction. Images may not be available for every entry.</p>
+ </div>
+</section>
+</main>
+
+<footer>
+ <strong>S.G. WORLDS 🌍</strong><br>
+ Your world of entertainment<br>
+ <a href="#" onclick="showPage('about');return false">About</a> ·
+ <a href="#" onclick="showPage('about');return false">Contact</a> ·
+ <a href="#" onclick="showPage('about');return false">Privacy</a><br>
+ © 2026 S.G. WORLDS
+</footer>
+
+<div class="modal" id="modal" onclick="if(event.target===this)closeModal()">
+ <div class="modalbox">
+  <button class="close" onclick="closeModal()">✕</button>
+  <div id="modalContent"></div>
+ </div>
+</div>
+
+<script>
+const movies=[
+{ name:"Inception",year:"2010",release:"16 July 2010",genre:"Science Fiction, Action",director:"Christopher Nolan",cast:"Leonardo DiCaprio, Joseph Gordon-Levitt, Elliot Page, Tom Hardy, Ken Watanabe",runtime:"148 minutes",country:"United States, United Kingdom",language:"English",studio:"Warner Bros. Pictures",wiki:"Inception",story:"A skilled thief who steals secrets through dream-sharing technology is offered a chance to have his criminal history erased. His mission is to plant an idea in another person's mind, a difficult task that takes him and his team into layered dream worlds.",recognition:"The film received major award nominations and won four Academy Awards.",rating:"Widely acclaimed by audiences and critics."},
+{ name:"Interstellar",year:"2014",release:"7 November 2014",genre:"Science Fiction, Adventure, Drama",director:"Christopher Nolan",cast:"Matthew McConaughey, Anne Hathaway, Jessica Chastain, Michael Caine",runtime:"169 minutes",country:"United States, United Kingdom",language:"English",studio:"Paramount Pictures, Warner Bros.",wiki:"Interstellar (film)",story:"As Earth faces environmental challenges, a former pilot joins a space mission to search for a place where humanity could survive. The journey explores space, time, family and sacrifice.",recognition:"The film won the Academy Award for Best Visual Effects.",rating:"Widely acclaimed for its visuals and music."},
+{ name:"The Dark Knight",year:"2008",release:"18 July 2008",genre:"Action, Crime, Drama",director:"Christopher Nolan",cast:"Christian Bale, Heath Ledger, Aaron Eckhart, Gary Oldman, Morgan Freeman",runtime:"152 minutes",country:"United States, United Kingdom",language:"English",studio:"Warner Bros. Pictures",wiki:"The Dark Knight",story:"Batman works with police officers and a district attorney to protect Gotham City. Their efforts are challenged by the Joker, a criminal who tries to create chaos and test the city's values.",recognition:"Heath Ledger received a posthumous Academy Award for his performance.",rating:"Widely acclaimed superhero crime drama."},
+{ name:"Gladiator",year:"2000",release:"5 May 2000",genre:"Historical, Action, Drama",director:"Ridley Scott",cast:"Russell Crowe, Joaquin Phoenix, Connie Nielsen, Oliver Reed",runtime:"155 minutes",country:"United States, United Kingdom",language:"English",studio:"DreamWorks Pictures, Universal Pictures",wiki:"Gladiator (2000 film)",story:"A respected Roman general is betrayed and forced into slavery. He becomes a gladiator and seeks justice while confronting the political power that destroyed his life.",recognition:"Won five Academy Awards, including Best Picture and Best Actor.",rating:"A celebrated historical action film."},
+{ name:"The Lion King",year:"1994",release:"24 June 1994",genre:"Animation, Adventure, Drama",director:"Roger Allers, Rob Minkoff",cast:"Matthew Broderick, James Earl Jones, Jeremy Irons, Moira Kelly",runtime:"88 minutes",country:"United States",language:"English",studio:"Walt Disney Feature Animation",wiki:"The Lion King",story:"Simba, a young lion prince, grows up learning about family, responsibility and courage. After a family tragedy, he must decide whether to return home and face his past.",recognition:"The film won Academy Awards for its music.",rating:"A highly regarded animated classic."},
+{ name:"Joker",year:"2019",release:"4 October 2019",genre:"Drama, Crime, Thriller",director:"Todd Phillips",cast:"Joaquin Phoenix, Robert De Niro, Zazie Beetz, Frances Conroy",runtime:"122 minutes",country:"United States, Canada",language:"English",studio:"Warner Bros. Pictures",wiki:"Joker (2019 film)",story:"Arthur Fleck is a struggling entertainer in Gotham City. The film follows his difficult experiences and the events that shape his public identity.",recognition:"Joaquin Phoenix won the Academy Award for Best Actor.",rating:"Award-winning character drama."},
+{ name:"Avatar",year:"2009",release:"18 December 2009",genre:"Science Fiction, Adventure",director:"James Cameron",cast:"Sam Worthington, Zoe Saldaña, Sigourney Weaver, Stephen Lang",runtime:"162 minutes",country:"United States",language:"English",studio:"20th Century Fox",wiki:"Avatar (2009 film)",story:"A former marine travels to Pandora, a distant moon, where he becomes involved with the Na'vi people and the conflict surrounding their home.",recognition:"Won three Academy Awards, including Best Cinematography and Best Visual Effects.",rating:"Known for its groundbreaking visual effects."},
+{ name:"Titanic",year:"1997",release:"19 December 1997",genre:"Romance, Drama, Historical",director:"James Cameron",cast:"Leonardo DiCaprio, Kate Winslet, Billy Zane, Kathy Bates",runtime:"195 minutes",country:"United States",language:"English",studio:"20th Century Fox, Paramount Pictures",wiki:"Titanic (1997 film)",story:"A fictional romance develops aboard the RMS Titanic during its famous 1912 voyage. The story combines personal relationships with the historical disaster.",recognition:"Won eleven Academy Awards, including Best Picture and Best Director.",rating:"One of the best-known films in cinema history."},
+{ name:"The Matrix",year:"1999",release:"31 March 1999",genre:"Science Fiction, Action",director:"The Wachowskis",cast:"Keanu Reeves, Laurence Fishburne, Carrie-Anne Moss, Hugo Weaving",runtime:"136 minutes",country:"United States",language:"English",studio:"Warner Bros. Pictures",wiki:"The Matrix",story:"A computer programmer discovers that the world he knows is a simulated reality. He joins a group of rebels seeking to understand and challenge the system.",recognition:"Won four Academy Awards and influenced science-fiction filmmaking.",rating:"A landmark science-fiction action film."},
+{ name:"Jurassic Park",year:"1993",release:"11 June 1993",genre:"Adventure, Science Fiction",director:"Steven Spielberg",cast:"Sam Neill, Laura Dern, Jeff Goldblum, Richard Attenborough",runtime:"127 minutes",country:"United States",language:"English",studio:"Universal Pictures",wiki:"Jurassic Park (film)",story:"Scientists and visitors explore a theme park where prehistoric dinosaurs have been recreated. A systems failure turns the visit into a dangerous struggle for survival.",recognition:"Won three Academy Awards.",rating:"A landmark adventure film."},
+{ name:"Black Panther",year:"2018",release:"16 February 2018",genre:"Superhero, Action, Adventure",director:"Ryan Coogler",cast:"Chadwick Boseman, Michael B. Jordan, Lupita Nyong'o, Danai Gurira",runtime:"134 minutes",country:"United States",language:"English",studio:"Marvel Studios",wiki:"Black Panther (film)",story:"T'Challa returns to Wakanda to take his place as king. He faces a challenge that forces him to consider the future and responsibilities of his nation.",recognition:"Won three Academy Awards.",rating:"A major Marvel superhero film."},
+{ name:"Avengers: Endgame",year:"2019",release:"26 April 2019",genre:"Superhero, Action, Adventure",director:"Anthony Russo, Joe Russo",cast:"Robert Downey Jr., Chris Evans, Mark Ruffalo, Scarlett Johansson",runtime:"181 minutes",country:"United States",language:"English",studio:"Marvel Studios",wiki:"Avengers: Endgame",story:"Following a devastating event, the remaining Avengers work together on a difficult plan that could change the future of their universe.",recognition:"Received an Academy Award nomination for visual effects.",rating:"A major entry in the Marvel Cinematic Universe."},
+{ name:"Spider-Man: No Way Home",year:"2021",release:"17 December 2021",genre:"Superhero, Action, Adventure",director:"Jon Watts",cast:"Tom Holland, Zendaya, Benedict Cumberbatch, Jacob Batalon",runtime:"148 minutes",country:"United States",language:"English",studio:"Marvel Studios, Columbia Pictures",wiki:"Spider-Man: No Way Home",story:"Peter Parker asks for help after his identity becomes public. The consequences bring unexpected visitors and difficult choices.",recognition:"Received major awards and audience recognition.",rating:"A popular Spider-Man film."},
+{ name:"Dune",year:"2021",release:"22 October 2021",genre:"Science Fiction, Adventure, Drama",director:"Denis Villeneuve",cast:"Timothée Chalamet, Rebecca Ferguson, Oscar Isaac, Zendaya",runtime:"155 minutes",country:"United States, Canada",language:"English",studio:"Legendary Pictures",wiki:"Dune (2021 film)",story:"Paul Atreides travels with his family to the desert planet Arrakis, a place of enormous political and economic importance.",recognition:"Won six Academy Awards.",rating:"Praised for its cinematography and production design."},
+{ name:"Oppenheimer",year:"2023",release:"21 July 2023",genre:"Historical, Drama, Biography",director:"Christopher Nolan",cast:"Cillian Murphy, Emily Blunt, Robert Downey Jr., Matt Damon",runtime:"180 minutes",country:"United States, United Kingdom",language:"English",studio:"Universal Pictures",wiki:"Oppenheimer (film)",story:"The film follows physicist J. Robert Oppenheimer and the development of the atomic bomb during the Second World War.",recognition:"Won seven Academy Awards, including Best Picture and Best Director.",rating:"A major historical biographical film."},
+{ name:"Barbie",year:"2023",release:"21 July 2023",genre:"Comedy, Fantasy, Adventure",director:"Greta Gerwig",cast:"Margot Robbie, Ryan Gosling, America Ferrera, Kate McKinnon",runtime:"114 minutes",country:"United States, United Kingdom",language:"English",studio:"Warner Bros. Pictures",wiki:"Barbie (film)",story:"Barbie leaves her familiar world and explores reality, discovering new ideas about identity, expectations and independence.",recognition:"Received numerous award nominations and won an Academy Award for Best Original Song.",rating:"A major global box-office success."},
+{ name:"Top Gun: Maverick",year:"2022",release:"27 May 2022",genre:"Action, Drama",director:"Joseph Kosinski",cast:"Tom Cruise, Miles Teller, Jennifer Connelly, Glen Powell",runtime:"130 minutes",country:"United States",language:"English",studio:"Paramount Pictures",wiki:"Top Gun: Maverick",story:"An experienced naval aviator returns to train a group of graduates for a demanding mission while confronting his past.",recognition:"Won the Academy Award for Best Sound.",rating:"Praised for its flight sequences and production."},
+{ name:"The Fellowship of the Ring",year:"2001",release:"19 December 2001",genre:"Fantasy, Adventure",director:"Peter Jackson",cast:"Elijah Wood, Ian McKellen, Viggo Mortensen, Sean Astin",runtime:"178 minutes",country:"New Zealand, United States",language:"English",studio:"New Line Cinema",wiki:"The Lord of the Rings: The Fellowship of the Ring",story:"A young hobbit begins a journey to destroy a powerful ring. He is joined by a fellowship of companions from different peoples.",recognition:"Won four Academy Awards.",rating:"A celebrated fantasy adventure."},
+{ name:"Finding Nemo",year:"2003",release:"30 May 2003",genre:"Animation, Adventure, Comedy",director:"Andrew Stanton",cast:"Albert Brooks, Ellen DeGeneres, Alexander Gould, Willem Dafoe",runtime:"100 minutes",country:"United States",language:"English",studio:"Pixar Animation Studios",wiki:"Finding Nemo",story:"A clownfish travels across the ocean to find his missing son, meeting many memorable sea creatures along the way.",recognition:"Won the Academy Award for Best Animated Feature.",rating:"An acclaimed animated family film."},
+{ name:"Coco",year:"2017",release:"22 November 2017",genre:"Animation, Fantasy, Music",director:"Lee Unkrich",cast:"Anthony Gonzalez, Gael García Bernal, Benjamin Bratt",runtime:"105 minutes",country:"United States",language:"English, Spanish",studio:"Pixar Animation Studios",wiki:"Coco (2017 film)",story:"A young boy who loves music enters the Land of the Dead and discovers important truths about his family's history.",recognition:"Won two Academy Awards.",rating:"Praised for its music and storytelling."}
+];
+
+const stars=[
+{name:"Cristiano Ronaldo",profession:"Footballer",born:"5 February 1985",country:"Portugal",known:"Football, goalscoring and international achievements",wiki:"Cristiano Ronaldo",career:"Ronaldo began his professional career in Portugal before playing for Manchester United, Real Madrid, Juventus and other clubs. He has also been a central figure for Portugal's national team.",achievements:"Multiple league titles, UEFA Champions League titles, international trophies and individual awards.",facts:"He is known for his athletic preparation, heading ability and long professional career.",category:"football"},
+{name:"Lionel Messi",profession:"Footballer",born:"24 June 1987",country:"Argentina",known:"Football, playmaking and goalscoring",wiki:"Lionel Messi",career:"Messi developed at Barcelona, where he became one of the club's most celebrated players. He later played for Paris Saint-Germain and Inter Miami and represented Argentina.",achievements:"Multiple Ballon d'Or awards, league titles, Copa América and FIFA World Cup winner.",facts:"He is widely admired for close control, passing, vision and dribbling.",category:"football"},
+{name:"Michael Jackson",profession:"Singer and entertainer",born:"29 August 1958",country:"United States",known:"Pop music, dance and performance",wiki:"Michael Jackson",career:"Jackson first became famous as a member of the Jackson 5 before building a highly influential solo career.",achievements:"Multiple Grammy Awards and landmark albums including Thriller and Bad.",facts:"His music videos and dance performances had a major influence on popular culture.",category:"music"},
+{name:"Taylor Swift",profession:"Singer-songwriter",born:"13 December 1989",country:"United States",known:"Pop and country music",wiki:"Taylor Swift",career:"Swift began her recording career in country music and later became one of the leading artists in pop music. Her songwriting often draws on personal stories and different musical styles.",achievements:"Multiple Grammy Awards and numerous international music awards.",facts:"She is known for re-recording some of her earlier albums.",category:"music"},
+{name:"Dwayne Johnson",profession:"Actor and former wrestler",born:"2 May 1972",country:"United States",known:"Action films and professional wrestling",wiki:"Dwayne Johnson",career:"Johnson first became widely known through professional wrestling before moving into film and television.",achievements:"Successful wrestling career and leading roles in major international films.",facts:"He is also known by the nickname The Rock.",category:"actor"},
+{name:"Leonardo DiCaprio",profession:"Actor and film producer",born:"11 November 1974",country:"United States",known:"Titanic, Inception and The Revenant",wiki:"Leonardo DiCaprio",career:"DiCaprio began acting as a young performer and later became known for roles in major films directed by prominent filmmakers.",achievements:"Academy Award for Best Actor for The Revenant and multiple other major awards.",facts:"He has also supported environmental conservation projects.",category:"actor"},
+{name:"Kylian Mbappé",profession:"Footballer",born:"20 December 1998",country:"France",known:"Football, speed and finishing",wiki:"Kylian Mbappé",career:"Mbappé rose to prominence at Monaco before becoming a major player for Paris Saint-Germain and Real Madrid. He has represented France internationally.",achievements:"FIFA World Cup winner with France and multiple domestic titles.",facts:"He became one of the youngest stars to win a World Cup.",category:"football"},
+{name:"Zendaya",profession:"Actor and singer",born:"1 September 1996",country:"United States",known:"Euphoria and Spider-Man films",wiki:"Zendaya",career:"Zendaya began in television and developed a film career, appearing in major productions and dramatic television roles.",achievements:"Emmy Awards for her performance in Euphoria and other industry recognition.",facts:"She has also worked in fashion and music.",category:"actor"},
+{name:"Ariana Grande",profession:"Singer and actor",born:"26 June 1993",country:"United States",known:"Pop music and television",wiki:"Ariana Grande",career:"Grande began acting in television before becoming a successful recording artist known for pop and R&B-influenced music.",achievements:"Grammy Award and numerous music industry awards.",facts:"She is known for her vocal range and distinctive pop sound.",category:"music"},
+{name:"Will Smith",profession:"Actor and musician",born:"25 September 1968",country:"United States",known:"The Fresh Prince, Men in Black and King Richard",wiki:"Will Smith",career:"Smith first gained fame as a rapper and television actor before becoming a leading film performer.",achievements:"Academy Award for Best Actor for King Richard and other major awards.",facts:"His career includes music, television and cinema.",category:"actor"},
+{name:"Beyoncé",profession:"Singer and performer",born:"4 September 1981",country:"United States",known:"R&B, pop music and live performances",wiki:"Beyoncé",career:"Beyoncé became famous with Destiny's Child before establishing a successful solo career.",achievements:"Numerous Grammy Awards and international music honours.",facts:"She is known for elaborate live performances and visual albums.",category:"music"},
+{name:"Rihanna",profession:"Singer and entrepreneur",born:"20 February 1988",country:"Barbados",known:"Pop, R&B and business",wiki:"Rihanna",career:"Rihanna became internationally known through hit songs and later expanded into fashion and beauty businesses.",achievements:"Multiple Grammy Awards and major business achievements.",facts:"She was born in Barbados and has become a global cultural figure.",category:"music"},
+{name:"Tom Cruise",profession:"Actor and producer",born:"3 July 1962",country:"United States",known:"Top Gun and Mission: Impossible",wiki:"Tom Cruise",career:"Cruise rose to prominence in the 1980s and became known for major action and drama films.",achievements:"Multiple Golden Globe Awards and an honorary Academy Award.",facts:"He is known for performing many of his own film stunts.",category:"actor"},
+{name:"Jackie Chan",profession:"Actor, director and martial artist",born:"7 April 1954",country:"Hong Kong",known:"Action comedy and stunt performance",wiki:"Jackie Chan",career:"Chan developed his career in Hong Kong cinema before becoming internationally famous for action-comedy films.",achievements:"Honorary Academy Award and many international film honours.",facts:"His style combines martial arts, physical comedy and inventive stunts.",category:"actor"},
+{name:"Adele",profession:"Singer-songwriter",born:"5 May 1988",country:"United Kingdom",known:"Soul and pop music",wiki:"Adele",career:"Adele became internationally known through albums including 19, 21, 25 and 30.",achievements:"Multiple Grammy Awards, Academy Award and other major music honours.",facts:"Her songs are known for emotional storytelling and powerful vocals.",category:"music"},
+{name:"Neymar",profession:"Footballer",born:"5 February 1992",country:"Brazil",known:"Football and attacking skill",wiki:"Neymar",career:"Neymar became famous at Santos before playing for Barcelona, Paris Saint-Germain and other clubs. He has represented Brazil.",achievements:"UEFA Champions League winner and Olympic gold medallist with Brazil.",facts:"He is known for creative attacking play and dribbling.",category:"football"},
+{name:"Serena Williams",profession:"Former tennis player",born:"26 September 1981",country:"United States",known:"Tennis championships",wiki:"Serena Williams",career:"Williams became one of the leading players in women's tennis and competed at the highest level for many years.",achievements:"23 Grand Slam singles titles in the Open Era and four Olympic gold medals.",facts:"She has also been involved in business and investment projects.",category:"sport"},
+{name:"MrBeast",profession:"Online creator and entrepreneur",born:"7 May 1998",country:"United States",known:"Online entertainment videos",wiki:"MrBeast",career:"MrBeast built a large online audience through challenge videos, creative competitions and large-scale productions.",achievements:"Major online creator awards and large philanthropic projects.",facts:"His videos are known for ambitious concepts and large production budgets.",category:"creator"},
+{name:"Shah Rukh Khan",profession:"Actor and film producer",born:"2 November 1965",country:"India",known:"Hindi cinema and Bollywood",wiki:"Shah Rukh Khan",career:"Khan began in television and became one of the most recognised leading actors in Hindi-language cinema.",achievements:"Numerous Indian film awards and international honours.",facts:"He is often referred to as the King of Bollywood.",category:"actor"},
+{name:"Ronaldo Nazário",profession:"Former footballer",born:"18 September 1976",country:"Brazil",known:"Football and World Cup",wiki:"Ronaldo (Brazilian footballer)",career:"Ronaldo played for leading clubs in Europe and represented Brazil in several major international tournaments.",achievements:"Two FIFA World Cups with Brazil and multiple individual awards.",facts:"He is remembered for his pace, technique and finishing.",category:"football"}
+];
+
+const shows=[
+{name:"Planet Earth",year:"2006",genre:"Nature documentary",creator:"Alastair Fothergill",cast:"Narrated by David Attenborough",wiki:"Planet Earth (2006 TV series)",story:"A landmark nature documentary exploring habitats, wildlife and natural environments across the planet.",seasons:"1 main series",network:"BBC"},
+{name:"Stranger Things",year:"2016",genre:"Science fiction, drama",creator:"The Duffer Brothers",cast:"Millie Bobby Brown, Finn Wolfhard, Winona Ryder, David Harbour",wiki:"Stranger Things",story:"A group of friends in a small town encounter mysterious events and a strange alternate dimension.",seasons:"Multiple seasons",network:"Netflix"},
+{name:"The Crown",year:"2016",genre:"Historical drama",creator:"Peter Morgan",cast:"Claire Foy, Olivia Colman, Imelda Staunton and others",wiki:"The Crown (TV series)",story:"A historical drama depicting events during the reign of Queen Elizabeth II and the British royal family.",seasons:"6 seasons",network:"Netflix"},
+{name:"Our Planet",year:"2019",genre:"Nature documentary",creator:"Alastair Fothergill",cast:"Narrated by David Attenborough",wiki:"Our Planet",story:"A documentary series showing wildlife and ecosystems while exploring environmental challenges.",seasons:"2 seasons",network:"Netflix"},
+{name:"Wednesday",year:"2022",genre:"Comedy, mystery, fantasy",creator:"Alfred Gough and Miles Millar",cast:"Jenna Ortega, Gwendoline Christie, Emma Myers",wiki:"Wednesday (TV series)",story:"Wednesday Addams attends Nevermore Academy and investigates strange mysteries while learning about her unusual abilities.",seasons:"Multiple seasons",network:"Netflix"},
+{name:"The Last of Us",year:"2023",genre:"Drama, post-apocalyptic",creator:"Craig Mazin and Neil Druckmann",cast:"Pedro Pascal, Bella Ramsey, Gabriel Luna",wiki:"The Last of Us (TV series)",story:"A man and a young girl travel across a changed United States, forming a bond while facing difficult challenges.",seasons:"Multiple seasons",network:"HBO"},
+{name:"Breaking Bad",year:"2008",genre:"Crime drama",creator:"Vince Gilligan",cast:"Bryan Cranston, Aaron Paul, Anna Gunn",wiki:"Breaking Bad",story:"A chemistry teacher makes a series of decisions that take him into the criminal world.",seasons:"5 seasons",network:"AMC"},
+{name:"Game of Thrones",year:"2011",genre:"Fantasy drama",creator:"David Benioff and D. B. Weiss",cast:"Emilia Clarke, Kit Harington, Peter Dinklage",wiki:"Game of Thrones",story:"Noble families compete for power in the fictional lands of Westeros while an ancient threat grows.",seasons:"8 seasons",network:"HBO"},
+{name:"Sherlock",year:"2010",genre:"Crime, mystery",creator:"Mark Gatiss and Steven Moffat",cast:"Benedict Cumberbatch, Martin Freeman",wiki:"Sherlock (TV series)",story:"A modern adaptation follows Sherlock Holmes and Dr. John Watson as they investigate complex cases in London.",seasons:"4 series",network:"BBC"},
+{name:"Friends",year:"1994",genre:"Comedy, sitcom",creator:"David Crane and Marta Kauffman",cast:"Jennifer Aniston, Courteney Cox, Lisa Kudrow, Matt LeBlanc",wiki:"Friends",story:"Six friends share everyday experiences, careers, relationships and life in New York City.",seasons:"10 seasons",network:"NBC"},
+{name:"The Mandalorian",year:"2019",genre:"Science fiction",creator:"Jon Favreau",cast:"Pedro Pascal, Katee Sackhoff, Carl Weathers",wiki:"The Mandalorian",story:"A lone bounty hunter travels through the Star Wars galaxy and becomes responsible for a mysterious young companion.",seasons:"Multiple seasons",network:"Disney+"},
+{name:"Planet Earth II",year:"2016",genre:"Nature documentary",creator:"BBC Natural History Unit",cast:"Narrated by David Attenborough",wiki:"Planet Earth II",story:"A nature documentary exploring wildlife and habitats, from islands and mountains to cities and grasslands.",seasons:"1 series",network:"BBC"}
+];
+
+const music=[
+{name:"Michael Jackson",genre:"Pop",country:"United States",wiki:"Michael Jackson",description:"Influential singer, songwriter and performer known for albums such as Thriller, Bad and Off the Wall."},
+{name:"Taylor Swift",genre:"Pop, country",country:"United States",wiki:"Taylor Swift",description:"Singer-songwriter known for narrative songwriting and albums spanning country, pop and alternative styles."},
+{name:"Beyoncé",genre:"R&B, pop",country:"United States",wiki:"Beyoncé",description:"Singer and performer known for solo albums, live performances and her earlier work with Destiny's Child."},
+{name:"Rihanna",genre:"Pop, R&B",country:"Barbados",wiki:"Rihanna",description:"International recording artist known for hits across pop, dance and R&B."},
+{name:"Adele",genre:"Soul, pop",country:"United Kingdom",wiki:"Adele",description:"Singer-songwriter known for powerful vocals and emotionally driven songs."},
+{name:"Drake",genre:"Hip-hop, R&B",country:"Canada",wiki:"Drake (musician)",description:"Rapper and singer known for blending hip-hop with melodic R&B influences."},
+{name:"The Weeknd",genre:"R&B, pop",country:"Canada",wiki:"The Weeknd",description:"Singer and songwriter known for atmospheric R&B and pop productions."},
+{name:"Ed Sheeran",genre:"Pop, folk",country:"United Kingdom",wiki:"Ed Sheeran",description:"Singer-songwriter known for acoustic performances, pop songs and songwriting."},
+{name:"Burna Boy",genre:"Afrofusion",country:"Nigeria",wiki:"Burna Boy",description:"Nigerian artist known internationally for Afrofusion and African music influences."},
+{name:"Wizkid",genre:"Afrobeats",country:"Nigeria",wiki:"Wizkid",description:"Nigerian singer known for Afrobeats and collaborations with international artists."}
+];
+
+const footballers=stars.filter(x=>x.category==="football");
+let currentFilter="All";
+let currentSearch="";
+let activeDetail=null;
+let imageCache={};
+let favourites=readFavourites();
+
+function readFavourites(){try{return JSON.parse(localStorage.getItem("sgworlds_favourites")||"[]")}catch(e){return[]}}
+function saveFavourites(){try{localStorage.setItem("sgworlds_favourites",JSON.stringify(favourites))}catch(e){alert("Your browser could not save favourites.")}}
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function idFor(type,item){return type+"|"+item.name}
+function isSaved(type,item){return favourites.includes(idFor(type,item))}
+function showPage(id,btn){
+ document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+ const page=document.getElementById(id);
+ if(page)page.classList.add("active");
+ document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===id));
+ document.getElementById("search").value="";
+ currentSearch="";
+ if(id==="favourites")renderFavourites();
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+function makeCard(item,type,index){
+ const saved=isSaved(type,item);
+ const subtitle=type==="movie"?item.year+" · "+item.genre:type==="star"?item.profession+" · "+item.country:type==="tv"?item.year+" · "+item.genre:type==="music"?item.genre+" · "+item.country:"Football · "+item.country;
+ return `<article class="card">
+ <div class="poster" id="image-${type}-${index}" onclick="openDetails('${type}',${index})">${esc(item.name)}</div>
+ <div class="info" onclick="openDetails('${type}',${index})"><h3>${esc(item.name)}</h3><p>${esc(subtitle)}</p><span class="tag">${type.toUpperCase()}</span></div>
+ <div class="card-actions"><button class="smallbtn" onclick="openDetails('${type}',${index})">Details</button><button class="smallbtn ${saved?'saved':''}" onclick="toggleFavourite('${type}',${index})">${saved?'♥ Saved':'♡ Save'}</button></div>
+ </article>`;
+}
+function renderList(id,data,type){
+ const el=document.getElementById(id);
+ if(el)el.innerHTML=data.length?data.map((x,i)=>makeCard(x,type,i)).join(""):'<p class="empty">No entries found.</p>';
+}
+function renderAll(){
+ renderList("movieList",movies,"movie");
+ renderList("starList",stars,"star");
+ renderList("tvList",shows,"tv");
+ renderList("musicList",music,"music");
+ renderList("footballList",footballers,"football");
+ renderList("homeMovies",movies.slice(0,5),"movie");
+ renderList("homeStars",stars.slice(0,5),"star");
+ renderList("homeTV",shows.slice(0,5),"tv");
+ renderNews();
+ loadImages();
+}
+async function getImage(wiki){
+ if(imageCache[wiki]!==undefined)return imageCache[wiki];
+ try{
+  const r=await fetch("https://en.wikipedia.org/api/rest_v1/page/summary/"+encodeURIComponent(wiki));
+  if(!r.ok){imageCache[wiki]="";return ""}
+  const d=await r.json();
+  imageCache[wiki]=d.thumbnail?.source||d.originalimage?.source||"";
+  return imageCache[wiki];
+ }catch(e){imageCache[wiki]="";return ""}
+}
+async function loadImages(){
+ const groups=[
+  {type:"movie",items:movies},
+  {type:"star",items:stars},
+  {type:"tv",items:shows},
+  {type:"music",items:music},
+  {type:"football",items:footballers}
+ ];
+ for(const group of groups){
+  for(let i=0;i<group.items.length;i++){
+   const item=group.items[i];
+   const el=document.getElementById("image-"+group.type+"-"+i);
+   if(!el||el.querySelector("img"))continue;
+   const url=await getImage(item.wiki);
+   if(url&&el.isConnected)el.innerHTML=`<img src="${esc(url)}" alt="${esc(item.name)}" loading="lazy">`;
+  }
+ }
+}
+function openDetails(type,index){
+ let data=type==="movie"?movies:type==="star"?stars:type==="tv"?shows:type==="music"?music:footballers;
+ const item=data[index];
+ if(!item)return;
+ activeDetail={type,index,item};
+ const wiki=item.wiki||item.name;
+ const title=item.name;
+ let body="";
+ if(type==="movie"){
+  body=`<p class="detail-meta">${esc(item.year)} · ${esc(item.release)} · ${esc(item.genre)}</p>
+  <p><b>Director:</b> ${esc(item.director)}</p>
+  <p><b>Main cast:</b> ${esc(item.cast)}</p>
+  <p><b>Runtime:</b> ${esc(item.runtime)}</p>
+  <p><b>Country:</b> ${esc(item.country)}</p>
+  <p><b>Language:</b> ${esc(item.language)}</p>
+  <p><b>Production:</b> ${esc(item.studio)}</p>
+  <h3>Storyline</h3><p class="detail-text">${esc(item.story)}</p>
+  <h3>Awards and recognition</h3><p class="detail-text">${esc(item.recognition)}</p>
+  <h3>Reception</h3><p class="detail-text">${esc(item.rating)}</p>`;
+ }else if(type==="star"||type==="football"){
+  body=`<p class="detail-meta">${esc(item.profession)} · ${esc(item.country)}</p>
+  <p><b>Date of birth:</b> ${esc(item.born)}</p>
+  <p><b>Known for:</b> ${esc(item.known)}</p>
+  <h3>Career biography</h3><p class="detail-text">${esc(item.career)}</p>
+  <h3>Achievements</h3><p class="detail-text">${esc(item.achievements)}</p>
+  <h3>Interesting facts</h3><p class="detail-text">${esc(item.facts)}</p>`;
+ }else if(type==="tv"){
+  body=`<p class="detail-meta">${esc(item.year)} · ${esc(item.genre)}</p>
+  <p><b>Creator:</b> ${esc(item.creator)}</p>
+  <p><b>Cast / Narrator:</b> ${esc(item.cast)}</p>
+  <p><b>Seasons:</b> ${esc(item.seasons)}</p>
+  <p><b>Network / Platform:</b> ${esc(item.network)}</p>
+  <h3>Storyline</h3><p class="detail-text">${esc(item.story)}</p>`;
+ }else{
+  body=`<p class="detail-meta">${esc(item.genre)} · ${esc(item.country)}</p>
+  <h3>About the artist</h3><p class="detail-text">${esc(item.description)}</p>`;
+ }
+ const wikiUrl="https://en.wikipedia.org/wiki/"+encodeURIComponent(wiki.replace(/ /g,"_"));
+ const videoQuery=encodeURIComponent(title+" official trailer");
+ document.getElementById("modalContent").innerHTML=`
+ <h2>${esc(title)}</h2>
+ <div id="detailImage" class="poster">${esc(title)}</div>
+ ${body}
+ <div class="detail-actions">
+ <button onclick="toggleActiveFavourite()">${isSaved(type,item)?"♥ Remove favourite":"♡ Add to favourites"}</button>
+ <a href="${wikiUrl}" target="_blank" rel="noopener">More information ↗</a>
+ ${type==="movie"||type==="tv"?`<a href="https://www.youtube.com/results?search_query=${videoQuery}" target="_blank" rel="noopener">Find trailer ↗</a>`:""}
+ </div>`;
+ document.getElementById("modal").style.display="block";
+ getImage(wiki).then(url=>{
+  const el=document.getElementById("detailImage");
+  if(el&&url)el.innerHTML=`<img class="detail-image" src="${esc(url)}" alt="${esc(title)}">`;
+ });
+}
+function closeModal(){document.getElementById("modal").style.display="none"}
+function toggleFavourite(type,index){
+ const data=type==="movie"?movies:type==="star"?stars:type==="tv"?shows:type==="music"?music:footballers;
+ const item=data[index];if(!item)return;
+ const id=idFor(type,item);
+ favourites=favourites.includes(id)?favourites.filter(x=>x!==id):[...favourites,id];
+ saveFavourites();
+ renderAll();
+ if(document.getElementById("favourites").classList.contains("active"))renderFavourites();
+ if(activeDetail&&activeDetail.item===item){
+  const btn=document.querySelector(".detail-actions button");
+  if(btn)btn.textContent=isSaved(type,item)?"♥ Remove favourite":"♡ Add to favourites";
+ }
+}
+function toggleActiveFavourite(){
+ if(activeDetail)toggleFavourite(activeDetail.type,activeDetail.index);
+}
+function renderFavourites(){
+ const list=[];
+ favourites.forEach(id=>{
+  const [type,name]=id.split("|");
+  const data=type==="movie"?movies:type==="star"?stars:type==="tv"?shows:type==="music"?music:type==="football"?footballers:[];
+  const item=data.find(x=>x.name===name);
+  if(item)list.push({type,item,index:data.indexOf(item)});
+ });
+ const el=document.getElementById("favouriteList");
+ if(!list.length){el.innerHTML='<p class="empty">You have not saved anything yet. Open a profile and tap Save.</p>';return}
+ el.innerHTML=list.map(x=>makeCard(x.item,x.type,x.index)).join("");
+}
+function filterCategory(page,category,btn){
+ currentFilter=category;
+ document.querySelectorAll("#movieFilters .chip").forEach(b=>b.classList.remove("active"));
+ if(btn)btn.classList.add("active");
+ const result=category==="All"?movies:movies.filter(x=>x.genre.toLowerCase().includes(category.toLowerCase()));
+ renderList("movieList",result,"movie");
+ loadImages();
+}
+function searchAll(){
+ const q=document.getElementById("search").value.toLowerCase().trim();
+ currentSearch=q;
+ if(!q)return;
+ showPage("movies");
+ document.getElementById("search").value=q;
+ const results=[];
+ function add(data,type){
+  data.forEach((x,i)=>{
+   const text=Object.values(x).join(" ").toLowerCase();
+   if(text.includes(q))results.push({item:x,type,index:i});
+  });
+ }
+ add(movies,"movie");add(stars,"star");add(shows,"tv");add(music,"music");add(footballers,"football");
+ const el=document.getElementById("movieList");
+ el.innerHTML=results.length?results.map(x=>makeCard(x.item,x.type,x.index)).join(""):'<p class="empty">No results found. Try another search.</p>';
+ loadImages();
+}
+function renderNews(){
+ const items=[
+ ["BBC Entertainment","Film, television, music and celebrity coverage.","https://www.bbc.com/culture"],
+ ["Variety","Film, television and entertainment industry reporting.","https://variety.com/"],
+ ["The Hollywood Reporter","Entertainment industry news and interviews.","https://www.hollywoodreporter.com/"],
+ ["Deadline","Film, television and media industry updates.","https://deadline.com/"],
+ ["Billboard","Music news, artist stories and chart coverage.","https://www.billboard.com/"],
+ ["ESPN Football","Football news, results and features.","https://www.espn.com/soccer/"],
+ ["Google News: Movies","Search current movie news from multiple publishers.","https://news.google.com/search?q=movies"],
+ ["Google News: Celebrities","Search current celebrity news from multiple publishers.","https://news.google.com/search?q=celebrity"],
+ ["Google News: Music","Search current music news from multiple publishers.","https://news.google.com/search?q=music"],
+ ["Google News: Football","Search current football news from multiple publishers.","https://news.google.com/search?q=football"]
+ ];
+ document.getElementById("newsList").innerHTML=items.map(x=>`<a class="news-link" href="${x[2]}" target="_blank" rel="noopener"><b>${esc(x[0])} ↗</b><span>${esc(x[1])}</span></a>`).join("");
+}
+renderAll();
+</script>
+</body>
+</html>
