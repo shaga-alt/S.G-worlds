@@ -1,350 +1,308 @@
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>S.G. Worlds | Entertainment</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S.G. WORLDS | Entertainment Universe</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#080810;color:white;font-family:Arial;overflow:hidden}
-header{height:70px;background:#100e1b;display:flex;align-items:center;justify-content:space-between;padding:0 4%;border-bottom:1px solid #49305e;gap:10px}
-.logo{font-size:19px;font-weight:bold;color:#d2a5ff}
-.menu{display:flex;gap:5px}
-button{cursor:pointer}
-.menu button{background:transparent;color:#ddd;border:0;padding:10px;border-radius:20px}
-.menu button.active,.menu button:hover{background:#9b54d5;color:white}
-.search{width:180px;padding:10px;background:#20192b;border:1px solid #49335d;color:white;border-radius:20px;outline:none}
-.slider{height:calc(100dvh - 135px);overflow:hidden}
-.track{display:flex;height:100%;transition:transform .5s}
-.page{flex:0 0 100%;height:100%;overflow-y:auto;padding:22px 5%;background:radial-gradient(ellipse at top right,#302044,#080810 65%)}
-.hero{min-height:330px;border-radius:20px;padding:30px;display:flex;align-items:end;background-size:cover;background-position:center;position:relative;margin-bottom:25px;overflow:hidden;background-color:#261536}
-.hero:before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#080810 5%,#080810bb 55%,transparent),linear-gradient(0deg,#080810aa,transparent)}
-.hero-content{position:relative;max-width:550px}
-.hero h1{font-size:clamp(34px,7vw,60px);margin:10px 0}
+html{scroll-behavior:smooth}
+body{margin:0;background:#090817;color:white;font-family:Arial,sans-serif}
+header{background:#15112b;padding:17px 15px;position:sticky;top:0;z-index:10;border-bottom:1px solid #392b60}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.logo{font-size:23px;font-weight:900;color:#c6a5ff;letter-spacing:1px}
+.search{background:#090817;color:white;border:1px solid #604b91;border-radius:25px;padding:11px 14px;width:min(100%,230px)}
+nav{display:flex;gap:8px;overflow-x:auto;margin-top:15px;padding-bottom:3px}
+nav button{background:#292044;color:white;border:0;padding:11px 17px;border-radius:20px;white-space:nowrap;cursor:pointer}
+nav button.active,nav button:hover{background:#9562e8}
+.page{display:none;padding:18px;min-height:75vh}
+.page.active{display:block;animation:fade .3s}
+@keyframes fade{from{opacity:.3}to{opacity:1}}
+.hero{padding:35px 22px;border-radius:20px;background:linear-gradient(120deg,#261443,#11102c,#42205b);margin-bottom:20px}
+.hero h1{font-size:35px;margin:0 0 10px}
 .hero p{color:#ddd;line-height:1.6}
-.tag{color:#d5a5ff;font-weight:bold;letter-spacing:3px}
-.primary{background:#a45cdd;color:white;border:0;padding:12px 20px;border-radius:25px;font-weight:bold}
-h2{color:#d9b7ff;margin-top:25px}
-.row-title{display:flex;justify-content:space-between;align-items:center}
-.row-title button{background:transparent;color:#d5a5ff;border:0}
-.rail{display:flex;gap:14px;overflow-x:auto;padding:8px 2px 18px;scroll-snap-type:x mandatory}
-.rail::-webkit-scrollbar{height:5px}
-.rail::-webkit-scrollbar-thumb{background:#76449b;border-radius:10px}
-.card{flex:0 0 150px;background:#191523;border:1px solid #342443;border-radius:13px;overflow:hidden;scroll-snap-align:start;cursor:pointer;transition:.2s}
-.card:hover{transform:translateY(-4px);border-color:#bd7cff}
-.poster{height:205px;background:#30203d center/cover no-repeat;position:relative}
-.card-info{padding:10px}
-.card h3{font-size:14px;margin:3px 0 7px}
-.card p{font-size:12px;color:#aaa;margin:0 0 7px}
-.rating{color:#ffc65c;font-size:12px}
-.category{flex:0 0 170px;height:110px;border-radius:14px;display:flex;align-items:end;padding:15px;background:#30203d center/cover;position:relative;overflow:hidden}
-.category:before{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#080810,transparent)}
-.category span{position:relative;font-weight:bold;font-size:18px}
-.controls{height:60px;background:#100e1b;border-top:1px solid #39254e;display:flex;align-items:center;justify-content:center;gap:20px}
-.controls button{background:#a45cdd;border:0;color:white;padding:10px 18px;border-radius:25px}
-#counter{color:#d3a5ff;font-size:13px}
-footer{height:25px;text-align:center;font-size:11px;color:#9987a9;padding:5px;background:#100e1b}
-.modal{display:none;position:fixed;inset:0;z-index:20;background:#000e;align-items:center;justify-content:center;padding:20px}
-.modal-box{background:#191323;border:1px solid #79509c;border-radius:18px;padding:20px;width:min(450px,100%);max-height:85vh;overflow:auto}
-.modal-box img{width:100%;height:230px;object-fit:cover;border-radius:12px}
-.close{float:right;background:none;border:0;color:white;font-size:25px}
-.status{font-size:11px;color:#bba4d0;margin-top:8px}
-@media(max-width:650px){
- header{padding:0 9px;height:65px}
- .logo{font-size:12px}
- .menu button{font-size:10px;padding:8px 5px}
- .search{display:none}
- .page{padding:16px 13px}
- .hero{min-height:290px;padding:20px}
- .card{flex-basis:135px}
- .poster{height:180px}
-}
+h2{color:#d3b7ff;margin-top:28px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:15px}
+.card{background:#17142a;border:1px solid #30264a;border-radius:15px;overflow:hidden;cursor:pointer;transition:.2s}
+.card:hover{transform:translateY(-4px);border-color:#a77aff}
+.poster{height:205px;background:linear-gradient(135deg,#251b3d,#493064);display:flex;align-items:center;justify-content:center;color:#c9b6e8;text-align:center;padding:12px;font-size:14px}
+.poster img{width:100%;height:100%;object-fit:cover}
+.info{padding:12px}
+.info h3{font-size:15px;margin:0 0 7px}
+.info p{font-size:12px;color:#bdb5ce;margin:0;line-height:1.5}
+.tag{display:inline-block;background:#392657;color:#d9c1ff;border-radius:20px;padding:5px 9px;font-size:11px;margin-top:8px}
+.ad{border:1px dashed #725d9b;background:#151127;border-radius:13px;padding:22px;text-align:center;color:#a99cbe;margin:25px 0}
+.plan-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}
+.plan{background:#1b1730;border:1px solid #49366d;padding:20px;border-radius:17px}
+.plan h3{color:#d5b6ff}
+.plan button,.mainbtn{background:#9864e8;color:white;border:0;border-radius:22px;padding:11px 18px;cursor:pointer}
+.plan.premium{border:2px solid #bd91ff}
+footer{text-align:center;padding:25px;color:#9b91b1;background:#100d20;margin-top:30px}
+footer a{color:#c8a6ff;margin:0 8px}
+.modal{display:none;position:fixed;inset:0;background:#000d;z-index:30;overflow:auto;padding:25px 12px}
+.modalbox{max-width:650px;margin:20px auto;background:#17132b;border:1px solid #7051a4;border-radius:18px;padding:20px;position:relative}
+.modalbox img{width:100%;max-height:320px;object-fit:cover;border-radius:12px}
+.close{position:absolute;right:15px;top:12px;background:#4b315f;color:white;border:0;border-radius:50%;padding:9px 13px;cursor:pointer}
+.modalbox p{line-height:1.7;color:#d1c9dd}
+.modalbox a{color:#cbaaff}
+.empty{color:#b7abc9;padding:20px}
+@media(max-width:500px){.hero h1{font-size:27px}.page{padding:13px}.poster{height:180px}}
 </style>
 </head>
 <body>
 
 <header>
- <div class="logo">S.G. WORLDS ✦</div>
- <input class="search" id="search" placeholder="Search movies..." oninput="searchMovies()">
- <nav class="menu">
-  <button class="active" onclick="go(0)">Home</button>
-  <button onclick="go(1)">Movies</button>
-  <button onclick="go(2)">Stars</button>
-  <button onclick="go(3)">TV</button>
-  <button onclick="go(4)">News</button>
+ <div class="top">
+  <div class="logo">S.G. WORLDS 🌍</div>
+  <input class="search" id="search" placeholder="Search movies, stars, TV..." oninput="searchAll()">
+ </div>
+ <nav>
+  <button class="active" onclick="showPage('home',this)">Home</button>
+  <button onclick="showPage('movies',this)">Movies 🎬</button>
+  <button onclick="showPage('stars',this)">Stars ⭐</button>
+  <button onclick="showPage('tv',this)">TV 📺</button>
+  <button onclick="showPage('news',this)">News 📰</button>
  </nav>
 </header>
 
-<div class="slider" id="slider">
-<div class="track" id="track">
+<main>
+<section class="page active" id="home">
+ <div class="hero">
+  <h1>Welcome to S.G. WORLDS</h1>
+  <p>Your entertainment universe. Discover movies, famous people, television, documentaries and more.</p>
+  <button class="mainbtn" onclick="showPage('movies')">Explore Movies</button>
+  <button class="mainbtn" onclick="showPage('stars')">Explore Stars</button>
+ </div>
 
-<section class="page">
- <div class="hero" data-wiki="Cinema">
-  <div class="hero-content">
-   <div class="tag">WELCOME TO S.G. WORLDS</div>
-   <h1>ENTERTAINMENT WITHOUT LIMITS.</h1>
-   <p>Discover movies, television, celebrities and stories from around the world.</p>
-   <button class="primary" onclick="go(1)">EXPLORE MOVIES →</button>
+ <div class="ad">ADVERTISEMENT SPACE<br><small>Advertising may appear here after an approved ad service is connected.</small></div>
+
+ <h2>🔥 Featured Movies</h2>
+ <div class="grid" id="featuredMovies"></div>
+ <h2>🌟 Famous People</h2>
+ <div class="grid" id="featuredStars"></div>
+
+ <h2>Choose Your Experience</h2>
+ <div class="plan-grid">
+  <div class="plan">
+   <h3>FREE MEMBERSHIP</h3>
+   <p>Explore movie information, celebrity biographies and TV details.</p>
+   <p>✓ Free browsing</p><p>✓ Search entertainment</p><p>✓ Discover new stars</p>
+   <button onclick="alert('You can explore S.G. WORLDS for free!')">Explore Free</button>
+  </div>
+  <div class="plan premium">
+   <h3>👑 PREMIUM</h3>
+   <p>A future membership area for additional features.</p>
+   <p>✓ Planned exclusive features</p><p>✓ Planned ad-free experience</p><p>✓ More entertainment extras</p>
+   <button onclick="alert('Premium payments are not connected yet. No payment has been taken.')">Coming Soon</button>
   </div>
  </div>
- <div class="row-title"><h2>Featured Movies</h2><button onclick="go(1)">See all →</button></div>
- <div class="rail" id="homeMovies"></div>
- <h2>Explore Categories</h2>
- <div class="rail" id="categories"></div>
+ <div class="ad">ADVERTISEMENT SPACE</div>
 </section>
 
-<section class="page">
- <div class="hero" data-wiki="Film">
-  <div class="hero-content">
-   <div class="tag">THE MOVIE COLLECTION</div>
-   <h1>YOUR NEXT GREAT MOVIE STARTS HERE.</h1>
-   <p>Explore famous films, discoveries and unforgettable cinema.</p>
-  </div>
+<section class="page" id="movies">
+ <div class="hero"><h1>🎬 Movies Universe</h1><p>Explore famous movies from around the world.</p></div>
+ <h2>Popular Movies</h2>
+ <div class="grid" id="movieList"></div>
+</section>
+
+<section class="page" id="stars">
+ <div class="hero"><h1>⭐ Celebrity World</h1><p>Discover actors, musicians, athletes and other famous personalities.</p></div>
+ <h2>Famous Celebrities</h2>
+ <div class="grid" id="starList"></div>
+</section>
+
+<section class="page" id="tv">
+ <div class="hero"><h1>📺 Television World</h1><p>Discover television series and documentaries.</p></div>
+ <h2>Popular TV Shows</h2>
+ <div class="grid" id="tvList"></div>
+</section>
+
+<section class="page" id="news">
+ <div class="hero"><h1>📰 Entertainment News</h1><p>Explore entertainment topics and discover what's happening across film, music and television.</p></div>
+ <div class="grid">
+  <div class="card" onclick="showNews('Movies','Discover film releases, cinema stories and movie industry updates.')"><div class="poster">🎬</div><div class="info"><h3>Movie News</h3><p>Film industry stories</p></div></div>
+  <div class="card" onclick="showNews('Celebrity News','Discover stories about actors, musicians, athletes and famous personalities.')"><div class="poster">⭐</div><div class="info"><h3>Celebrity News</h3><p>Famous people</p></div></div>
+  <div class="card" onclick="showNews('Music News','Explore music releases, artists and music industry stories.')"><div class="poster">🎵</div><div class="info"><h3>Music News</h3><p>Music and artists</p></div></div>
+  <div class="card" onclick="showNews('Television News','Explore television shows, documentaries and streaming entertainment.')"><div class="poster">📺</div><div class="info"><h3>TV News</h3><p>Television updates</p></div></div>
  </div>
- <h2>Popular Movies</h2><div class="rail" id="movieList"></div>
- <h2>Action & Adventure</h2><div class="rail" id="actionList"></div>
- <h2>Animation & Drama</h2><div class="rail" id="otherMovies"></div>
+ <div class="ad">ADVERTISEMENT SPACE</div>
+ <h2>About S.G. WORLDS</h2>
+ <p>S.G. WORLDS is an entertainment discovery website for movie fans, celebrity followers and television viewers.</p>
+ <h2>Contact</h2>
+ <p>Contact the website owner through the contact details you choose to publish here.</p>
+ <h2>Privacy</h2>
+ <p>This website may use external services to load images. If advertising, accounts or analytics are added later, publish an accurate privacy policy explaining what information is collected and how it is used.</p>
 </section>
+</main>
 
-<section class="page">
- <div class="hero" data-wiki="Celebrity">
-  <div class="hero-content">
-   <div class="tag">GLOBAL PERSONALITIES</div>
-   <h1>MEET THE STARS.</h1>
-   <p>Discover actors, musicians, athletes and influential personalities.</p>
-  </div>
- </div>
- <h2>Famous Personalities</h2><div class="rail" id="starsList"></div>
-</section>
-
-<section class="page">
- <div class="hero" data-wiki="Television">
-  <div class="hero-content">
-   <div class="tag">SERIES • DOCUMENTARIES • SHOWS</div>
-   <h1>THE WORLD OF TELEVISION.</h1>
-   <p>Discover stories, series and shows worth exploring.</p>
-  </div>
- </div>
- <h2>Explore TV</h2><div class="rail" id="tvList"></div>
-</section>
-
-<section class="page">
- <div class="hero" data-wiki="Entertainment">
-  <div class="hero-content">
-   <div class="tag">S.G. WORLDS NEWS</div>
-   <h1>THE LATEST IN ENTERTAINMENT.</h1>
-   <p>Explore movie announcements, celebrity stories and entertainment updates.</p>
-  </div>
- </div>
- <h2>Entertainment Updates</h2><div class="rail" id="newsList"></div>
-</section>
-
-</div>
-</div>
-
-<div class="controls">
- <button onclick="move(-1)">← Previous</button>
- <span id="counter">1 / 5</span>
- <button onclick="move(1)">Next →</button>
-</div>
-<footer>S.G. WORLDS • ENTERTAINMENT • DISCOVER MORE</footer>
+<footer>
+ <strong>S.G. WORLDS 🌍</strong><br><br>
+ Your world of entertainment<br><br>
+ © 2026 S.G. WORLDS
+</footer>
 
 <div class="modal" id="modal" onclick="if(event.target===this)closeModal()">
- <div class="modal-box">
-  <button class="close" onclick="closeModal()">×</button>
+ <div class="modalbox">
+  <button class="close" onclick="closeModal()">✕</button>
   <div id="modalContent"></div>
  </div>
 </div>
 
 <script>
-let current=0;
-const total=5;
-const imageCache={};
-
 const movies=[
- ["Inception","Sci-Fi • 2010","8.8","Inception","A mind-bending science-fiction thriller."],
- ["Interstellar","Sci-Fi • 2014","8.7","Interstellar (film)","An epic journey through space and time."],
- ["The Dark Knight","Action • 2008","9.0","The Dark Knight","A legendary superhero crime drama."],
- ["Gladiator","Action • 2000","8.5","Gladiator (2000 film)","An epic historical adventure."],
- ["The Lion King","Animation • 1994","8.5","The Lion King","An unforgettable animated adventure."],
- ["Joker","Drama • 2019","8.3","Joker (2019 film)","A psychological character drama."],
- ["Avatar","Adventure • 2009","7.9","Avatar (2009 film)","A journey into a spectacular world."],
- ["Titanic","Drama • 1997","7.9","Titanic (1997 film)","A famous romantic disaster film."],
- ["The Matrix","Sci-Fi • 1999","8.7","The Matrix","A science-fiction action classic."],
- ["Jurassic Park","Adventure • 1993","8.2","Jurassic Park (film)","A classic dinosaur adventure."]
+{name:"Inception",year:"2010",genre:"Science Fiction / Action",director:"Christopher Nolan",cast:"Leonardo DiCaprio, Joseph Gordon-Levitt, Elliot Page",wiki:"Inception",description:"A skilled team enters dreams to carry out a complicated mission involving a powerful idea."},
+{name:"Interstellar",year:"2014",genre:"Science Fiction / Drama",director:"Christopher Nolan",cast:"Matthew McConaughey, Anne Hathaway, Jessica Chastain",wiki:"Interstellar (film)",description:"A group of explorers travels beyond Earth in search of a future for humanity."},
+{name:"The Dark Knight",year:"2008",genre:"Action / Crime",director:"Christopher Nolan",cast:"Christian Bale, Heath Ledger, Aaron Eckhart",wiki:"The Dark Knight",description:"Batman faces a dangerous criminal who brings chaos to Gotham City."},
+{name:"Gladiator",year:"2000",genre:"Historical / Action",director:"Ridley Scott",cast:"Russell Crowe, Joaquin Phoenix",wiki:"Gladiator (2000 film)",description:"A Roman general seeks justice after losing everything."},
+{name:"The Lion King",year:"1994",genre:"Animation / Adventure",director:"Roger Allers and Rob Minkoff",cast:"Matthew Broderick, James Earl Jones",wiki:"The Lion King",description:"A young lion learns about responsibility and his place in the circle of life."},
+{name:"Joker",year:"2019",genre:"Drama / Thriller",director:"Todd Phillips",cast:"Joaquin Phoenix, Robert De Niro",wiki:"Joker (2019 film)",description:"A character study of a troubled comedian in Gotham City."},
+{name:"Avatar",year:"2009",genre:"Science Fiction / Adventure",director:"James Cameron",cast:"Sam Worthington, Zoe Saldaña",wiki:"Avatar (2009 film)",description:"A human becomes involved in the world and people of Pandora."},
+{name:"Titanic",year:"1997",genre:"Romance / Drama",director:"James Cameron",cast:"Leonardo DiCaprio, Kate Winslet",wiki:"Titanic (1997 film)",description:"A fictional love story unfolds aboard the famous ocean liner."},
+{name:"The Matrix",year:"1999",genre:"Science Fiction / Action",director:"The Wachowskis",cast:"Keanu Reeves, Laurence Fishburne",wiki:"The Matrix",description:"A computer programmer discovers that reality is not what it seems."},
+{name:"Jurassic Park",year:"1993",genre:"Adventure / Science Fiction",director:"Steven Spielberg",cast:"Sam Neill, Laura Dern, Jeff Goldblum",wiki:"Jurassic Park (film)",description:"Visitors explore a theme park where prehistoric creatures have been brought back."},
+{name:"Black Panther",year:"2018",genre:"Superhero / Action",director:"Ryan Coogler",cast:"Chadwick Boseman, Lupita Nyong'o, Michael B. Jordan",wiki:"Black Panther (film)",description:"T'Challa returns home to lead the technologically advanced nation of Wakanda."},
+{name:"Avengers: Endgame",year:"2019",genre:"Superhero / Adventure",director:"Anthony and Joe Russo",cast:"Robert Downey Jr., Chris Evans, Scarlett Johansson",wiki:"Avengers: Endgame",description:"The Avengers unite for a final effort to reverse a devastating event."},
+{name:"Spider-Man: No Way Home",year:"2021",genre:"Superhero / Adventure",director:"Jon Watts",cast:"Tom Holland, Zendaya, Benedict Cumberbatch",wiki:"Spider-Man: No Way Home",description:"Peter Parker faces unexpected challenges after his identity becomes public."},
+{name:"Dune",year:"2021",genre:"Science Fiction / Adventure",director:"Denis Villeneuve",cast:"Timothée Chalamet, Zendaya, Rebecca Ferguson",wiki:"Dune (2021 film)",description:"A young noble travels to a desert planet that holds a valuable resource."},
+{name:"Oppenheimer",year:"2023",genre:"Historical / Drama",director:"Christopher Nolan",cast:"Cillian Murphy, Emily Blunt, Robert Downey Jr.",wiki:"Oppenheimer (film)",description:"A historical drama about physicist J. Robert Oppenheimer and the atomic bomb project."},
+{name:"Barbie",year:"2023",genre:"Comedy / Fantasy",director:"Greta Gerwig",cast:"Margot Robbie, Ryan Gosling",wiki:"Barbie (film)",description:"Barbie explores the real world and discovers new ideas about herself."},
+{name:"Top Gun: Maverick",year:"2022",genre:"Action / Drama",director:"Joseph Kosinski",cast:"Tom Cruise, Miles Teller",wiki:"Top Gun: Maverick",description:"An experienced pilot trains a new group of pilots for a difficult assignment."},
+{name:"The Lord of the Rings: The Fellowship of the Ring",year:"2001",genre:"Fantasy / Adventure",director:"Peter Jackson",cast:"Elijah Wood, Ian McKellen, Viggo Mortensen",wiki:"The Lord of the Rings: The Fellowship of the Ring",description:"A fellowship begins a journey to protect Middle-earth from a powerful ring."},
+{name:"Finding Nemo",year:"2003",genre:"Animation / Adventure",director:"Andrew Stanton",cast:"Albert Brooks, Ellen DeGeneres",wiki:"Finding Nemo",description:"A clownfish travels across the ocean in search of his son."},
+{name:"Coco",year:"2017",genre:"Animation / Fantasy",director:"Lee Unkrich",cast:"Anthony Gonzalez, Gael García Bernal",wiki:"Coco (2017 film)",description:"A young musician discovers family history during an extraordinary journey."}
 ];
 
 const stars=[
- ["Cristiano Ronaldo","Football Star","Cristiano Ronaldo"],
- ["Lionel Messi","Football Star","Lionel Messi"],
- ["Michael Jackson","Music Legend","Michael Jackson"],
- ["Taylor Swift","Singer","Taylor Swift"],
- ["Dwayne Johnson","Actor","Dwayne Johnson"],
- ["Leonardo DiCaprio","Actor","Leonardo DiCaprio"],
- ["Kylian Mbappe","Football Star","Kylian Mbappé"],
- ["Zendaya","Actress","Zendaya"],
- ["Ariana Grande","Singer","Ariana Grande"],
- ["Will Smith","Actor","Will Smith"]
+{name:"Cristiano Ronaldo",type:"Footballer",country:"Portugal",born:"5 February 1985",known:"Football and international records",wiki:"Cristiano Ronaldo",bio:"Portuguese footballer widely recognised for his goalscoring, athletic ability and long career at top clubs."},
+{name:"Lionel Messi",type:"Footballer",country:"Argentina",born:"24 June 1987",known:"Football and playmaking",wiki:"Lionel Messi",bio:"Argentine footballer known for his creativity, dribbling, passing and achievements with club and country."},
+{name:"Michael Jackson",type:"Musician",country:"United States",born:"29 August 1958",known:"Pop music and dance",wiki:"Michael Jackson",bio:"Singer and entertainer whose music, performances and influence helped shape modern pop culture."},
+{name:"Taylor Swift",type:"Singer",country:"United States",born:"13 December 1989",known:"Pop and country music",wiki:"Taylor Swift",bio:"Singer-songwriter known for storytelling, songwriting and successful albums across several music styles."},
+{name:"Dwayne Johnson",type:"Actor",country:"United States",born:"2 May 1972",known:"Film and professional wrestling",wiki:"Dwayne Johnson",bio:"Actor and former professional wrestler known for major action and comedy film roles."},
+{name:"Leonardo DiCaprio",type:"Actor",country:"United States",born:"11 November 1974",known:"Titanic, Inception and The Revenant",wiki:"Leonardo DiCaprio",bio:"Award-winning actor known for roles in films including Titanic, Inception and The Revenant."},
+{name:"Kylian Mbappé",type:"Footballer",country:"France",born:"20 December 1998",known:"Football and World Cup",wiki:"Kylian Mbappé",bio:"French footballer known for speed, finishing and performances for club and country."},
+{name:"Zendaya",type:"Actor",country:"United States",born:"1 September 1996",known:"Euphoria and Spider-Man",wiki:"Zendaya",bio:"Actor and singer recognised for television and film performances, including Euphoria and Spider-Man."},
+{name:"Ariana Grande",type:"Singer and actor",country:"United States",born:"26 June 1993",known:"Pop music and acting",wiki:"Ariana Grande",bio:"Singer and actor known for her pop music career and television and film roles."},
+{name:"Will Smith",type:"Actor and musician",country:"United States",born:"25 September 1968",known:"The Fresh Prince and film roles",wiki:"Will Smith",bio:"Actor and musician known for television, comedy and major film performances."},
+{name:"Beyoncé",type:"Singer",country:"United States",born:"4 September 1981",known:"Music and live performances",wiki:"Beyoncé",bio:"Singer and performer known for her influential music career and acclaimed live shows."},
+{name:"Rihanna",type:"Singer and entrepreneur",country:"Barbados",born:"20 February 1988",known:"Music and business",wiki:"Rihanna",bio:"Barbadian singer and entrepreneur known for hit songs and successful business ventures."},
+{name:"Tom Cruise",type:"Actor",country:"United States",born:"3 July 1962",known:"Mission: Impossible and Top Gun",wiki:"Tom Cruise",bio:"Actor known for action films, including the Mission: Impossible and Top Gun franchises."},
+{name:"Jackie Chan",type:"Actor and martial artist",country:"Hong Kong",born:"7 April 1954",known:"Action comedy films",wiki:"Jackie Chan",bio:"Actor and filmmaker recognised for action comedy, physical performance and stunt work."},
+{name:"Adele",type:"Singer",country:"United Kingdom",born:"5 May 1988",known:"Soul and pop music",wiki:"Adele",bio:"British singer-songwriter known for powerful vocals and emotional pop and soul songs."},
+{name:"Neymar",type:"Footballer",country:"Brazil",born:"5 February 1992",known:"Football and skill",wiki:"Neymar",bio:"Brazilian footballer known for creative attacking play, dribbling and international career."},
+{name:"Serena Williams",type:"Tennis player",country:"United States",born:"26 September 1981",known:"Tennis championships",wiki:"Serena Williams",bio:"Former professional tennis player regarded as one of the most successful athletes in the sport."},
+{name:"MrBeast",type:"Online creator",country:"United States",born:"7 May 1998",known:"Online videos and challenges",wiki:"MrBeast",bio:"Online creator known for large-scale videos, entertainment projects and philanthropy."},
+{name:"Shah Rukh Khan",type:"Actor",country:"India",born:"2 November 1965",known:"Bollywood films",wiki:"Shah Rukh Khan",bio:"Indian actor and film producer widely known for leading roles in Hindi cinema."},
+{name:"Ronaldo Nazário",type:"Former footballer",country:"Brazil",born:"18 September 1976",known:"Football and World Cup",wiki:"Ronaldo (Brazilian footballer)",bio:"Brazilian former footballer celebrated for his striking ability and achievements with Brazil."}
 ];
 
 const shows=[
- ["Planet Earth","Documentary","Planet Earth"],
- ["Stranger Things","Drama Series","Stranger Things"],
- ["The Crown","Historical Series","The Crown (TV series)"],
- ["Our Planet","Documentary","Our Planet"],
- ["Wednesday","Mystery Series","Wednesday (TV series)"],
- ["The Last of Us","Drama Series","The Last of Us (TV series)"]
+{name:"Planet Earth",year:"2006",genre:"Nature Documentary",wiki:"Planet Earth (2006 TV series)",description:"A landmark nature documentary series exploring wildlife and environments around the world."},
+{name:"Stranger Things",year:"2016",genre:"Science Fiction / Drama",wiki:"Stranger Things",description:"A group of young friends encounter mysterious events in their town."},
+{name:"The Crown",year:"2016",genre:"Historical Drama",wiki:"The Crown (TV series)",description:"A historical drama following the reign of Queen Elizabeth II."},
+{name:"Our Planet",year:"2019",genre:"Nature Documentary",wiki:"Our Planet",description:"A documentary series exploring the natural world and the importance of conservation."},
+{name:"Wednesday",year:"2022",genre:"Comedy / Mystery",wiki:"Wednesday (TV series)",description:"Wednesday Addams attends a school where she investigates strange mysteries."},
+{name:"The Last of Us",year:"2023",genre:"Drama",wiki:"The Last of Us (TV series)",description:"A drama series following two people travelling through a changed world."},
+{name:"Breaking Bad",year:"2008",genre:"Crime Drama",wiki:"Breaking Bad",description:"A chemistry teacher becomes involved in the illegal drug trade."},
+{name:"Game of Thrones",year:"2011",genre:"Fantasy Drama",wiki:"Game of Thrones",description:"Noble families compete for power in a fictional fantasy world."},
+{name:"Sherlock",year:"2010",genre:"Crime / Mystery",wiki:"Sherlock (TV series)",description:"A modern television adaptation of the famous detective stories."},
+{name:"Friends",year:"1994",genre:"Comedy",wiki:"Friends",description:"Six friends navigate everyday life and relationships in New York City."},
+{name:"The Mandalorian",year:"2019",genre:"Science Fiction",wiki:"The Mandalorian",description:"A lone bounty hunter travels through the Star Wars galaxy."},
+{name:"Planet Earth II",year:"2016",genre:"Nature Documentary",wiki:"Planet Earth II",description:"A nature documentary exploring animals and habitats across the planet."}
 ];
 
-const news=[
- ["Movie Industry","Film and cinema stories.","Cinema"],
- ["Music World","Music and artist stories.","Music"],
- ["Celebrity Updates","Famous personality stories.","Celebrity"],
- ["Entertainment Awards","Entertainment award events.","Academy Awards"]
-];
-
-const categories=[
- ["Action","Action film"],
- ["Comedy","Comedy"],
- ["Sci-Fi","Science fiction"],
- ["Adventure","Adventure film"],
- ["Drama","Drama film"],
- ["Animation","Animation"]
-];
-
-function esc(s){
- return String(s).replace(/[&<>"']/g,c=>({
-  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
- }[c]));
+function showPage(id,btn){
+ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+ document.getElementById(id).classList.add('active');
+ document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+ if(btn)btn.classList.add('active');
+ document.getElementById('search').value='';
 }
-
-function makeCard(name,type,description,wiki,rating=""){
- const id="card-"+Math.random().toString(36).slice(2);
- const fallback="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=500";
- return `<div class="card" data-wiki="${esc(wiki)}"
- onclick="details('${esc(name)}','${esc(type)}','${esc(description)}','${esc(wiki)}')">
- <div class="poster" id="${id}" style="background-image:url('${fallback}')"></div>
- <div class="card-info"><h3>${esc(name)}</h3>
- <p>${esc(type)}</p>${rating?`<span class="rating">★ ${esc(rating)}</span>`:""}
- </div></div>`;
+function esc(s){return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function card(item,type,index){
+ let title=item.name;
+ let subtitle=type==='movie'?item.year+' • '+item.genre:type==='star'?item.type+' • '+item.country:item.year+' • '+item.genre;
+ return `<div class="card" onclick="openDetails('${type}',${index})">
+ <div class="poster" id="pic-${type}-${index}">${esc(title)}</div>
+ <div class="info"><h3>${esc(title)}</h3><p>${esc(subtitle)}</p><span class="tag">${type==='movie'?'MOVIE':type==='star'?'CELEBRITY':'TV SHOW'}</span></div>
+ </div>`;
 }
-
-function movieCard(m){
- return makeCard(m[0],m[1],m[4],m[3],m[2]);
+function render(){
+ document.getElementById('movieList').innerHTML=movies.map((x,i)=>card(x,'movie',i)).join('');
+ document.getElementById('starList').innerHTML=stars.map((x,i)=>card(x,'star',i)).join('');
+ document.getElementById('tvList').innerHTML=shows.map((x,i)=>card(x,'tv',i)).join('');
+ document.getElementById('featuredMovies').innerHTML=movies.slice(0,5).map((x,i)=>card(x,'movie',i)).join('');
+ document.getElementById('featuredStars').innerHTML=stars.slice(0,5).map((x,i)=>card(x,'star',i)).join('');
+ loadImages();
 }
-function starCard(s){
- return makeCard(s[0],s[1],"Discover more about "+s[0]+".",s[2]);
-}
-function showCard(s){
- return makeCard(s[0],s[1],"Explore this television title.",s[2]);
-}
-function newsCard(n){
- return makeCard(n[0], "Entertainment News",n[1],n[2]);
-}
-
-document.getElementById("homeMovies").innerHTML=movies.slice(0,6).map(movieCard).join("");
-document.getElementById("movieList").innerHTML=movies.map(movieCard).join("");
-document.getElementById("actionList").innerHTML=movies.filter(m=>/Action|Adventure/.test(m[1])).map(movieCard).join("");
-document.getElementById("otherMovies").innerHTML=movies.filter(m=>/Animation|Drama/.test(m[1])).map(movieCard).join("");
-document.getElementById("starsList").innerHTML=stars.map(starCard).join("");
-document.getElementById("tvList").innerHTML=shows.map(showCard).join("");
-document.getElementById("newsList").innerHTML=news.map(newsCard).join("");
-
-document.getElementById("categories").innerHTML=categories.map(c=>
- `<div class="category" data-wiki="${esc(c[1])}"><span>${esc(c[0])}</span></div>`
-).join("");
-
-async function getRealImage(title){
- if(imageCache[title]!==undefined)return imageCache[title];
-
+const imageCache={};
+async function getImage(wiki){
+ if(imageCache[wiki])return imageCache[wiki];
  try{
-  const url="https://en.wikipedia.org/api/rest_v1/page/summary/"+encodeURIComponent(title.replace(/ /g,"_"));
-  const response=await fetch(url);
-  if(!response.ok)throw new Error("Image unavailable");
-  const data=await response.json();
-  const picture=data.thumbnail?.source||data.originalimage?.source||null;
-  imageCache[title]=picture;
-  return picture;
- }catch(e){
-  imageCache[title]=null;
-  return null;
+  let response=await fetch('https://en.wikipedia.org/api/rest_v1/page/summary/'+encodeURIComponent(wiki));
+  if(!response.ok)return '';
+  let data=await response.json();
+  let url=data.thumbnail?.source||data.originalimage?.source||'';
+  imageCache[wiki]=url;
+  return url;
+ }catch(e){return '';}
+}
+async function loadImages(){
+ const entries=[
+  ...movies.map((x,i)=>({x,type:'movie',i})),
+  ...stars.map((x,i)=>({x,type:'star',i})),
+  ...shows.map((x,i)=>({x,type:'tv',i}))
+ ];
+ for(const entry of entries){
+  const url=await getImage(entry.x.wiki);
+  const el=document.getElementById(`pic-${entry.type}-${entry.i}`);
+  if(el&&url)el.innerHTML=`<img src="${esc(url)}" alt="${esc(entry.x.name)}" loading="lazy">`;
  }
 }
-
-async function loadRealImages(){
- const elements=document.querySelectorAll("[data-wiki]");
-
- for(const element of elements){
-  const title=element.dataset.wiki;
-  const picture=await getRealImage(title);
-
-  if(picture){
-   if(element.classList.contains("hero")){
-    element.style.backgroundImage=`url("${picture}")`;
-   }else if(element.classList.contains("category")){
-    element.style.backgroundImage=`url("${picture}")`;
-   }else if(element.classList.contains("card")){
-    const poster=element.querySelector(".poster");
-    if(poster)poster.style.backgroundImage=`url("${picture}")`;
-   }
-  }
- }
-}
-
-function go(index){
- current=Math.max(0,Math.min(total-1,index));
- document.getElementById("track").style.transform=`translateX(-${current*100}%)`;
- document.getElementById("counter").textContent=(current+1)+" / "+total;
- document.querySelectorAll(".menu button").forEach((b,i)=>{
-  b.classList.toggle("active",i===current);
+function openDetails(type,index){
+ let item=type==='movie'?movies[index]:type==='star'?stars[index]:shows[index];
+ if(!item)return;
+ let extra=type==='movie'
+ ? `<p><b>Director:</b> ${esc(item.director)}</p><p><b>Cast:</b> ${esc(item.cast)}</p>`
+ : type==='star'
+ ? `<p><b>Profession:</b> ${esc(item.type)}</p><p><b>Country:</b> ${esc(item.country)}</p><p><b>Date of birth:</b> ${esc(item.born)}</p><p><b>Known for:</b> ${esc(item.known)}</p>`
+ : '';
+ let wikiLink='https://en.wikipedia.org/wiki/'+encodeURIComponent(item.wiki.replace(/ /g,'_'));
+ document.getElementById('modalContent').innerHTML=`
+ <h2>${esc(item.name)}</h2>
+ <div id="detailImage" class="poster">${esc(item.name)}</div>
+ <p><b>${type==='star'?'Profile':item.year}</b> • ${esc(type==='star'?item.type:item.genre)}</p>
+ ${extra}
+ <p>${esc(type==='star'?item.bio:item.description)}</p>
+ <p><a href="${wikiLink}" target="_blank" rel="noopener">Read more on Wikipedia ↗</a></p>
+ ${type!=='star'?`<p><a href="https://www.youtube.com/results?search_query=${encodeURIComponent(item.name+' official trailer')}" target="_blank" rel="noopener">Find trailer on YouTube ↗</a></p>`:''}
+ `;
+ document.getElementById('modal').style.display='block';
+ getImage(item.wiki).then(url=>{
+  let el=document.getElementById('detailImage');
+  if(el&&url)el.innerHTML=`<img src="${esc(url)}" alt="${esc(item.name)}">`;
  });
 }
-function move(d){go(current+d)}
-
-function details(name,type,description,wiki){
- document.getElementById("modalContent").innerHTML=`
- <div id="detailImage" style="height:230px;background:#30203d center/cover;border-radius:12px"></div>
- <h2>${esc(name)}</h2>
- <p style="color:#c69aff">${esc(type)}</p>
- <p style="line-height:1.6;color:#ddd">${esc(description)}</p>
- <p class="status">Image and information from Wikipedia, where available.</p>`;
- document.getElementById("modal").style.display="flex";
-
- getRealImage(wiki).then(picture=>{
-  if(picture){
-   document.getElementById("detailImage").style.backgroundImage=`url("${picture}")`;
-  }
- });
+function closeModal(){document.getElementById('modal').style.display='none';}
+function showNews(title,description){
+ document.getElementById('modalContent').innerHTML=`<h2>${esc(title)}</h2><p>${esc(description)}</p><p>More updates will be added to this section as the website develops.</p>`;
+ document.getElementById('modal').style.display='block';
 }
-
-function closeModal(){
- document.getElementById("modal").style.display="none";
+function searchAll(){
+ let q=document.getElementById('search').value.toLowerCase().trim();
+ if(!q)return;
+ showPage('movies');
+ let results=[
+ ...movies.filter(x=>x.name.toLowerCase().includes(q)||x.genre.toLowerCase().includes(q)).map(x=>({x,type:'movie',i:movies.indexOf(x)})),
+ ...stars.filter(x=>x.name.toLowerCase().includes(q)||x.type.toLowerCase().includes(q)).map(x=>({x,type:'star',i:stars.indexOf(x)})),
+ ...shows.filter(x=>x.name.toLowerCase().includes(q)||x.genre.toLowerCase().includes(q)).map(x=>({x,type:'tv',i:shows.indexOf(x)}))
+ ];
+ document.getElementById('movieList').innerHTML=results.length?results.map(r=>card(r.x,r.type,r.i)).join(''):'<p class="empty">No results found. Try another name.</p>';
+ document.getElementById('movieList').scrollIntoView({behavior:'smooth',block:'start'});
+ loadImages();
 }
-
-function searchMovies(){
- const q=document.getElementById("search").value.toLowerCase();
- const results=movies.filter(m=>
-  m[0].toLowerCase().includes(q)||m[1].toLowerCase().includes(q)
- );
- go(1);
- document.getElementById("movieList").innerHTML=
-  results.length?results.map(movieCard).join(""):"<p>No matching movies found.</p>";
- loadRealImages();
-}
-
-let startX=0;
-const slider=document.getElementById("slider");
-slider.addEventListener("touchstart",e=>{
- startX=e.touches[0].clientX;
-},{passive:true});
-slider.addEventListener("touchend",e=>{
- const diff=e.changedTouches[0].clientX-startX;
- if(Math.abs(diff)>80)move(diff<0?1:-1);
-},{passive:true});
-
-loadRealImages();
+render();
 </script>
 </body>
 </html>
+
