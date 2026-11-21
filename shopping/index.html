@@ -1,0 +1,378 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SHOPPING WORLD</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f4f5f7;color:#17191e;font-family:Arial,sans-serif}
+header{background:white;border-bottom:1px solid #e5e6e9;position:sticky;top:0;z-index:10}
+.top{width:100%;padding:13px 2%;display:flex;align-items:center;gap:22px;justify-content:space-between;flex-wrap:wrap}
+.logo{font-size:21px;font-weight:900;white-space:nowrap}
+.logo span{color:#e94737}
+nav{display:flex;gap:18px}
+nav a{text-decoration:none;color:#555;font-size:13px}
+.search{flex:1;min-width:170px;max-width:500px;padding:11px 14px;border:1px solid #ddd;border-radius:5px;font-size:13px}
+.hero{background:#17191e;color:white;padding:28px 3%}
+.hero h1{font-size:30px;margin:0 0 8px}
+.hero p{font-size:13px;color:#bbb;margin:0}
+main{width:100%;padding:22px 2%}
+.heading{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.heading h2{font-size:19px;margin:0}
+.count{font-size:11px;color:#777}
+.categories{display:flex;gap:8px;overflow-x:auto;padding:5px 0 16px}
+.category{border:1px solid #ddd;background:white;padding:8px 13px;border-radius:20px;white-space:nowrap;font-size:11px;cursor:pointer}
+.category.active,.category:hover{background:#17191e;color:white;border-color:#17191e}
+.products{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px}
+.product{background:white;border:1px solid #e6e7ea;border-radius:6px;overflow:hidden;min-width:0}
+.product img{width:100%;height:105px;object-fit:cover;display:block;background:#eee}
+.info{padding:9px}
+.cat{font-size:9px;color:#e94737;text-transform:uppercase;font-weight:bold}
+.name{font-size:12px;font-weight:bold;margin:5px 0;line-height:1.35;min-height:30px}
+.desc{font-size:10px;color:#777;line-height:1.4;min-height:27px}
+.price{font-size:10px;margin-top:7px;color:#777}
+.details{display:block;border-top:1px solid #eee;margin-top:8px;padding-top:8px;color:#e94737;text-decoration:none;font-size:10px}
+.empty{grid-column:1/-1;background:white;padding:30px;text-align:center;color:#777}
+footer{background:#17191e;color:#aaa;padding:25px 3%;font-size:11px;line-height:1.8;margin-top:35px}
+@media(max-width:900px){.products{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:600px){
+ .top{gap:12px;padding:12px}
+ nav{gap:12px}nav a{font-size:11px}
+ .search{order:3;max-width:none;flex-basis:100%}
+ .hero{padding:25px 4%}.hero h1{font-size:25px}
+ main{padding:17px 10px}
+ .products{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+ .product img{height:85px}
+ .info{padding:7px}.name{font-size:11px}
+ .desc{font-size:9px}.details{font-size:9px}
+}
+</style>
+</head>
+<body>
+
+<header>
+ <div class="top">
+  <div class="logo">SHOPPING<span> WORLD</span></div>
+  <nav>
+   <a href="#home">Home</a>
+   <a href="#categories">Categories</a>
+   <a href="#products">Products</a>
+  </nav>
+  <input id="search" class="search" placeholder="Search among 200 products...">
+ </div>
+</header>
+
+<section class="hero" id="home">
+ <h1>Everything you need.</h1>
+ <p>Discover 200 products across fashion, technology, home, sports and more.</p>
+</section>
+
+<main>
+ <div class="heading" id="categories"><h2>Shop by category</h2></div>
+ <div class="categories" id="filters">
+  <button class="category active" data-category="All">All products</button>
+  <button class="category" data-category="Fashion">Fashion</button>
+  <button class="category" data-category="Phones">Phones</button>
+  <button class="category" data-category="Electronics">Electronics</button>
+  <button class="category" data-category="Computers">Computers</button>
+  <button class="category" data-category="Shoes">Shoes</button>
+  <button class="category" data-category="Watches">Watches</button>
+  <button class="category" data-category="Beauty">Beauty</button>
+  <button class="category" data-category="Home">Home</button>
+  <button class="category" data-category="Furniture">Furniture</button>
+  <button class="category" data-category="Sports">Sports</button>
+  <button class="category" data-category="Gaming">Gaming</button>
+  <button class="category" data-category="Accessories">Accessories</button>
+  <button class="category" data-category="Toys">Toys</button>
+  <button class="category" data-category="Automotive">Automotive</button>
+  <button class="category" data-category="Books">Books</button>
+  <button class="category" data-category="Kitchen">Kitchen</button>
+  <button class="category" data-category="Outdoor">Outdoor</button>
+ </div>
+
+ <div class="heading" id="products">
+  <h2>Discover products</h2>
+  <span class="count" id="count"></span>
+ </div>
+ <div class="products" id="product-list"></div>
+</main>
+
+<footer>
+ <strong>SHOPPING WORLD</strong><br>
+ Your world of shopping, all in one place.<br>
+ Product prices, sellers, stock and purchasing features will be added later.
+ <br><br>© 2026 SHOPPING WORLD
+</footer>
+
+<script>
+// Each product has its own name, category and image search.
+const rawProducts = `
+Classic Cotton T-Shirt|Fashion|Casual everyday clothing|cotton t shirt
+Slim Fit Jeans|Fashion|Denim clothing|blue jeans
+Men's Casual Jacket|Fashion|Everyday outerwear|mens casual jacket
+Women's Summer Dress|Fashion|Summer clothing|summer dress
+Men's Formal Suit|Fashion|Formal wear|mens formal suit
+Women's Blazer|Fashion|Smart clothing|womens blazer
+Hooded Sweatshirt|Fashion|Comfortable casual wear|hooded sweatshirt
+Knitted Sweater|Fashion|Warm knitwear|knitted sweater
+Polo Shirt|Fashion|Classic casual top|polo shirt
+Linen Shirt|Fashion|Lightweight clothing|linen shirt
+Women's Skirt|Fashion|Everyday fashion|womens skirt
+Cargo Trousers|Fashion|Utility style trousers|cargo pants
+Sports Leggings|Fashion|Active clothing|sports leggings
+Winter Coat|Fashion|Cold weather clothing|winter coat
+Rain Jacket|Fashion|Weather protection|rain jacket
+Children's T-Shirt|Fashion|Children's clothing|kids t shirt
+Baby Romper|Fashion|Baby clothing|baby romper
+Evening Gown|Fashion|Formal occasion wear|evening gown
+Tracksuit Set|Fashion|Sports fashion|tracksuit
+Denim Shorts|Fashion|Casual summer wear|denim shorts
+Smartphone 128GB|Phones|Modern mobile phone|smartphone
+Smartphone 256GB|Phones|Large storage phone|modern smartphone
+Foldable Smartphone|Phones|Foldable mobile technology|foldable phone
+Budget Android Phone|Phones|Everyday mobile phone|android phone
+Premium Android Phone|Phones|Advanced mobile phone|premium android phone
+Refurbished Smartphone|Phones|Pre-owned mobile device|mobile phone
+Cordless Phone|Phones|Home communication device|cordless telephone
+Tablet Phone|Phones|Large screen mobile device|tablet phone
+Phone Power Bank|Phones|Portable charging|phone power bank
+Wireless Phone Charger|Phones|Convenient charging|wireless phone charger
+Phone Protective Case|Phones|Phone protection|smartphone case
+Tempered Glass Screen Protector|Phones|Screen protection|phone screen protector
+USB-C Phone Cable|Phones|Charging accessory|usb c cable
+Bluetooth Speaker|Electronics|Portable sound|bluetooth speaker
+Wireless Headphones|Electronics|Wireless audio|wireless headphones
+Studio Headphones|Electronics|Audio equipment|studio headphones
+Noise Cancelling Earbuds|Electronics|Personal audio|wireless earbuds
+Digital Camera|Electronics|Photography equipment|digital camera
+Action Camera|Electronics|Adventure recording|action camera
+Mirrorless Camera Lens|Electronics|Camera accessory|camera lens
+Portable Projector|Electronics|Home projection|portable projector
+Smart Television|Electronics|Home entertainment|smart television
+4K Monitor|Electronics|Display equipment|4k monitor
+Computer Microphone|Electronics|Recording equipment|usb microphone
+Soundbar Speaker|Electronics|Home audio|soundbar
+Portable Radio|Electronics|Audio device|portable radio
+Smart Home Hub|Electronics|Home technology|smart home hub
+Wi-Fi Router|Electronics|Internet equipment|wifi router
+External SSD Drive|Electronics|Digital storage|external ssd
+USB Flash Drive|Electronics|Portable storage|usb flash drive
+Laptop Computer|Computers|Portable computer|laptop computer
+Desktop Computer|Computers|Desktop workstation|desktop computer
+Gaming Laptop|Computers|Computer for gaming|gaming laptop
+Business Laptop|Computers|Work computer|business laptop
+Computer Keyboard|Computers|Typing accessory|computer keyboard
+Mechanical Keyboard|Computers|Mechanical typing|mechanical keyboard
+Wireless Mouse|Computers|Computer accessory|wireless mouse
+Gaming Mouse|Computers|Gaming accessory|gaming mouse
+Laptop Cooling Pad|Computers|Laptop cooling|laptop cooling pad
+Laptop Stand|Computers|Desk accessory|laptop stand
+Computer Monitor Stand|Computers|Monitor accessory|monitor stand
+Graphics Tablet|Computers|Digital drawing device|graphics tablet
+Desktop Graphics Card|Computers|Computer component|graphics card
+Computer RAM Kit|Computers|Memory component|computer ram
+Motherboard|Computers|Computer component|computer motherboard
+Running Sneakers|Shoes|Running footwear|running sneakers
+Leather Dress Shoes|Shoes|Formal footwear|leather dress shoes
+Women's High Heels|Shoes|Fashion footwear|high heel shoes
+Men's Leather Boots|Shoes|Leather footwear|mens leather boots
+Hiking Boots|Shoes|Outdoor footwear|hiking boots
+Basketball Shoes|Shoes|Court footwear|basketball shoes
+Football Boots|Shoes|Football footwear|football boots
+Canvas Trainers|Shoes|Casual footwear|canvas shoes
+Sandals|Shoes|Open footwear|sandals
+Children's School Shoes|Shoes|School footwear|school shoes
+Slip-On Shoes|Shoes|Easy everyday footwear|slip on shoes
+Trail Running Shoes|Shoes|Outdoor running footwear|trail running shoes
+Classic Leather Watch|Watches|Traditional timepiece|leather watch
+Digital Sports Watch|Watches|Digital timepiece|digital sports watch
+Smart Watch|Watches|Connected wearable|smartwatch
+Diving Watch|Watches|Water sports timepiece|diving watch
+Minimalist Wristwatch|Watches|Simple watch design|minimalist watch
+Women's Bracelet Watch|Watches|Fashion timepiece|womens bracelet watch
+Luxury Automatic Watch|Watches|Automatic timepiece|automatic luxury watch
+Kids Digital Watch|Watches|Children's timepiece|kids digital watch
+Watch Strap|Watches|Watch accessory|watch strap
+Pocket Watch|Watches|Classic pocket timepiece|pocket watch
+Face Moisturizer|Beauty|Daily skincare|face moisturizer
+Sunscreen Lotion|Beauty|Sun protection|sunscreen lotion
+Facial Cleanser|Beauty|Face cleansing|facial cleanser
+Lipstick Collection|Beauty|Makeup products|lipstick makeup
+Makeup Brush Set|Beauty|Makeup tools|makeup brush set
+Perfume Spray|Beauty|Personal fragrance|perfume bottle
+Hair Shampoo|Beauty|Hair care|shampoo bottle
+Hair Conditioner|Beauty|Hair care|hair conditioner
+Hair Dryer|Beauty|Hair styling tool|hair dryer
+Electric Hair Clipper|Beauty|Grooming equipment|hair clipper
+Nail Polish Set|Beauty|Nail cosmetics|nail polish
+Body Lotion|Beauty|Body skincare|body lotion
+Facial Serum|Beauty|Skincare treatment|facial serum
+Makeup Foundation|Beauty|Cosmetic makeup|makeup foundation
+Makeup Mirror|Beauty|Beauty accessory|makeup mirror
+Modern Sofa|Furniture|Living room furniture|modern sofa
+Wooden Dining Table|Furniture|Dining furniture|wooden dining table
+Office Desk|Furniture|Workspace furniture|office desk
+Ergonomic Office Chair|Furniture|Office seating|ergonomic office chair
+Bedside Table|Furniture|Bedroom furniture|bedside table
+Bookshelf|Furniture|Storage furniture|bookshelf
+Wardrobe Cabinet|Furniture|Clothing storage|wardrobe cabinet
+Coffee Table|Furniture|Living room table|coffee table
+Outdoor Garden Chair|Furniture|Outdoor seating|garden chair
+King Size Bed Frame|Furniture|Bedroom furniture|king bed frame
+Floor Lamp|Home|Home lighting|floor lamp
+Decorative Wall Clock|Home|Home decoration|wall clock
+Ceramic Flower Vase|Home|Decorative accessory|ceramic vase
+Indoor Plant Pot|Home|Plant accessory|indoor plant pot
+Decorative Wall Art|Home|Wall decoration|wall art
+Soft Throw Blanket|Home|Home comfort|throw blanket
+Bathroom Towel Set|Home|Bathroom essentials|bath towels
+Bed Sheet Set|Home|Bedroom essentials|bed sheets
+Laundry Basket|Home|Laundry storage|laundry basket
+Door Mat|Home|Home accessory|door mat
+Electric Kettle|Kitchen|Kitchen appliance|electric kettle
+Coffee Maker|Kitchen|Coffee equipment|coffee maker
+Blender Machine|Kitchen|Kitchen appliance|kitchen blender
+Rice Cooker|Kitchen|Cooking appliance|rice cooker
+Air Fryer|Kitchen|Kitchen appliance|air fryer
+Toaster Machine|Kitchen|Breakfast appliance|toaster
+Nonstick Frying Pan|Kitchen|Cookware|nonstick frying pan
+Stainless Steel Saucepan|Kitchen|Cooking pot|stainless steel saucepan
+Dinner Plate Set|Kitchen|Tableware|dinner plate set
+Kitchen Knife Set|Kitchen|Kitchen tools|kitchen knife set
+Cutting Board|Kitchen|Food preparation|cutting board
+Water Bottle|Kitchen|Reusable drinkware|water bottle
+Food Storage Containers|Kitchen|Kitchen storage|food storage containers
+Dish Rack|Kitchen|Kitchen organizer|dish drying rack
+Manual Coffee Grinder|Kitchen|Coffee accessory|coffee grinder
+Football|Sports|Sports equipment|soccer football
+Basketball|Sports|Sports equipment|basketball ball
+Tennis Racket|Sports|Tennis equipment|tennis racket
+Badminton Racket|Sports|Badminton equipment|badminton racket
+Table Tennis Set|Sports|Table tennis equipment|table tennis paddle
+Boxing Gloves|Sports|Boxing equipment|boxing gloves
+Yoga Mat|Sports|Fitness accessory|yoga mat
+Adjustable Dumbbells|Sports|Strength equipment|adjustable dumbbells
+Skipping Rope|Sports|Fitness equipment|jump rope
+Cycling Helmet|Sports|Cycling protection|cycling helmet
+Football Goalkeeper Gloves|Sports|Football equipment|goalkeeper gloves
+Resistance Bands|Sports|Fitness equipment|resistance bands
+Swimming Goggles|Sports|Swimming accessory|swimming goggles
+Camping Tent|Outdoor|Outdoor shelter|camping tent
+Sleeping Bag|Outdoor|Camping equipment|sleeping bag
+Hiking Backpack|Outdoor|Outdoor bag|hiking backpack
+Portable Camping Stove|Outdoor|Camping cooking|camping stove
+Mountain Bicycle|Outdoor|Cycling equipment|mountain bicycle
+Fishing Rod|Outdoor|Fishing equipment|fishing rod
+Binoculars|Outdoor|Outdoor viewing|binoculars
+Travel Suitcase|Outdoor|Travel luggage|travel suitcase
+Solar Garden Light|Outdoor|Outdoor lighting|solar garden light
+Portable Folding Chair|Outdoor|Camping seating|folding camping chair
+Gaming Monitor|Gaming|Gaming display|gaming monitor
+Wireless Gaming Controller|Gaming|Gaming accessory|wireless game controller
+Gaming Headset|Gaming|Gaming audio|gaming headset
+Mechanical Gaming Keyboard|Gaming|Gaming keyboard|gaming keyboard
+Gaming Mouse Pad|Gaming|Desk accessory|gaming mouse pad
+Gaming Chair|Gaming|Gaming furniture|gaming chair
+Console Storage Stand|Gaming|Console accessory|gaming console stand
+VR Headset|Gaming|Virtual reality|virtual reality headset
+Portable Game Console|Gaming|Handheld gaming|handheld game console
+Gaming Desk|Gaming|Gaming furniture|gaming desk
+Leather Handbag|Accessories|Fashion accessory|leather handbag
+Travel Backpack|Accessories|Travel accessory|travel backpack
+Leather Wallet|Accessories|Personal accessory|leather wallet
+Polarized Sunglasses|Accessories|Eyewear|polarized sunglasses
+Leather Belt|Accessories|Fashion accessory|leather belt
+Silk Scarf|Accessories|Fashion accessory|silk scarf
+Silver Necklace|Accessories|Jewellery|silver necklace
+Gold Bracelet|Accessories|Jewellery|gold bracelet
+Stud Earrings|Accessories|Jewellery|stud earrings
+Baseball Cap|Accessories|Headwear|baseball cap
+Kids Building Blocks|Toys|Construction toy|building blocks toy
+Remote Control Car|Toys|Toy vehicle|remote control car
+Stuffed Teddy Bear|Toys|Soft toy|teddy bear
+Toy Train Set|Toys|Toy railway|toy train set
+Wooden Puzzle|Toys|Puzzle toy|wooden puzzle
+Doll House|Toys|Pretend play toy|doll house
+Toy Dinosaur Figure|Toys|Toy figure|toy dinosaur
+Children's Art Set|Toys|Creative toy|kids art set
+Board Game|Toys|Family game|board game
+Toy Robot|Toys|Electronic toy|toy robot
+Car Phone Holder|Automotive|Vehicle accessory|car phone holder
+Car Seat Cover|Automotive|Vehicle interior|car seat cover
+Car Floor Mats|Automotive|Vehicle accessory|car floor mats
+Portable Car Vacuum|Automotive|Car cleaning|car vacuum cleaner
+Car Dash Camera|Automotive|Vehicle camera|car dash camera
+Car Jump Starter|Automotive|Car equipment|car jump starter
+Car Air Compressor|Automotive|Vehicle equipment|car air compressor
+Car Steering Wheel Cover|Automotive|Car interior accessory|steering wheel cover
+Car Emergency Kit|Automotive|Road safety equipment|car emergency kit
+Car Roof Rack|Automotive|Vehicle storage|car roof rack
+Fiction Novel|Books|Fiction reading|fiction novel book
+Business Strategy Book|Books|Business reading|business book
+Science Encyclopedia|Books|Educational reading|science encyclopedia
+Children's Storybook|Books|Children's reading|children storybook
+Travel Guidebook|Books|Travel reading|travel guide book
+Cookbook Collection|Books|Cooking reading|cookbook
+History Book|Books|History reading|history book
+Art and Design Book|Books|Creative reading|art design book
+Language Learning Book|Books|Language education|language learning book
+Personal Development Book|Books|Self improvement|personal development book
+`;
+
+const products=rawProducts.trim().split("\n").map(line=>line.split("|"));
+
+let active="All";
+const list=document.getElementById("product-list");
+
+function imageFor(product){
+ const search=encodeURIComponent(product[3]);
+ return `https://loremflickr.com/360/260/${search}`;
+}
+
+function render(){
+ const q=document.getElementById("search").value.toLowerCase();
+ const found=products.filter(p=>
+  (active==="All"||p[1]===active)&&
+  p.join(" ").toLowerCase().includes(q)
+ );
+
+ document.getElementById("count").textContent=
+  found.length+" of "+products.length+" products";
+
+ if(!found.length){
+  list.innerHTML='<div class="empty">No products found. Try another search.</div>';
+  return;
+ }
+
+ list.innerHTML=found.map((p,i)=>`
+  <article class="product">
+   <img src="${imageFor(p)}" alt="${p[0]}" loading="lazy"
+    onerror="this.src='https://placehold.co/360x260/f0f0f0/555?text=Shopping+World'">
+   <div class="info">
+    <div class="cat">${p[1]}</div>
+    <div class="name">${p[0]}</div>
+    <div class="desc">${p[2]}</div>
+    <div class="price">Price: Coming soon</div>
+    <a class="details" href="#products">Details coming soon →</a>
+   </div>
+  </article>
+ `).join("");
+}
+
+document.getElementById("search").addEventListener("input",render);
+
+document.querySelectorAll(".category").forEach(btn=>{
+ btn.addEventListener("click",()=>{
+  document.querySelectorAll(".category").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  active=btn.dataset.category;
+  render();
+ });
+});
+
+render();
+</script>
+</body>
+</html>
