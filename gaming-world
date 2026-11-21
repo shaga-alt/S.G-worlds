@@ -1,0 +1,271 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gaming World | Discover Games</title>
+<style>
+:root {
+  --bg:#090a0d;
+  --panel:#111318;
+  --panel2:#171a20;
+  --red:#ed303c;
+  --text:#f4f4f5;
+  --muted:#9297a2;
+  --line:#252932;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;
+}
+header{
+  height:72px;padding:0 6%;display:flex;align-items:center;
+  justify-content:space-between;border-bottom:1px solid var(--line);
+  background:#0c0e12;position:sticky;top:0;z-index:10;
+}
+.logo{font-size:22px;font-weight:900;letter-spacing:1px}
+.logo span{color:var(--red)}
+nav{display:flex;gap:25px}
+nav a{color:#b9bdc6;text-decoration:none;font-size:14px}
+nav a:hover{color:white}
+.hero{
+  padding:55px 6% 42px;
+  background:linear-gradient(100deg,#171014,#111318 55%,#171014);
+  border-bottom:1px solid var(--line);
+}
+.eyebrow{color:var(--red);font-size:11px;font-weight:bold;letter-spacing:3px}
+.hero h1{font-size:clamp(30px,5vw,54px);margin:12px 0}
+.hero p{color:#aeb2bc;max-width:570px;line-height:1.7}
+.hero a{color:white;text-decoration:none;border-bottom:1px solid var(--red);padding-bottom:4px;font-size:14px}
+main{max-width:1250px;margin:auto;padding:35px 5%}
+.section-head{
+ display:flex;justify-content:space-between;align-items:center;
+ gap:15px;margin-bottom:20px;flex-wrap:wrap
+}
+.section-head h2{font-size:22px;margin:0}
+.search{
+ background:var(--panel);border:1px solid var(--line);color:white;
+ padding:12px 15px;border-radius:6px;width:min(100%,280px);outline:none
+}
+.filters{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:20px}
+.filter{
+ background:transparent;color:#aeb2bc;border:1px solid var(--line);
+ border-radius:20px;padding:8px 14px;cursor:pointer;font-size:12px
+}
+.filter.active,.filter:hover{border-color:var(--red);color:white}
+.list-head,.game-row{
+ display:grid;
+ grid-template-columns:65px minmax(150px,1fr) 130px 115px 115px 110px;
+ gap:15px;align-items:center
+}
+.list-head{
+ color:#777e8b;font-size:10px;text-transform:uppercase;
+ letter-spacing:1px;padding:12px 15px;border-bottom:1px solid var(--line)
+}
+.game-row{
+ min-height:96px;padding:12px 15px;border-bottom:1px solid var(--line);
+ transition:.2s;background:transparent
+}
+.game-row:hover{background:var(--panel);border-left:2px solid var(--red)}
+.cover{
+ width:55px;height:70px;object-fit:cover;border-radius:4px;
+ background:#242832;display:block
+}
+.cover-fallback{
+ width:55px;height:70px;border-radius:4px;background:#242832;
+ display:flex;align-items:center;justify-content:center;
+ color:var(--red);font-size:18px;font-weight:bold
+}
+.game-name{font-size:14px;font-weight:bold;margin-bottom:6px}
+.game-info{font-size:11px;color:var(--muted);line-height:1.5}
+.platform{font-size:11px;color:#c0c4cc}
+.price{font-size:12px;color:#d9dce2;line-height:1.6}
+.price small{display:block;color:var(--muted);font-size:10px}
+.offer a{font-size:12px;color:#ff626c;text-decoration:none}
+.offer a:hover{text-decoration:underline;color:white}
+.tag{
+ display:inline-block;font-size:9px;color:#ff8a91;
+ border:1px solid #593037;padding:3px 6px;border-radius:3px;
+ margin-left:5px;vertical-align:middle
+}
+.empty{padding:35px;text-align:center;color:var(--muted)}
+.notice{
+ margin-top:25px;padding:17px;background:#111318;
+ border-left:2px solid var(--red);color:#aeb2bc;
+ font-size:12px;line-height:1.7
+}
+footer{
+ border-top:1px solid var(--line);padding:30px 6%;
+ color:#777e8b;font-size:12px;line-height:1.8
+}
+footer strong{color:white}
+@media(max-width:760px){
+ header{padding:0 4%;height:64px}
+ nav{gap:12px}nav a{font-size:11px}
+ .logo{font-size:18px}
+ main{padding:28px 4%}
+ .list-head{display:none}
+ .game-row{
+  grid-template-columns:55px minmax(0,1fr) auto;
+  gap:12px;padding:13px 5px
+ }
+ .platform{display:none}
+ .price{display:none}
+ .offer{grid-column:3;grid-row:1}
+ .game-name{font-size:13px}
+ .game-info{font-size:10px}
+ .hero{padding:42px 5%}
+}
+</style>
+</head>
+<body>
+
+<header>
+ <div class="logo">GAMING<span> WORLD</span></div>
+ <nav>
+  <a href="#discover">Discover</a>
+  <a href="#games">Games</a>
+  <a href="#about">About</a>
+ </nav>
+</header>
+
+<section class="hero" id="discover">
+ <div class="eyebrow">YOUR GAMING DESTINATION</div>
+ <h1>Discover your next game.</h1>
+ <p>Explore popular games, compare platforms and visit official stores to check available editions and prices.</p>
+ <a href="#games">EXPLORE THE COLLECTION →</a>
+</section>
+
+<main id="games">
+ <div class="section-head">
+  <h2>Explore games</h2>
+  <input class="search" id="search" type="search" placeholder="Search games...">
+ </div>
+
+ <div class="filters" id="filters">
+  <button class="filter active" data-filter="All">All games</button>
+  <button class="filter" data-filter="Sports">Sports</button>
+  <button class="filter" data-filter="Action">Action</button>
+  <button class="filter" data-filter="Adventure">Adventure</button>
+  <button class="filter" data-filter="Racing">Racing</button>
+  <button class="filter" data-filter="Simulation">Simulation</button>
+  <button class="filter" data-filter="Other">Other</button>
+ </div>
+
+ <div class="list-head">
+  <span>Cover</span><span>Game title</span><span>Platforms</span>
+  <span>USD price</span><span>RWF price</span><span>Store</span>
+ </div>
+ <div id="game-list"></div>
+
+ <div class="notice">
+  <strong>About prices:</strong> Prices are not connected to live retailer feeds yet.
+  We do not display invented prices. Visit the store link to check the current price,
+  available editions and regional availability. RWF conversions will be added when
+  a reliable exchange-rate and price source is connected.
+  <br><br>
+  <strong>Age guidance:</strong> Some games have mature-age ratings. Check each game's
+  official rating and discuss suitability with a parent or guardian before buying.
+ </div>
+</main>
+
+<footer id="about">
+ <strong>GAMING WORLD</strong><br>
+ An independent game discovery website. We do not sell games directly or process payments.
+ Some retailer links may become affiliate links in the future; any affiliate links will
+ be clearly disclosed.
+ <br><br>© 2026 Gaming World
+</footer>
+
+<script>
+const games = [
+ {name:"EA SPORTS FC 26",category:"Sports",year:2025,studio:"EA Sports",id:3405690,platform:"PC, PlayStation, Xbox",url:"https://store.steampowered.com/app/3405690/"},
+ {name:"EA SPORTS FC 25",category:"Sports",year:2024,studio:"EA Sports",id:2669320,platform:"PC, PlayStation, Xbox",url:"https://store.steampowered.com/app/2669320/"},
+ {name:"EA SPORTS FC 24",category:"Sports",year:2023,studio:"EA Sports",id:2195250,platform:"PC, PlayStation, Xbox",url:"https://store.steampowered.com/app/2195250/"},
+ {name:"FIFA 23",category:"Sports",year:2022,studio:"EA Sports",id:1811260,platform:"PC, PlayStation, Xbox",url:"https://store.steampowered.com/app/1811260/"},
+ {name:"Grand Theft Auto VI",category:"Action",year:2026,studio:"Rockstar Games",platform:"PS5, Xbox Series X|S",url:"https://www.rockstargames.com/VI",official:true},
+ {name:"Grand Theft Auto V",category:"Action",year:2013,studio:"Rockstar Games",id:271590,platform:"PC, PlayStation, Xbox",url:"https://store.steampowered.com/app/271590/"},
+ {name:"Fortnite",category:"Action",studio:"Epic Games",platform:"PC, PlayStation, Xbox, Mobile",url:"https://www.fortnite.com/",official:true},
+ {name:"Minecraft",category:"Adventure",studio:"Mojang",platform:"PC, Console, Mobile",url:"https://www.minecraft.net/",official:true},
+ {name:"Call of Duty: Warzone",category:"Action",studio:"Activision",platform:"PC, PlayStation, Xbox",url:"https://www.callofduty.com/warzone",official:true},
+ {name:"Rocket League",category:"Sports",year:2015,studio:"Psyonix",id:252950,platform:"PC, PlayStation, Xbox",url:"https://store.steampowered.com/app/252950/"},
+ {name:"Forza Horizon 5",category:"Racing",year:2021,studio:"Playground Games",id:1551360,platform:"PC, Xbox, PlayStation",url:"https://store.steampowered.com/app/1551360/"},
+ {name:"Need for Speed Heat",category:"Racing",year:2019,studio:"Ghost Games",id:1222680,platform:"PC, PlayStation, Xbox",url:"https://store.steampowered.com/app/1222680/"},
+ {name:"Stardew Valley",category:"Simulation",year:2016,studio:"ConcernedApe",id:413150,platform:"PC, Console, Mobile",url:"https://store.steampowered.com/app/413150/"},
+ {name:"Terraria",category:"Adventure",year:2011,studio:"Re-Logic",id:105600,platform:"PC, Console, Mobile",url:"https://store.steampowered.com/app/105600/"},
+ {name:"Hogwarts Legacy",category:"Adventure",year:2023,studio:"Avalanche Software",id:990080,platform:"PC, PlayStation, Xbox",url:"https://store.steampowered.com/app/990080/"},
+ {name:"LEGO Star Wars: The Skywalker Saga",category:"Adventure",year:2022,studio:"TT Games",id:920210,platform:"PC, PlayStation, Xbox",url:"https://store.steampowered.com/app/920210/"},
+ {name:"LEGO Marvel Super Heroes",category:"Adventure",year:2013,studio:"TT Games",id:249130,platform:"PC, PlayStation, Xbox",url:"https://store.steampowered.com/app/249130/"},
+ {name:"Human: Fall Flat",category:"Other",year:2016,studio:"No Brakes Games",id:477160,platform:"PC, Console, Mobile",url:"https://store.steampowered.com/app/477160/"},
+ {name:"Unpacking",category:"Other",year:2021,studio:"Witch Beam",id:1135690,platform:"PC, Console",url:"https://store.steampowered.com/app/1135690/"},
+ {name:"Portal 2",category:"Adventure",year:2011,studio:"Valve",id:620,platform:"PC",url:"https://store.steampowered.com/app/620/"},
+ {name:"Slime Rancher",category:"Adventure",year:2017,studio:"Monomi Park",id:433340,platform:"PC, Console",url:"https://store.steampowered.com/app/433340/"},
+ {name:"A Short Hike",category:"Adventure",year:2019,studio:"Adam Robinson-Yu",id:1055540,platform:"PC, Console",url:"https://store.steampowered.com/app/1055540/"},
+ {name:"Ori and the Blind Forest",category:"Adventure",year:2015,studio:"Moon Studios",id:261570,platform:"PC, Xbox",url:"https://store.steampowered.com/app/261570/"},
+ {name:"Sonic Mania",category:"Action",year:2017,studio:"PagodaWest Games",id:584400,platform:"PC, Console",url:"https://store.steampowered.com/app/584400/"},
+ {name:"Planet Zoo",category:"Simulation",year:2019,studio:"Frontier Developments",id:703080,platform:"PC",url:"https://store.steampowered.com/app/703080/"},
+ {name:"Cities: Skylines",category:"Simulation",year:2015,studio:"Colossal Order",id:255710,platform:"PC, Console",url:"https://store.steampowered.com/app/255710/"},
+ {name:"Euro Truck Simulator 2",category:"Simulation",year:2012,studio:"SCS Software",id:227300,platform:"PC",url:"https://store.steampowered.com/app/227300/"},
+ {name:"Sea of Thieves",category:"Adventure",year:2018,studio:"Rare",id:1172620,platform:"PC, PlayStation, Xbox",url:"https://store.steampowered.com/app/1172620/"},
+ {name:"It Takes Two",category:"Adventure",year:2021,studio:"Hazelight Studios",id:1426210,platform:"PC, PlayStation, Xbox",url:"https://store.steampowered.com/app/1426210/"},
+ {name:"No Man's Sky",category:"Adventure",year:2016,studio:"Hello Games",id:275850,platform:"PC, PlayStation, Xbox",url:"https://store.steampowered.com/app/275850/"},
+ {name:"Cuphead",category:"Action",year:2017,studio:"Studio MDHR",id:268910,platform:"PC, PlayStation, Xbox",url:"https://store.steampowered.com/app/268910/"}
+];
+
+let activeFilter = "All";
+
+function renderGames(){
+ const search = document.getElementById("search").value.toLowerCase();
+ const filtered = games.filter(g=>{
+  const matchesFilter = activeFilter==="All" || g.category===activeFilter;
+  const matchesSearch = g.name.toLowerCase().includes(search) ||
+   g.studio.toLowerCase().includes(search);
+  return matchesFilter && matchesSearch;
+ });
+
+ const list = document.getElementById("game-list");
+ if(!filtered.length){
+  list.innerHTML='<div class="empty">No games found. Try another search.</div>';
+  return;
+ }
+
+ list.innerHTML = filtered.map(g=>{
+  const image = g.id
+   ? `<img class="cover" loading="lazy"
+      src="https://cdn.akamai.steamstatic.com/steam/apps/${g.id}/library_600x900.jpg"
+      alt="${g.name} cover"
+      onerror="this.outerHTML='<div class=&quot;cover-fallback&quot;>GW</div>'">`
+   : `<div class="cover-fallback">GW</div>`;
+
+  return `
+   <article class="game-row">
+    <div>${image}</div>
+    <div>
+     <div class="game-name">${g.name}
+      ${g.official?'<span class="tag">OFFICIAL STORE</span>':''}
+     </div>
+     <div class="game-info">${g.studio}${g.year?' · '+g.year:''} · ${g.category}</div>
+    </div>
+    <div class="platform">${g.platform}</div>
+    <div class="price">Check store<small>USD price varies</small></div>
+    <div class="price">Not listed<small>RWF price unavailable</small></div>
+    <div class="offer"><a href="${g.url}" target="_blank" rel="noopener noreferrer">View offers →</a></div>
+   </article>`;
+ }).join("");
+}
+
+document.getElementById("search").addEventListener("input",renderGames);
+document.querySelectorAll(".filter").forEach(button=>{
+ button.addEventListener("click",()=>{
+  document.querySelectorAll(".filter").forEach(b=>b.classList.remove("active"));
+  button.classList.add("active");
+  activeFilter=button.dataset.filter;
+  renderGames();
+ });
+});
+renderGames();
+</script>
+</body>
+</html>
