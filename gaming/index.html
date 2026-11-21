@@ -1,0 +1,276 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPORTS WORLD | Live Scores & Sports News</title>
+<style>
+:root{
+ --bg:#0b0d10;
+ --panel:#13161b;
+ --panel2:#191d23;
+ --line:#282d35;
+ --red:#ed3542;
+ --white:#f5f6f8;
+ --muted:#9299a4;
+}
+*{box-sizing:border-box}
+body{
+ margin:0;background:var(--bg);color:var(--white);
+ font-family:Arial,Helvetica,sans-serif;
+}
+a{color:inherit;text-decoration:none}
+header{
+ background:#101216;border-bottom:1px solid var(--line);
+ position:sticky;top:0;z-index:20;
+}
+.top{
+ max-width:1250px;margin:auto;padding:17px 22px;
+ display:flex;align-items:center;justify-content:space-between;
+}
+.logo{font-size:23px;font-weight:900;letter-spacing:1px}
+.logo span{color:var(--red)}
+nav{display:flex;gap:23px;flex-wrap:wrap}
+nav a{font-size:13px;color:#aeb4be}
+nav a:hover,nav a.active{color:white}
+nav a.active{border-bottom:2px solid var(--red);padding-bottom:7px}
+.sportbar{
+ background:#15191f;border-bottom:1px solid var(--line);
+ overflow-x:auto;white-space:nowrap;
+}
+.sportbar-inner{
+ max-width:1250px;margin:auto;padding:12px 22px;
+ display:flex;gap:25px;
+}
+.sportbar a{font-size:12px;color:#b7bdc7}
+.sportbar a:hover{color:var(--red)}
+.container{max-width:1250px;margin:auto;padding:25px 22px}
+.page-title{font-size:23px;margin:0 0 7px}
+.subtitle{font-size:12px;color:var(--muted);margin-bottom:25px}
+.layout{
+ display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:24px;
+}
+.section{
+ background:var(--panel);border:1px solid var(--line);
+ border-radius:7px;margin-bottom:20px;overflow:hidden;
+}
+.section-title{
+ padding:15px 17px;border-bottom:1px solid var(--line);
+ display:flex;justify-content:space-between;align-items:center;
+ font-size:14px;font-weight:bold;
+}
+.section-title small{font-size:10px;color:var(--muted);font-weight:normal}
+.match-tabs{
+ display:flex;gap:20px;padding:12px 16px;
+ border-bottom:1px solid var(--line);overflow-x:auto;
+}
+.match-tabs a{font-size:11px;color:var(--muted);white-space:nowrap}
+.match-tabs a.active{color:var(--red)}
+.match{
+ display:grid;grid-template-columns:70px 1fr 70px;
+ align-items:center;gap:10px;padding:15px 17px;
+ border-bottom:1px solid var(--line);
+}
+.match:last-child{border-bottom:0}
+.match:hover{background:var(--panel2)}
+.competition{font-size:10px;color:var(--muted);margin-bottom:7px}
+.teams{font-size:12px;line-height:1.9}
+.score{text-align:center;font-size:14px;font-weight:bold}
+.status{font-size:9px;color:var(--muted);text-align:center;margin-top:5px}
+.live{color:#ff5965}
+.empty{
+ padding:28px 18px;text-align:center;color:var(--muted);
+ font-size:12px;line-height:1.8
+}
+.news-item{
+ display:grid;grid-template-columns:100px 1fr;gap:13px;
+ padding:13px 15px;border-bottom:1px solid var(--line);
+}
+.news-image{
+ width:100px;height:72px;object-fit:cover;
+ border-radius:4px;background:#252a32;
+}
+.news-title{font-size:13px;font-weight:bold;line-height:1.5}
+.news-meta{font-size:10px;color:var(--muted);margin-top:7px}
+.news-item:hover .news-title{color:#ff6872}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:390px}
+th,td{padding:12px 10px;border-bottom:1px solid var(--line);font-size:11px;text-align:center}
+th{color:var(--muted);font-weight:normal}
+th:first-child,td:first-child{text-align:left;padding-left:17px}
+.table-empty{padding:20px;text-align:center;color:var(--muted);font-size:12px}
+.link-list a{
+ display:block;padding:13px 16px;border-bottom:1px solid var(--line);
+ color:#c4c9d1;font-size:12px;
+}
+.link-list a:hover{color:var(--red)}
+footer{
+ border-top:1px solid var(--line);margin-top:30px;
+ padding:28px 22px;color:var(--muted);font-size:11px;line-height:1.8;
+}
+footer div{max-width:1250px;margin:auto}
+@media(max-width:800px){
+ .layout{grid-template-columns:1fr}
+ .top{padding:15px}
+ nav{gap:12px}
+ nav a{font-size:11px}
+ .container{padding:20px 13px}
+ .match{grid-template-columns:57px 1fr 58px;padding:13px 11px}
+}
+</style>
+</head>
+<body>
+
+<header>
+ <div class="top">
+  <a class="logo" href="#">SPORTS<span>WORLD</span></a>
+  <nav>
+   <a class="active" href="#home">Home</a>
+   <a href="#live">Live</a>
+   <a href="#news">News</a>
+   <a href="#tables">Tables</a>
+  </nav>
+ </div>
+ <div class="sportbar">
+  <div class="sportbar-inner">
+   <a href="#football">⚽ Football</a>
+   <a href="#basketball">🏀 Basketball</a>
+   <a href="#tennis">🎾 Tennis</a>
+   <a href="#other">🏎 Motorsport</a>
+   <a href="#other">🏉 Other sports</a>
+  </div>
+ </div>
+</header>
+
+<main class="container" id="home">
+ <h1 class="page-title">Sports centre</h1>
+ <div class="subtitle">Your destination for sports news, scores, fixtures and standings.</div>
+
+ <div class="layout">
+  <div>
+   <section class="section" id="live">
+    <div class="section-title">
+     <span>LIVE SCORES</span>
+     <small>Match centre</small>
+    </div>
+    <div class="match-tabs">
+     <a class="active" href="#football">Football</a>
+     <a href="#basketball">Basketball</a>
+     <a href="#tennis">Tennis</a>
+     <a href="#other">Other</a>
+    </div>
+    <div id="live-matches" class="empty">
+     Live scores are not connected yet.<br>
+     Your real match scores will appear here when we connect a sports data provider.
+    </div>
+   </section>
+
+   <section class="section" id="football">
+    <div class="section-title">
+     <span>FOOTBALL</span><small>Fixtures & results</small>
+    </div>
+    <div class="empty">
+     Football fixtures and results will appear here after the live data connection is added.
+    </div>
+   </section>
+
+   <section class="section" id="basketball">
+    <div class="section-title">
+     <span>BASKETBALL</span><small>Scores & games</small>
+    </div>
+    <div class="empty">
+     Basketball scores and fixtures will appear here.
+    </div>
+   </section>
+
+   <section class="section" id="tennis">
+    <div class="section-title">
+     <span>TENNIS</span><small>Tournaments</small>
+    </div>
+    <div class="empty">
+     Tennis tournaments and results will appear here.
+    </div>
+   </section>
+
+   <section class="section" id="tables">
+    <div class="section-title">
+     <span>LEAGUE TABLES</span><small>Standings</small>
+    </div>
+    <div class="table-wrap">
+     <table>
+      <thead>
+       <tr><th>Team</th><th>P</th><th>W</th><th>D</th><th>L</th><th>Pts</th></tr>
+      </thead>
+      <tbody id="league-table">
+       <tr><td colspan="6" class="table-empty">
+        Official league standings will appear here when connected.
+       </td></tr>
+      </tbody>
+     </table>
+    </div>
+   </section>
+  </div>
+
+  <aside>
+   <section class="section" id="news">
+    <div class="section-title">
+     <span>SPORTS NEWS</span><small>Latest coverage</small>
+    </div>
+    <div class="news-item">
+     <img class="news-image" src="https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=400" alt="Football stadium">
+     <div>
+      <a class="news-title" href="https://www.bbc.com/sport/football" target="_blank" rel="noopener">Latest football news and reports</a>
+      <div class="news-meta">BBC SPORT · Football</div>
+     </div>
+    </div>
+    <div class="news-item">
+     <img class="news-image" src="https://images.unsplash.com/photo-1546519638-68e109498ffc?w=400" alt="Basketball">
+     <div>
+      <a class="news-title" href="https://www.espn.com/nba/" target="_blank" rel="noopener">Basketball news and NBA coverage</a>
+      <div class="news-meta">ESPN · Basketball</div>
+     </div>
+    </div>
+    <div class="news-item">
+     <img class="news-image" src="https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?w=400" alt="Tennis">
+     <div>
+      <a class="news-title" href="https://www.atptour.com/" target="_blank" rel="noopener">Tennis news and tournament updates</a>
+      <div class="news-meta">ATP TOUR · Tennis</div>
+     </div>
+    </div>
+    <div class="news-item">
+     <img class="news-image" src="https://images.unsplash.com/photo-1508098682722-e99c643e7f0b?w=400" alt="Football match">
+     <div>
+      <a class="news-title" href="https://www.skysports.com/football" target="_blank" rel="noopener">Football headlines and analysis</a>
+      <div class="news-meta">SKY SPORTS · Football</div>
+     </div>
+    </div>
+   </section>
+
+   <section class="section" id="other">
+    <div class="section-title"><span>SPORTS COVERAGE</span></div>
+    <div class="link-list">
+     <a href="https://www.fifa.com/" target="_blank" rel="noopener">FIFA · International football</a>
+     <a href="https://www.uefa.com/" target="_blank" rel="noopener">UEFA · European competitions</a>
+     <a href="https://www.nba.com/" target="_blank" rel="noopener">NBA · Basketball</a>
+     <a href="https://www.formula1.com/" target="_blank" rel="noopener">Formula 1 · Motorsport</a>
+     <a href="https://www.world.rugby/" target="_blank" rel="noopener">World Rugby · Rugby</a>
+    </div>
+   </section>
+  </aside>
+ </div>
+</main>
+
+<footer>
+ <div>
+  <strong>SPORTS WORLD</strong><br>
+  Sports news, fixtures, scores and standings in one place.
+  <br>
+  Scores and standings will be supplied by connected data services.
+  News links currently lead to the publishers' websites.
+  <br><br>© 2026 SPORTS WORLD
+ </div>
+</footer>
+
+</body>
+</html>
