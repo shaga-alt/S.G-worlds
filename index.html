@@ -1,0 +1,491 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S.G. WORLDS</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#080d16;color:white;font-family:Arial,sans-serif}
+header{background:#101a2a;padding:17px 4%;display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap;border-bottom:1px solid #26354a}
+.logo{font-size:25px;font-weight:900;white-space:nowrap}
+.logo span{color:#42a5ff}
+.search{flex:1;max-width:520px}
+.search input{width:100%;padding:13px 16px;border:1px solid #34455f;border-radius:8px;background:#080f1c;color:white;outline:none}
+nav{display:flex;gap:17px}
+nav a{color:#d0d9e8;text-decoration:none;font-size:13px}
+main{padding:25px 4% 50px}
+.welcome{margin-bottom:22px}
+.welcome h1{font-size:29px;margin-bottom:8px}
+.welcome p,.sub{color:#9eacc0;font-size:14px}
+
+.featured{position:relative;height:330px;border-radius:13px;overflow:hidden;margin-bottom:28px;background:#15243a}
+.slide{position:absolute;inset:0;opacity:0;visibility:hidden;transition:opacity .6s}
+.slide.active{opacity:1;visibility:visible}
+.slide img{width:100%;height:100%;object-fit:cover}
+.slide:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(3,8,18,.94),rgba(3,8,18,.2))}
+.slide-content{position:absolute;z-index:2;left:6%;top:50%;transform:translateY(-50%);max-width:520px}
+.slide-content small{color:#65baff;font-weight:bold;letter-spacing:3px}
+.slide-content h2{font-size:clamp(28px,5vw,48px);margin:13px 0}
+.slide-content p{color:#d4dce9;line-height:1.6;font-size:14px}
+.explore{display:inline-block;margin-top:18px;background:#168cf0;padding:12px 20px;border-radius:6px;text-decoration:none;color:white;font-weight:bold;font-size:13px}
+.arrow{position:absolute;z-index:4;top:50%;transform:translateY(-50%);width:42px;height:42px;border:1px solid #ffffff66;background:#101a2acc;color:white;border-radius:50%;font-size:24px;cursor:pointer}
+.prev{left:14px}.next{right:14px}
+.dots{position:absolute;z-index:4;bottom:17px;left:50%;transform:translateX(-50%);display:flex;gap:9px}
+.dot{width:9px;height:9px;border:0;border-radius:50%;background:#ffffff77;cursor:pointer}
+.dot.active{background:#42a5ff;width:23px;border-radius:10px}
+
+.filters{display:flex;gap:10px;overflow-x:auto;padding:5px 0 20px}
+.filter{border:1px solid #34455f;background:#111c2c;color:#dbe5f3;padding:10px 18px;border-radius:25px;white-space:nowrap;cursor:pointer}
+.filter.active,.filter:hover{background:#168cf0;border-color:#168cf0;color:white}
+
+.section-title{font-size:21px;margin:12px 0 7px}
+.section-head{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:17px}
+.section-head p{color:#8999ae;font-size:12px}
+.grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:17px}
+.world-card,.trend-card{background:#111b2a;border:1px solid #26364b;border-radius:10px;overflow:hidden;text-decoration:none;color:white;transition:.2s;min-width:0}
+.world-card:hover,.trend-card:hover{transform:translateY(-4px);border-color:#42a5ff}
+.world-card img{width:100%;height:145px;object-fit:cover;display:block}
+.details{padding:13px}
+.details small{color:#56b5ff;font-size:10px;font-weight:bold;letter-spacing:1px}
+.details h3{font-size:15px;margin:8px 0;line-height:1.3}
+.details p{color:#aab7c9;font-size:12px;line-height:1.5;min-height:36px}
+.open{display:block;color:#56b5ff;font-size:11px;font-weight:bold;margin-top:13px}
+
+.trending{margin-top:38px}
+.trend-list{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px}
+.trend-card img{width:100%;height:145px;object-fit:cover;display:block;background:#17263a}
+.trend-info{padding:12px}
+.trend-info small{color:#59b5ff;font-size:10px;font-weight:bold;letter-spacing:1px}
+.trend-info h3{font-size:14px;margin:8px 0}
+.trend-info p{font-size:11px;color:#aab7c9;line-height:1.5}
+.trend-link{display:block;color:#58b5ff;font-size:11px;font-weight:bold;margin-top:12px}
+.trend-label{display:inline-block;background:#1a2d45;color:#83c7ff;padding:5px 8px;border-radius:4px;font-size:10px;margin-top:8px}
+.empty{display:none;color:#aab7c9;padding:30px 0}
+
+.credits{background:#0d1725;border-top:1px solid #26354a;padding:22px 5%;color:#aab7c9;font-size:11px;line-height:1.8}
+.credits h3{color:white;font-size:14px;margin-bottom:8px}
+.credits a{color:#67baff;text-decoration:none}
+footer{text-align:center;padding:25px;color:#8291a7;border-top:1px solid #26354a}
+
+@media(max-width:1050px){
+ .grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+ .trend-list{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(max-width:650px){
+ header{padding:15px 4%}
+ .logo{font-size:22px}
+ .search{order:3;flex-basis:100%;max-width:none}
+ nav{gap:12px}
+ nav a{font-size:12px}
+ main{padding:22px 4%}
+ .welcome h1{font-size:25px}
+ .featured{height:300px}
+ .slide-content{left:8%;right:8%}
+ .slide-content p{font-size:12px}
+ .arrow{width:34px;height:34px;font-size:19px}
+ .prev{left:8px}.next{right:8px}
+ .grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}
+ .world-card img{height:105px}
+ .details{padding:9px}
+ .details h3{font-size:12px}
+ .details p{font-size:10px;min-height:48px}
+ .open{font-size:9px}
+ .trend-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ .trend-card img{height:115px}
+ .trend-info{padding:9px}
+ .trend-info h3{font-size:12px}
+ .trend-info p{font-size:10px}
+ .section-title{font-size:19px}
+}
+@media(max-width:370px){
+ .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+ <div class="logo">S.G. <span>WORLDS</span></div>
+ <div class="search">
+  <input id="search" type="search" placeholder="Search worlds..." oninput="filterWorlds()">
+ </div>
+ <nav>
+  <a href="#home">Home</a>
+  <a href="#worlds">Explore</a>
+  <a href="#trending">Trending</a>
+ </nav>
+</header>
+
+<main id="home">
+
+ <div class="welcome">
+  <h1>Explore S.G. WORLDS</h1>
+  <p>Four experiences. One destination.</p>
+ </div>
+
+ <section class="featured">
+
+  <div class="slide active">
+   <img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=1400&q=85" alt="Cinema">
+   <div class="slide-content">
+    <small>FEATURED WORLD 01</small>
+    <h2>Entertainment World</h2>
+    <p>Discover movies, celebrities, television and entertainment.</p>
+    <a class="explore" href="entertainment/index.html">Explore Now →</a>
+   </div>
+  </div>
+
+  <div class="slide">
+   <img src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=1400&q=85" alt="Sports">
+   <div class="slide-content">
+    <small>FEATURED WORLD 02</small>
+    <h2>Sports World</h2>
+    <p>Follow matches, teams, results, tables and sports news.</p>
+    <a class="explore" href="gaming/index.html">Explore Now →</a>
+   </div>
+  </div>
+
+  <div class="slide">
+   <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1400&q=85" alt="Shopping">
+   <div class="slide-content">
+    <small>FEATURED WORLD 03</small>
+    <h2>Shopping World</h2>
+    <p>Explore products and discover things you love.</p>
+    <a class="explore" href="shopping/index.html">Explore Now →</a>
+   </div>
+  </div>
+
+  <div class="slide">
+   <img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=1400&q=85" alt="Music">
+   <div class="slide-content">
+    <small>FEATURED WORLD 04</small>
+    <h2>Music World</h2>
+    <p>Discover songs, music and your favourite artists.</p>
+    <a class="explore" href="music/index.html">Explore Now →</a>
+   </div>
+  </div>
+
+  <button class="arrow prev" onclick="changeSlide(-1)">‹</button>
+  <button class="arrow next" onclick="changeSlide(1)">›</button>
+
+  <div class="dots">
+   <button class="dot active" onclick="showSlide(0)"></button>
+   <button class="dot" onclick="showSlide(1)"></button>
+   <button class="dot" onclick="showSlide(2)"></button>
+   <button class="dot" onclick="showSlide(3)"></button>
+  </div>
+ </section>
+
+ <div class="filters">
+  <button class="filter active" onclick="chooseCategory('all',this)">All Worlds</button>
+  <button class="filter" onclick="chooseCategory('entertainment',this)">Entertainment</button>
+  <button class="filter" onclick="chooseCategory('sports',this)">Sports</button>
+  <button class="filter" onclick="chooseCategory('shopping',this)">Shopping</button>
+  <button class="filter" onclick="chooseCategory('music',this)">Music</button>
+ </div>
+
+ <h2 class="section-title" id="worlds">Discover All Worlds</h2>
+
+ <div class="grid">
+
+  <a class="world-card" data-category="entertainment" href="entertainment/index.html">
+   <img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=600&q=80" alt="Cinema">
+   <div class="details">
+    <small>01 · WATCH</small>
+    <h3>Entertainment World</h3>
+    <p>Movies, celebrities, TV and entertainment news.</p>
+    <span class="open">Explore World →</span>
+   </div>
+  </a>
+
+  <a class="world-card" data-category="sports" href="gaming/index.html">
+   <img src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=600&q=80" alt="Sports">
+   <div class="details">
+    <small>02 · FOLLOW</small>
+    <h3>Sports World</h3>
+    <p>Matches, teams, results, tables and sports news.</p>
+    <span class="open">Explore World →</span>
+   </div>
+  </a>
+
+  <a class="world-card" data-category="shopping" href="shopping/index.html">
+   <img src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=600&q=80" alt="Shopping">
+   <div class="details">
+    <small>03 · DISCOVER</small>
+    <h3>Shopping World</h3>
+    <p>Explore products and discover things you love.</p>
+    <span class="open">Explore World →</span>
+   </div>
+  </a>
+
+  <a class="world-card" data-category="music" href="music/index.html">
+   <img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&w=600&q=80" alt="Music">
+   <div class="details">
+    <small>04 · LISTEN</small>
+    <h3>Music World</h3>
+    <p>Discover songs, music and your favourite artists.</p>
+    <span class="open">Explore World →</span>
+   </div>
+  </a>
+
+ </div>
+
+ <p class="empty" id="empty">No worlds found. Try another search.</p>
+
+ <section class="trending" id="trending">
+
+  <div class="section-head">
+   <div>
+    <h2 class="section-title">🔥 Trending Now</h2>
+    <p class="sub">Featured entertainment, sports, music and products</p>
+   </div>
+  </div>
+
+  <div class="trend-list">
+
+   <!-- MOVIES -->
+
+   <a class="trend-card" href="entertainment/index.html">
+    <img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=600&q=80" alt="Practical Magic 2 movie">
+    <div class="trend-info">
+     <small>MOVIES</small>
+     <h3>Practical Magic 2</h3>
+     <p>Fantasy comedy-drama · 2026</p>
+     <span class="trend-label">Movie feature</span>
+     <span class="trend-link">Explore Entertainment →</span>
+    </div>
+   </a>
+
+   <a class="trend-card" href="entertainment/index.html">
+    <img
+     src="https://upload.wikimedia.org/wikipedia/commons/e/ee/Spider-Man_Brand_New_Day.webp"
+     alt="Spider-Man Brand New Day logo"
+     onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1535016120720-40c646be5580?auto=format&fit=crop&w=600&q=80';">
+    <div class="trend-info">
+     <small>MOVIES</small>
+     <h3>Spider-Man: Brand New Day</h3>
+     <p>Superhero action · 2026</p>
+     <span class="trend-label">Movie logo</span>
+     <span class="trend-link">Explore Entertainment →</span>
+    </div>
+   </a>
+
+   <a class="trend-card" href="entertainment/index.html">
+    <img
+     src="https://upload.wikimedia.org/wikipedia/commons/0/07/Logo_Coyote_vs_Acme.png"
+     alt="Coyote vs Acme logo"
+     onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=600&q=80';">
+    <div class="trend-info">
+     <small>MOVIES</small>
+     <h3>Coyote vs. Acme</h3>
+     <p>Comedy · 2026</p>
+     <span class="trend-label">Movie logo</span>
+     <span class="trend-link">Explore Entertainment →</span>
+    </div>
+   </a>
+
+   <!-- FOOTBALL -->
+
+   <a class="trend-card" href="gaming/index.html">
+    <img
+     src="https://upload.wikimedia.org/wikipedia/commons/8/8a/Bayern_Munich_players.jpg"
+     alt="Bayern Munich players"
+     onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=600&q=80';">
+    <div class="trend-info">
+     <small>FOOTBALL</small>
+     <h3>Bayern Munich</h3>
+     <p>Bayern players during a training session.</p>
+     <span class="trend-label">Club photograph</span>
+     <span class="trend-link">Explore Sports →</span>
+    </div>
+   </a>
+
+   <a class="trend-card" href="gaming/index.html">
+    <img
+     src="https://upload.wikimedia.org/wikipedia/commons/9/9e/Arsenal_FC_1920-21.jpg"
+     alt="Historical Arsenal team photograph"
+     onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&w=600&q=80';">
+    <div class="trend-info">
+     <small>FOOTBALL</small>
+     <h3>Arsenal</h3>
+     <p>A historical Arsenal team photograph from 1920–21.</p>
+     <span class="trend-label">Historic club photo</span>
+     <span class="trend-link">Explore Sports →</span>
+    </div>
+   </a>
+
+   <a class="trend-card" href="gaming/index.html">
+    <img
+     src="https://upload.wikimedia.org/wikipedia/commons/c/ce/FCBarcelona.JPG"
+     alt="Historical FC Barcelona team photograph"
+     onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&w=600&q=80';">
+    <div class="trend-info">
+     <small>FOOTBALL</small>
+     <h3>Barcelona</h3>
+     <p>Barcelona team photograph from 2005.</p>
+     <span class="trend-label">Historic club photo</span>
+     <span class="trend-link">Explore Sports →</span>
+    </div>
+   </a>
+
+   <!-- MUSIC -->
+
+   <a class="trend-card" href="music/index.html">
+    <img
+     src="https://upload.wikimedia.org/wikipedia/commons/2/22/Tate_McRae.jpg"
+     alt="Tate McRae performing"
+     onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=600&q=80';">
+    <div class="trend-info">
+     <small>MUSIC</small>
+     <h3>Housewife</h3>
+     <p>Tate McRae</p>
+     <span class="trend-label">Artist photograph</span>
+     <span class="trend-link">Explore Music →</span>
+    </div>
+   </a>
+
+   <a class="trend-card" href="music/index.html">
+    <img
+     src="https://upload.wikimedia.org/wikipedia/commons/b/b2/Karol_G%2C_Colombian_Reggaeton_Artist_%28cropped%29.png"
+     alt="Karol G"
+     onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=600&q=80';">
+    <div class="trend-info">
+     <small>MUSIC</small>
+     <h3>BbY WOW</h3>
+     <p>KAROL G with Judeline &amp; rusowsky</p>
+     <span class="trend-label">Artist photograph</span>
+     <span class="trend-link">Explore Music →</span>
+    </div>
+   </a>
+
+   <a class="trend-card" href="music/index.html">
+    <img src="https://images.unsplash.com/photo-1459749411175-04bf5292ceea?auto=format&fit=crop&w=600&q=80" alt="Live music">
+    <div class="trend-info">
+     <small>MUSIC</small>
+     <h3>Stop The Wedding!</h3>
+     <p>Ashe</p>
+     <span class="trend-label">Music feature</span>
+     <span class="trend-link">Explore Music →</span>
+    </div>
+   </a>
+
+   <!-- SHOPPING -->
+
+   <a class="trend-card" href="shopping/index.html">
+    <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=600&q=80" alt="T-shirts">
+    <div class="trend-info">
+     <small>SHOPPING</small>
+     <h3>Fashion T-shirts</h3>
+     <p>Explore fashion and clothing.</p>
+     <span class="trend-label">Product category</span>
+     <span class="trend-link">Explore Shopping →</span>
+    </div>
+   </a>
+
+   <a class="trend-card" href="shopping/index.html">
+    <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=600&q=80" alt="Sneakers">
+    <div class="trend-info">
+     <small>SHOPPING</small>
+     <h3>Sneakers</h3>
+     <p>Explore footwear and trainers.</p>
+     <span class="trend-label">Product category</span>
+     <span class="trend-link">Explore Shopping →</span>
+    </div>
+   </a>
+
+   <a class="trend-card" href="shopping/index.html">
+    <img src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=600&q=80" alt="Kitchen appliances">
+    <div class="trend-info">
+     <small>SHOPPING</small>
+     <h3>Kitchen Appliances</h3>
+     <p>Explore useful home products.</p>
+     <span class="trend-label">Product category</span>
+     <span class="trend-link">Explore Shopping →</span>
+    </div>
+   </a>
+
+  </div>
+ </section>
+
+</main>
+
+<section class="credits">
+ <h3>Image credits</h3>
+ <p>Spider-Man logo: <a href="https://commons.wikimedia.org/wiki/File:Spider-Man_Brand_New_Day.webp" target="_blank" rel="noopener">Wikimedia Commons</a>.</p>
+ <p>Coyote vs. Acme logo: <a href="https://commons.wikimedia.org/wiki/File:Logo_Coyote_vs_Acme.png" target="_blank" rel="noopener">Wikimedia Commons</a> · Ketchup Entertainment · CC BY 4.0.</p>
+ <p>Bayern Munich photograph: <a href="https://commons.wikimedia.org/wiki/File:Bayern_Munich_players.jpg" target="_blank" rel="noopener">Wikimedia Commons</a> · Doha Stadium Plus Qatar · CC BY 2.0.</p>
+ <p>Arsenal historical photograph: <a href="https://commons.wikimedia.org/wiki/File:Arsenal_FC_1920-21.jpg" target="_blank" rel="noopener">Wikimedia Commons</a>.</p>
+ <p>Barcelona photograph: <a href="https://commons.wikimedia.org/wiki/File:FCBarcelona.JPG" target="_blank" rel="noopener">Wikimedia Commons</a> · CC BY-SA.</p>
+ <p>Tate McRae photograph: <a href="https://commons.wikimedia.org/wiki/File:Tate_McRae.jpg" target="_blank" rel="noopener">Wikimedia Commons</a> · Lorane boisvert · CC BY-SA 4.0.</p>
+ <p>KAROL G photograph: <a href="https://commons.wikimedia.org/wiki/File:Karol_G,_Colombian_Reggaeton_Artist_(cropped).png" target="_blank" rel="noopener">Wikimedia Commons</a> · WMX Presents · CC BY 4.0.</p>
+ <p>Some images are general visual illustrations rather than photographs of the exact movie, song or product.</p>
+</section>
+
+<footer>© 2026 S.G. WORLDS · All Rights Reserved</footer>
+
+<script>
+let selectedCategory="all";
+let currentSlide=0;
+
+const slides=document.querySelectorAll(".slide");
+const dots=document.querySelectorAll(".dot");
+
+function showSlide(index){
+ currentSlide=(index+slides.length)%slides.length;
+ slides.forEach((slide,i)=>{
+  slide.classList.toggle("active",i===currentSlide);
+ });
+ dots.forEach((dot,i)=>{
+  dot.classList.toggle("active",i===currentSlide);
+ });
+}
+
+function changeSlide(direction){
+ showSlide(currentSlide+direction);
+}
+
+setInterval(()=>{
+ changeSlide(1);
+},5000);
+
+function chooseCategory(category,button){
+ selectedCategory=category;
+
+ document.querySelectorAll(".filter").forEach(b=>{
+  b.classList.remove("active");
+ });
+
+ button.classList.add("active");
+ filterWorlds();
+}
+
+function filterWorlds(){
+ const query=document.getElementById("search").value.toLowerCase();
+ let visible=0;
+
+ document.querySelectorAll(".world-card").forEach(card=>{
+  const matchesCategory=
+   selectedCategory==="all" ||
+   card.dataset.category===selectedCategory;
+
+  const matchesSearch=
+   card.innerText.toLowerCase().includes(query);
+
+  const show=matchesCategory&&matchesSearch;
+
+  card.style.display=show?"block":"none";
+
+  if(show)visible++;
+ });
+
+ document.getElementById("empty").style.display=
+  visible?"none":"block";
+}
+</script>
+
+</body>
+</html>
