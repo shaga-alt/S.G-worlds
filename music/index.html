@@ -1,0 +1,656 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#090B0F">
+<title>SHAGA MUSIC</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--bg:#090B0F;--panel:#151922;--card:#202735;--green:#1ED760;--red:#FA315A;--purple:#A78BFA;--muted:#9BA5B5;--line:#2a3241;--white:#f7f8fb}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--white);font-family:Inter,system-ui,Arial,sans-serif}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer;border:0}
+.top{height:70px;display:flex;align-items:center;justify-content:space-between;padding:0 22px;border-bottom:1px solid var(--line);background:#0c0f15;position:sticky;top:0;z-index:5}
+.brand{display:flex;align-items:center;gap:10px;font-weight:900;letter-spacing:1.4px}
+.brandmark{width:35px;height:35px;border-radius:12px;background:linear-gradient(135deg,var(--green),var(--purple));display:grid;place-items:center;color:#08110c;font-size:20px}
+.topright{display:flex;gap:10px;align-items:center}
+.search{width:min(38vw,390px);background:var(--panel);border:1px solid var(--line);color:white;padding:11px 14px;border-radius:13px;outline:none}
+.layout{display:grid;grid-template-columns:220px minmax(0,1fr);min-height:calc(100vh - 70px)}
+aside{padding:20px 13px;background:#0d1118;border-right:1px solid var(--line);position:sticky;top:70px;height:calc(100vh - 70px)}
+.navlabel{color:var(--muted);font-size:11px;letter-spacing:1.5px;margin:18px 10px 8px}
+.navbtn{width:100%;text-align:left;color:#cbd2df;background:transparent;padding:12px 13px;border-radius:12px;margin:2px 0;font-weight:650}
+.navbtn:hover,.navbtn.active{background:var(--card);color:white}
+.navbtn.active{box-shadow:inset 3px 0 var(--green)}
+main{padding:25px 28px 150px;min-width:0;max-width:1500px;width:100%;margin:auto}
+.page{display:none}.page.active{display:block}
+.sectionhead{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:7px 0 18px}
+.sectionhead h2{margin:0;font-size:23px}
+.muted{color:var(--muted)}.small{font-size:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:17px}
+.music-card{background:transparent;border-radius:15px;padding:10px;cursor:pointer;min-width:0;transition:.18s}
+.music-card:hover{background:var(--panel);transform:translateY(-2px)}
+.art{width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px;background:linear-gradient(135deg,#253b34,#25233e)}
+.btn{padding:10px 15px;border-radius:11px;background:var(--green);color:#07130b;font-weight:800}
+.btn.secondary{background:var(--card);color:white;border:1px solid var(--line)}
+.btn.red{background:var(--red);color:white}
+.btn.purple{background:var(--purple);color:#151022}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:18px;margin:15px 0}
+.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.field{display:flex;flex-direction:column;gap:6px}
+.field.full{grid-column:1/-1}
+.field label{font-size:12px;color:var(--muted)}
+.field input,.field textarea,.field select{width:100%;background:#0d121a;color:white;border:1px solid var(--line);padding:12px;border-radius:10px;outline:none}
+.field textarea{min-height:110px;resize:vertical}
+.hero{background:linear-gradient(115deg,#1a2a25,#201d36 58%,#351c2b);border:1px solid #343647;border-radius:22px;padding:25px;margin-bottom:26px}
+.hero h1{font-size:clamp(25px,4vw,42px);margin:0 0 8px}
+.hero p{color:#c0c7d3;margin:0}
+.hero .chips{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.chip{border:1px solid #4a5362;background:#ffffff0b;padding:7px 11px;border-radius:20px;font-size:12px}
+.empty{padding:32px;text-align:center;border:1px dashed #3a4352;border-radius:15px;color:var(--muted)}
+.player{position:fixed;bottom:0;left:0;right:0;background:#111720;border-top:1px solid #30394a;padding:10px 18px;z-index:10;display:grid;grid-template-columns:minmax(140px,1fr) minmax(220px,1.5fr) minmax(80px,1fr);align-items:center;gap:15px}
+.now{display:flex;align-items:center;gap:10px;min-width:0}
+.now img{width:48px;height:48px;object-fit:cover;border-radius:8px;background:var(--card)}
+.now strong,.now span{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.now span{font-size:12px;color:var(--muted);margin-top:3px}
+.controls{text-align:center}
+.controlrow{display:flex;justify-content:center;align-items:center;gap:14px}
+.iconbtn{background:transparent;color:#dce2ed;font-size:18px;padding:5px}
+.playbtn{background:var(--green);color:#07130b;width:38px;height:38px;border-radius:50%;font-weight:900}
+.progressrow{display:flex;align-items:center;gap:9px;font-size:10px;color:var(--muted);margin-top:5px}
+.progressrow input{width:100%;accent-color:var(--green)}
+.vol{text-align:right}.vol input{width:90px;accent-color:var(--green)}
+.notice{padding:11px 13px;border-radius:10px;background:#1a2c24;color:#baf4cb;margin:12px 0;font-size:13px;display:none}
+.notice.error{background:#351b24;color:#ffc0cd}
+.authbox{max-width:480px;margin:25px auto}
+.tabs{display:flex;gap:8px;margin-bottom:15px}
+.tabs button{flex:1}
+.artistrow{display:flex;gap:15px;align-items:center;background:var(--panel);padding:14px;border-radius:14px;margin:10px 0}
+.artistpic{width:65px;height:65px;border-radius:50%;object-fit:cover;background:var(--card)}
+.video-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+.video-card{background:var(--panel);padding:10px;border-radius:15px;cursor:pointer}
+.video-card img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:10px;background:var(--card)}
+.video-card h3{font-size:14px;margin:9px 2px 3px}
+.mobilebar{display:none}
+.lyrics{white-space:pre-wrap;line-height:1.9;color:#e2e7f0;background:#0d121a;border-radius:12px;padding:17px}
+@media(max-width:800px){
+.layout{display:block}aside{display:none}
+main{padding:18px 14px 160px}
+.top{padding:0 13px}.search{width:42vw}
+.player{grid-template-columns:1fr 1.4fr;padding:8px 10px;gap:6px}
+.vol{display:none}.now img{width:40px;height:40px}
+.mobilebar{display:flex;position:fixed;bottom:74px;left:0;right:0;background:#0d1118;border-top:1px solid var(--line);justify-content:space-around;padding:8px 3px;z-index:8}
+.mobilebar button{font-size:10px;color:#cbd2df;background:transparent;padding:5px}
+.mobilebar button span{display:block;font-size:17px;margin-bottom:2px}
+.formgrid{grid-template-columns:1fr}.field.full{grid-column:auto}
+.grid{grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+.sectionhead h2{font-size:20px}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand"><div class="brandmark">S</div><span>SHAGA MUSIC</span></div>
+  <div class="topright">
+    <input id="globalSearch" class="search" placeholder="Search music, artists, albums..." oninput="searchEverywhere(this.value)">
+    <button class="btn secondary" onclick="showPage('account')">Account</button>
+  </div>
+</header>
+
+<div class="layout">
+<aside>
+  <div class="navlabel">DISCOVER</div>
+  <button class="navbtn active" data-page="home" onclick="showPage('home')">⌂ &nbsp; Home</button>
+  <button class="navbtn" data-page="discover" onclick="showPage('discover')">⌕ &nbsp; Discover</button>
+  <button class="navbtn" data-page="artists" onclick="showPage('artists')">♬ &nbsp; Artists</button>
+  <button class="navbtn" data-page="albums" onclick="showPage('albums')">▣ &nbsp; Albums</button>
+  <button class="navbtn" data-page="videos" onclick="showPage('videos')">▷ &nbsp; Videos</button>
+  <div class="navlabel">YOUR MUSIC</div>
+  <button class="navbtn" data-page="library" onclick="showPage('library')">▤ &nbsp; Library</button>
+  <button class="navbtn" data-page="favourites" onclick="showPage('favourites')">♡ &nbsp; Favourites</button>
+  <button class="navbtn" data-page="playlists" onclick="showPage('playlists')">☷ &nbsp; Playlists</button>
+  <button class="navbtn" data-page="dj" onclick="showPage('dj')">✦ &nbsp; SHAGA DJ</button>
+  <div class="navlabel">CREATE</div>
+  <button class="navbtn" data-page="studio" onclick="showPage('studio')">＋ &nbsp; Studio / Upload</button>
+  <button class="navbtn" data-page="lyrics" onclick="showPage('lyrics')">≡ &nbsp; Lyrics</button>
+  <button class="navbtn" data-page="premium" onclick="showPage('premium')">◇ &nbsp; Premium</button>
+</aside>
+
+<main>
+<section id="home" class="page active">
+  <div class="hero">
+    <h1>SHAGA MUSIC</h1>
+    <p>Your sound. Your world. Discover music, artists and new releases.</p>
+    <div class="chips"><span class="chip">Music discovery</span><span class="chip">Artist studio</span><span class="chip">Your library</span></div>
+  </div>
+  <div class="sectionhead"><h2>Recently added</h2><button class="btn secondary" onclick="showPage('discover')">See all</button></div>
+  <div id="recentSongs" class="grid"></div>
+  <div class="sectionhead"><h2>Your favourites</h2></div>
+  <div id="homeFavs" class="grid"></div>
+</section>
+
+<section id="discover" class="page">
+  <div class="sectionhead"><h2>Discover music</h2><span class="muted small" id="songCount"></span></div>
+  <div id="allSongs" class="grid"></div>
+</section>
+
+<section id="artists" class="page">
+  <div class="sectionhead"><h2>Artists</h2></div>
+  <div id="artistList"></div>
+  <div class="panel">
+    <h3>Artist profiles</h3>
+    <p class="muted small">Artist profiles are created and verified by an administrator. An administrator must approve an artist account before it can publish official information.</p>
+  </div>
+</section>
+
+<section id="albums" class="page">
+  <div class="sectionhead"><h2>Albums & releases</h2></div>
+  <div id="albumList" class="grid"></div>
+</section>
+
+<section id="videos" class="page">
+  <div class="sectionhead"><h2>YouTube collection</h2><button class="btn secondary" onclick="addVideo()">＋ Add video</button></div>
+  <div id="videoGrid" class="video-grid"></div>
+</section>
+
+<section id="library" class="page">
+  <div class="sectionhead"><h2>Your library</h2></div>
+  <div id="librarySongs" class="grid"></div>
+</section>
+
+<section id="favourites" class="page">
+  <div class="sectionhead"><h2>Favourites</h2></div>
+  <div id="favSongs" class="grid"></div>
+</section>
+
+<section id="playlists" class="page">
+  <div class="sectionhead"><h2>Playlists</h2><button class="btn" onclick="createPlaylist()">＋ New playlist</button></div>
+  <div id="playlistList"></div>
+</section>
+
+<section id="dj" class="page">
+  <div class="sectionhead"><h2>SHAGA DJ</h2></div>
+  <div class="panel">
+    <p class="muted">Choose a listening mix from the music available in your catalogue.</p>
+    <div class="chips">
+      <button class="btn secondary" onclick="djMix('all')">All sounds</button>
+      <button class="btn secondary" onclick="djMix('new')">New music</button>
+    </div>
+    <div id="djResults" class="grid" style="margin-top:16px"></div>
+  </div>
+</section>
+
+<section id="studio" class="page">
+  <div class="sectionhead"><h2>Studio</h2></div>
+  <div id="studioNotice" class="notice"></div>
+  <div class="panel">
+    <h3>Upload a track</h3>
+    <p class="muted small">Upload only audio you created or have permission to distribute. Sign in first.</p>
+    <div class="formgrid">
+      <div class="field"><label>Song title</label><input id="upTitle" placeholder="Track title"></div>
+      <div class="field"><label>Artist name</label><input id="upArtist" placeholder="Artist"></div>
+      <div class="field"><label>Audio file</label><input id="upAudio" type="file" accept="audio/*"></div>
+      <div class="field"><label>Artwork (optional)</label><input id="upArt" type="file" accept="image/*"></div>
+      <div class="field full"><button class="btn" onclick="uploadSong()">Upload track</button></div>
+    </div>
+  </div>
+  <div class="panel"><h3>Your uploads</h3><div id="myUploads" class="grid"></div></div>
+</section>
+
+<section id="lyrics" class="page">
+  <div class="sectionhead"><h2>Lyrics</h2></div>
+  <div class="panel">
+    <div class="field"><label>Select a song</label><select id="lyricSong" onchange="showLyrics()"><option value="">Choose a song</option></select></div>
+    <div id="lyricsDisplay" class="lyrics" style="margin-top:14px">Select a song to view available lyrics.</div>
+    <div id="lyricsEditor" style="margin-top:14px"></div>
+  </div>
+</section>
+
+<section id="account" class="page">
+  <div class="sectionhead"><h2>Your account</h2></div>
+  <div class="authbox panel">
+    <div id="accountStatus" class="notice"></div>
+    <div id="authForms">
+      <div class="tabs">
+        <button class="btn" onclick="authMode('login')">Log in</button>
+        <button class="btn secondary" onclick="authMode('signup')">Create account</button>
+      </div>
+      <div class="field"><label>Email</label><input id="authEmail" type="email" autocomplete="email" placeholder="you@example.com"></div>
+      <div class="field" style="margin-top:12px"><label>Password</label><input id="authPassword" type="password" autocomplete="current-password" placeholder="At least 6 characters"></div>
+      <button class="btn" style="width:100%;margin-top:15px" id="authSubmit" onclick="submitAuth()">Log in</button>
+      <p class="muted small">Use an email address you can access. Email confirmation may be required by your Supabase settings.</p>
+    </div>
+    <div id="loggedIn" style="display:none">
+      <p id="userEmail"></p>
+      <p class="muted small" id="userRole"></p>
+      <button class="btn red" onclick="logout()">Log out</button>
+    </div>
+  </div>
+</section>
+
+<section id="premium" class="page">
+  <div class="sectionhead"><h2>SHAGA Premium</h2></div>
+  <div class="panel">
+    <h2>More music. More freedom.</h2>
+    <p class="muted">Premium membership is a planned feature. No payment will be taken on this page.</p>
+    <ul class="muted"><li>Premium listening experience</li><li>Expanded personal library</li><li>Future offline listening</li></ul>
+    <p class="small muted">Payment integration needs a supported payment provider and a properly configured merchant account.</p>
+  </div>
+</section>
+</main>
+</div>
+
+<nav class="mobilebar">
+<button onclick="showPage('home')"><span>⌂</span>Home</button>
+<button onclick="showPage('discover')"><span>⌕</span>Discover</button>
+<button onclick="showPage('library')"><span>▤</span>Library</button>
+<button onclick="showPage('studio')"><span>＋</span>Studio</button>
+<button onclick="showPage('account')"><span>●</span>Account</button>
+</nav>
+
+<div class="player">
+  <div class="now">
+    <img id="playerArt" alt="" src="">
+    <div style="min-width:0"><strong id="playerTitle">Choose a track</strong><span id="playerArtist">SHAGA MUSIC</span></div>
+  </div>
+  <div class="controls">
+    <div class="controlrow">
+      <button class="iconbtn" onclick="toggleShuffle()" title="Shuffle">⤨</button>
+      <button class="iconbtn" onclick="previousSong()">|◀</button>
+      <button class="playbtn" id="playPause" onclick="togglePlay()">▶</button>
+      <button class="iconbtn" onclick="nextSong()">▶|</button>
+      <button class="iconbtn" onclick="toggleRepeat()" title="Repeat">↻</button>
+    </div>
+    <div class="progressrow">
+      <span id="currentTime">0:00</span>
+      <input id="progress" type="range" min="0" max="100" value="0" oninput="seekAudio(this.value)">
+      <span id="duration">0:00</span>
+    </div>
+  </div>
+  <div class="vol"><input type="range" min="0" max="1" step=".01" value=".8" oninput="audio.volume=this.value"></div>
+</div>
+<audio id="audio"></audio>
+
+<script>
+// Keep your existing Supabase project and publishable key.
+const SUPABASE_URL="https://qppzalgmxewuddxblmlz.supabase.co";
+const SUPABASE_KEY="sb_publishable_BKsfvK3UfjqtvRptaghGGA_sdELamOp";
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
+const audio=document.getElementById("audio");
+let songs=[],user=null,profile=null,currentIndex=-1,shuffle=false,repeat=false,authAction="login";
+let favourites=JSON.parse(localStorage.getItem("shaga_favourites")||"[]");
+let playlists=JSON.parse(localStorage.getItem("shaga_playlists")||"[]");
+let videos=JSON.parse(localStorage.getItem("shaga_videos")||"[]");
+
+const placeholder="data:image/svg+xml;charset=UTF-8,"+encodeURIComponent(
+'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300"><rect width="300" height="300" fill="#202735"/><text x="50%" y="53%" font-size="78" text-anchor="middle" fill="#a78bfa">♫</text></svg>'
+);
+
+function safe(s){
+ return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function notice(id,msg,error=false){
+ let el=document.getElementById(id);
+ if(!el)return;
+ el.textContent=msg;
+ el.className="notice"+(error?" error":"");
+ el.style.display="block";
+}
+function showPage(id){
+ document.querySelectorAll(".page").forEach(p=>p.classList.toggle("active",p.id===id));
+ document.querySelectorAll(".navbtn").forEach(b=>b.classList.toggle("active",b.dataset.page===id));
+ if(id==="account")renderAccount();
+ if(id==="studio")renderUploads();
+ if(id==="lyrics")fillLyricSelect();
+ if(id==="playlists")renderPlaylists();
+}
+function card(song){
+ const art=song.artwork_url||song.cover_url||placeholder;
+ return `<article class="music-card" onclick="playSong('${safe(song.id)}')">
+ <img class="art" src="${safe(art)}" onerror="this.src=placeholder" alt="">
+ <h3>${safe(song.title)}</h3><p>${safe(song.artist||"Unknown artist")}</p>
+ <div style="margin-top:9px">
+ <button class="btn secondary" style="padding:6px 9px;font-size:12px" onclick="event.stopPropagation();toggleFavourite('${safe(song.id)}')">${favourites.includes(String(song.id))?"♥":"♡"}</button>
+ </div></article>`;
+}
+function renderGrid(id,list){
+ let el=document.getElementById(id);
+ if(!el)return;
+ el.innerHTML=list.length?list.map(card).join(""):'<div class="empty">No music to show yet. Upload a track or check back later.</div>';
+}
+async function loadSongs(){
+ const {data,error}=await db.from("songs").select("*").order("created_at",{ascending:false});
+ if(error){
+  console.error(error);
+  ["recentSongs","allSongs","librarySongs","favSongs","homeFavs"].forEach(id=>{
+   let e=document.getElementById(id);
+   if(e)e.innerHTML='<div class="empty">Could not load songs. Check your Supabase table and Row Level Security settings.</div>';
+  });
+  return;
+ }
+ songs=(data||[]).map(s=>({...s,artwork_url:s.artwork_url||s.cover_url||""}));
+ renderAll();
+}
+function renderAll(){
+ renderGrid("recentSongs",songs.slice(0,12));
+ renderGrid("allSongs",songs);
+ renderGrid("librarySongs",songs.filter(s=>user&&s.owner_id===user.id));
+ renderGrid("favSongs",songs.filter(s=>favourites.includes(String(s.id))));
+ renderGrid("homeFavs",songs.filter(s=>favourites.includes(String(s.id))).slice(0,6));
+ document.getElementById("songCount").textContent=songs.length+" tracks";
+ renderUploads();
+ fillLyricSelect();
+}
+function playSong(id){
+ let index=songs.findIndex(s=>String(s.id)===String(id));
+ if(index<0)return;
+ currentIndex=index;
+ let s=songs[index];
+ audio.src=s.file_url;
+ audio.play().then(()=>{
+  document.getElementById("playPause").textContent="Ⅱ";
+ }).catch(()=>{
+  alert("This track could not play. Check that its audio URL is public and valid.");
+ });
+ document.getElementById("playerTitle").textContent=s.title;
+ document.getElementById("playerArtist").textContent=s.artist||"Unknown artist";
+ document.getElementById("playerArt").src=s.artwork_url||placeholder;
+}
+function togglePlay(){
+ if(!audio.src){
+  if(songs.length)playSong(songs[0].id);
+  return;
+ }
+ if(audio.paused){
+  audio.play();
+  document.getElementById("playPause").textContent="Ⅱ";
+ }else{
+  audio.pause();
+  document.getElementById("playPause").textContent="▶";
+ }
+}
+function nextSong(){
+ if(!songs.length)return;
+ let i=shuffle?Math.floor(Math.random()*songs.length):(currentIndex+1)%songs.length;
+ playSong(songs[i].id);
+}
+function previousSong(){
+ if(!songs.length)return;
+ let i=(currentIndex-1+songs.length)%songs.length;
+ playSong(songs[i].id);
+}
+function toggleShuffle(){shuffle=!shuffle;alert("Shuffle "+(shuffle?"on":"off"))}
+function toggleRepeat(){repeat=!repeat;alert("Repeat "+(repeat?"on":"off"))}
+audio.addEventListener("timeupdate",()=>{
+ if(!audio.duration)return;
+ document.getElementById("progress").value=audio.currentTime/audio.duration*100;
+ document.getElementById("currentTime").textContent=fmt(audio.currentTime);
+ document.getElementById("duration").textContent=fmt(audio.duration);
+});
+audio.addEventListener("ended",()=>{if(repeat)audio.play();else nextSong()});
+function fmt(n){
+ if(!isFinite(n))return"0:00";
+ return Math.floor(n/60)+":"+String(Math.floor(n%60)).padStart(2,"0");
+}
+function seekAudio(v){if(audio.duration)audio.currentTime=audio.duration*Number(v)/100}
+
+function toggleFavourite(id){
+ id=String(id);
+ favourites=favourites.includes(id)?favourites.filter(x=>x!==id):[...favourites,id];
+ localStorage.setItem("shaga_favourites",JSON.stringify(favourites));
+ renderAll();
+}
+function searchEverywhere(q){
+ q=q.toLowerCase().trim();
+ let found=songs.filter(s=>(s.title||"").toLowerCase().includes(q)||(s.artist||"").toLowerCase().includes(q));
+ showPage("discover");
+ renderGrid("allSongs",q?found:songs);
+}
+
+function createPlaylist(){
+ let name=prompt("Name your playlist");
+ if(!name)return;
+ playlists.push({id:Date.now(),name:name,ids:[]});
+ savePlaylists();
+}
+function savePlaylists(){
+ localStorage.setItem("shaga_playlists",JSON.stringify(playlists));
+ renderPlaylists();
+}
+function renderPlaylists(){
+ let el=document.getElementById("playlistList");
+ if(!el)return;
+ el.innerHTML=playlists.length?playlists.map(p=>`
+ <div class="panel">
+ <div class="sectionhead"><h3>${safe(p.name)}</h3><button class="btn secondary" onclick="addToPlaylist(${p.id})">Add current track</button></div>
+ <div class="grid">${songs.filter(s=>p.ids.includes(String(s.id))).map(card).join("")||'<span class="muted small">No tracks in this playlist yet.</span>'}</div>
+ <button class="btn red" onclick="deletePlaylist(${p.id})">Delete playlist</button>
+ </div>`).join(""):'<div class="empty">Create your first playlist.</div>';
+}
+function addToPlaylist(id){
+ if(currentIndex<0){alert("Play a song first.");return}
+ let p=playlists.find(x=>x.id===id);
+ if(p&&!p.ids.includes(String(songs[currentIndex].id)))p.ids.push(String(songs[currentIndex].id));
+ savePlaylists();
+}
+function deletePlaylist(id){
+ playlists=playlists.filter(p=>p.id!==id);
+ savePlaylists();
+}
+function djMix(mode){
+ let list=mode==="new"?songs.slice(0,10):songs;
+ if(!list.length){
+  document.getElementById("djResults").innerHTML='<div class="empty">Upload music to build your mix.</div>';
+  return;
+ }
+ renderGrid("djResults",list);
+ playSong(list[0].id);
+}
+
+function addVideo(){
+ let url=prompt("Paste a YouTube video URL");
+ if(!url)return;
+ let id=(url.match(/(?:youtu\.be\/|v=|shorts\/)([A-Za-z0-9_-]{6,})/)||[])[1];
+ if(!id){alert("That YouTube URL was not recognised.");return}
+ videos.push({id,title:"YouTube video"});
+ localStorage.setItem("shaga_videos",JSON.stringify(videos));
+ renderVideos();
+}
+function renderVideos(){
+ let el=document.getElementById("videoGrid");
+ if(!el)return;
+ el.innerHTML=videos.map((v,i)=>`
+ <div class="video-card">
+ <img src="https://img.youtube.com/vi/${safe(v.id)}/hqdefault.jpg" onclick="window.open('https://www.youtube.com/watch?v=${safe(v.id)}','_blank')">
+ <h3 onclick="window.open('https://www.youtube.com/watch?v=${safe(v.id)}','_blank')">${safe(v.title)}</h3>
+ <button class="btn red" onclick="removeVideo(${i})">Remove</button>
+ </div>`).join("")||'<div class="empty">Add YouTube videos to build your collection.</div>';
+}
+function removeVideo(i){
+ videos.splice(i,1);
+ localStorage.setItem("shaga_videos",JSON.stringify(videos));
+ renderVideos();
+}
+
+function authMode(mode){
+ authAction=mode;
+ document.getElementById("authSubmit").textContent=mode==="login"?"Log in":"Create account";
+}
+async function submitAuth(){
+ let email=document.getElementById("authEmail").value.trim();
+ let password=document.getElementById("authPassword").value;
+ if(!email||!password){notice("accountStatus","Enter your email and password.",true);return}
+ let result=authAction==="signup"
+  ?await db.auth.signUp({email,password})
+  :await db.auth.signInWithPassword({email,password});
+ if(result.error){notice("accountStatus",result.error.message,true);return}
+ if(authAction==="signup"&&!result.data.session){
+  notice("accountStatus","Account created. Check your email to confirm it, then log in.");
+  return;
+ }
+ user=result.data.user;
+ await loadProfile();
+ renderAccount();
+ await loadSongs();
+}
+async function logout(){
+ await db.auth.signOut();
+ user=null;profile=null;
+ renderAccount();renderAll();
+}
+async function loadProfile(){
+ if(!user)return;
+ let {data}=await db.from("profiles").select("display_name,role").eq("id",user.id).maybeSingle();
+ profile=data||{role:"listener"};
+}
+function renderAccount(){
+ let logged=!!user;
+ document.getElementById("authForms").style.display=logged?"none":"block";
+ document.getElementById("loggedIn").style.display=logged?"block":"none";
+ if(logged){
+  document.getElementById("userEmail").textContent=user.email;
+  document.getElementById("userRole").textContent="Account role: "+(profile?.role||"listener");
+ }
+}
+
+async function uploadSong(){
+ if(!user){notice("studioNotice","Please log in before uploading.",true);return}
+ let title=document.getElementById("upTitle").value.trim();
+ let artist=document.getElementById("upArtist").value.trim();
+ let file=document.getElementById("upAudio").files[0];
+ let art=document.getElementById("upArt").files[0];
+ if(!title||!file){notice("studioNotice","Add a song title and choose an audio file.",true);return}
+ if(!file.type.startsWith("audio/")){notice("studioNotice","Please select an audio file.",true);return}
+ try{
+  let ext=(file.name.split(".").pop()||"mp3").replace(/[^a-zA-Z0-9]/g,"");
+  let path=user.id+"/"+crypto.randomUUID()+"."+ext;
+  let up=await db.storage.from("music").upload(path,file,{contentType:file.type,upsert:false});
+  if(up.error)throw up.error;
+  let fileUrl=db.storage.from("music").getPublicUrl(path).data.publicUrl;
+  let artworkUrl=null;
+  if(art){
+   let artExt=(art.name.split(".").pop()||"jpg").replace(/[^a-zA-Z0-9]/g,"");
+   let artPath=user.id+"/art-"+crypto.randomUUID()+"."+artExt;
+   let au=await db.storage.from("music").upload(artPath,art,{upsert:false});
+   if(au.error)throw au.error;
+   artworkUrl=db.storage.from("music").getPublicUrl(artPath).data.publicUrl;
+  }
+  let ins=await db.from("songs").insert({
+   title:title,
+   artist:artist||user.email,
+   file_url:fileUrl,
+   storage_path:path,
+   owner_id:user.id,
+   ...(artworkUrl?{artwork_url:artworkUrl}:{})
+  });
+  if(ins.error)throw ins.error;
+  notice("studioNotice","Your track was uploaded successfully.");
+  document.getElementById("upTitle").value="";
+  document.getElementById("upArtist").value="";
+  document.getElementById("upAudio").value="";
+  document.getElementById("upArt").value="";
+  await loadSongs();
+ }catch(e){
+  notice("studioNotice",e.message||"Upload failed. Check your storage policies and songs table.",true);
+ }
+}
+function renderUploads(){
+ let el=document.getElementById("myUploads");
+ if(!el)return;
+ let mine=songs.filter(s=>user&&s.owner_id===user.id);
+ el.innerHTML=mine.length?mine.map(s=>`
+ <div class="music-card">
+ <img class="art" src="${safe(s.artwork_url||placeholder)}">
+ <h3>${safe(s.title)}</h3><p>${safe(s.artist||"")}</p>
+ <button class="btn red" style="margin-top:9px" onclick="deleteSong('${safe(s.id)}')">Delete</button>
+ </div>`).join(""):'<div class="empty">Your uploaded tracks will appear here.</div>';
+}
+async function deleteSong(id){
+ let s=songs.find(x=>String(x.id)===String(id));
+ if(!s||!user||s.owner_id!==user.id){alert("You can only delete your own uploads.");return}
+ if(!confirm("Delete this track?"))return;
+ let {error}=await db.from("songs").delete().eq("id",id);
+ if(error){alert(error.message);return}
+ if(s.storage_path)await db.storage.from("music").remove([s.storage_path]);
+ await loadSongs();
+}
+
+function fillLyricSelect(){
+ let el=document.getElementById("lyricSong");
+ if(!el)return;
+ let current=el.value;
+ el.innerHTML='<option value="">Choose a song</option>'+songs.map(s=>`<option value="${safe(s.id)}">${safe(s.title)} — ${safe(s.artist||"")}</option>`).join("");
+ el.value=current;
+}
+async function showLyrics(){
+ let id=document.getElementById("lyricSong").value;
+ let display=document.getElementById("lyricsDisplay");
+ let editor=document.getElementById("lyricsEditor");
+ editor.innerHTML="";
+ if(!id){display.textContent="Select a song to view available lyrics.";return}
+ let {data,error}=await db.from("lyrics").select("content").eq("song_id",id).maybeSingle();
+ display.textContent=error?"Lyrics are not available yet.":(data?.content||"No lyrics have been added for this song.");
+ if(user&&["artist","admin"].includes(profile?.role)){
+  editor.innerHTML=`
+   <div class="field"><label>Edit official lyrics</label><textarea id="lyricsText">${safe(data?.content||"")}</textarea></div>
+   <button class="btn" style="margin-top:10px" onclick="saveLyrics()">Save lyrics</button>`;
+ }
+}
+async function saveLyrics(){
+ let id=document.getElementById("lyricSong").value;
+ let content=document.getElementById("lyricsText").value;
+ let {error}=await db.from("lyrics").upsert(
+  {song_id:id,content,updated_by:user.id},
+  {onConflict:"song_id"}
+ );
+ if(error){alert(error.message);return}
+ showLyrics();
+ alert("Lyrics saved.");
+}
+
+async function loadArtists(){
+ let el=document.getElementById("artistList");
+ let {data,error}=await db.from("artists").select("id,stage_name,bio,avatar_url,verified").order("stage_name");
+ if(error||!data?.length){
+  el.innerHTML='<div class="empty">Artist profiles will appear here when approved profiles are added.</div>';
+  return;
+ }
+ el.innerHTML=data.map(a=>`
+ <div class="artistrow">
+ <img class="artistpic" src="${safe(a.avatar_url||placeholder)}">
+ <div><strong>${safe(a.stage_name)} ${a.verified?"✓":""}</strong>
+ <p class="muted small">${safe(a.bio||"Artist profile")}</p></div>
+ </div>`).join("");
+}
+async function loadAlbums(){
+ let el=document.getElementById("albumList");
+ let {data,error}=await db.from("albums").select("id,title,artist_name,artwork_url").order("created_at",{ascending:false});
+ if(error||!data?.length){
+  el.innerHTML='<div class="empty">No albums published yet.</div>';
+  return;
+ }
+ el.innerHTML=data.map(a=>`
+ <div class="music-card">
+ <img class="art" src="${safe(a.artwork_url||placeholder)}">
+ <h3>${safe(a.title)}</h3><p>${safe(a.artist_name||"Artist")}</p>
+ </div>`).join("");
+}
+
+async function init(){
+ let {data}=await db.auth.getSession();
+ user=data.session?.user||null;
+ if(user)await loadProfile();
+ renderAccount();
+ renderPlaylists();
+ renderVideos();
+ await loadSongs();
+ loadArtists();
+ loadAlbums();
+}
+init();
+</script>
+</body>
+</html>
